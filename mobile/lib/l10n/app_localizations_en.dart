@@ -578,6 +578,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter a relative’s code to follow them, with their consent.';
 
   @override
+  String get homeAccompaniedSection => 'People I support';
+
+  @override
+  String get healthAidantOnlyTitle => 'Health is your own follow-up';
+
+  @override
+  String get healthAidantOnlyBody =>
+      'Measurements here are for your own follow-up. You can start it whenever you want. The people you support stay on Home.';
+
+  @override
   String get homeShareCodeTitle => 'Invite a caregiver';
 
   @override

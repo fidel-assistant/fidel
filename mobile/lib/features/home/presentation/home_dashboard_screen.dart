@@ -10,8 +10,10 @@ import '../../../core/theme/premium.dart';
 import '../../../core/ui/app_toast.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/dose_slot.dart';
+import '../application/cercle_controller.dart';
 import '../application/home_controller.dart';
 import '../domain/dashboard_models.dart';
+import 'widgets/accompanied_section.dart';
 import 'widgets/add_constante_sheet.dart';
 import 'widgets/check_in_card.dart';
 import 'widgets/day_ring.dart';
@@ -44,7 +46,16 @@ class HomeDashboardScreen extends ConsumerWidget {
         Expanded(
           child: RefreshIndicator(
             color: AppColors.primary,
-            onRefresh: () => ref.read(homeControllerProvider.notifier).load(),
+            onRefresh: () async {
+              await ref.read(homeControllerProvider.notifier).load();
+              final aidant =
+                  ref.read(homeControllerProvider).profile?.isAidant == true;
+              if (aidant) {
+                await ref
+                    .read(cercleControllerProvider.notifier)
+                    .load(force: true);
+              }
+            },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.fromLTRB(
@@ -77,8 +88,13 @@ class HomeDashboardScreen extends ConsumerWidget {
     }
 
     if (!state.hasPatient) {
+      if (state.profile?.isAidant == true) {
+        return const [AccompaniedSection(showActions: true)];
+      }
       return [_ActivateBanner(l10n: l10n)];
     }
+
+    final isAidant = state.profile?.isAidant == true;
 
     final dash = state.dashboardForDay;
     final prises = state.visiblePrises;
@@ -126,6 +142,11 @@ class HomeDashboardScreen extends ConsumerWidget {
       else ...[
         _DaySummaryCard(day: state.day, prises: prises, l10n: l10n),
         const SizedBox(height: 16),
+      ],
+
+      if (isAidant) ...[
+        const AccompaniedSection(),
+        const SizedBox(height: 20),
       ],
 
       // 2. KPIs du jour + graphe semaine

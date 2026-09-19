@@ -1136,6 +1136,24 @@ abstract class AppLocalizations {
   /// **'Enter a relative’s code to follow them, with their consent.'**
   String get homeAccompanyBody;
 
+  /// No description provided for @homeAccompaniedSection.
+  ///
+  /// In en, this message translates to:
+  /// **'People I support'**
+  String get homeAccompaniedSection;
+
+  /// No description provided for @healthAidantOnlyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health is your own follow-up'**
+  String get healthAidantOnlyTitle;
+
+  /// No description provided for @healthAidantOnlyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurements here are for your own follow-up. You can start it whenever you want. The people you support stay on Home.'**
+  String get healthAidantOnlyBody;
+
   /// No description provided for @homeShareCodeTitle.
   ///
   /// In en, this message translates to:
