@@ -52,11 +52,7 @@ class ReminderActionDispatcher {
 
     final sosAlert = parseSosPayload(response.payload);
     if (sosAlert != null) {
-      final router = _container.read(appRouterProvider);
-      router.push(
-        '/sos-aidant',
-        extra: sosAlert,
-      );
+      openSosAidantScreen(_container.read(appRouterProvider), sosAlert);
       return;
     }
 

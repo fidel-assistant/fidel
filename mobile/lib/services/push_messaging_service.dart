@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/router/app_router.dart';
 import '../features/auth/application/auth_providers.dart';
 import '../features/home/application/home_controller.dart';
 import '../features/home/data/home_repository.dart';
@@ -78,10 +79,15 @@ class PushMessagingService {
     FirebaseMessaging.onMessage.listen((msg) {
       unawaited(handleMessage(msg, fromUserTap: false));
     });
-    // Tap sur notif : ne pas re-poster l’alarme.
+    // Tap sur notif : ouvrir l’écran SOS (sans re-poster l’alarme).
     FirebaseMessaging.onMessageOpenedApp.listen((msg) {
       unawaited(handleMessage(msg, fromUserTap: true));
     });
+
+    final initial = await messaging.getInitialMessage();
+    if (initial != null) {
+      unawaited(handleMessage(initial, fromUserTap: true));
+    }
 
     final token = await messaging.getToken();
     await registerTokenIfPossible(token);
@@ -100,6 +106,16 @@ class PushMessagingService {
     }
   }
 
+  ActiveSosAlert? _alertFromData(Map<String, dynamic> data) {
+    final sosId = data['sos_id']?.toString() ?? '';
+    if (sosId.isEmpty) return null;
+    return ActiveSosAlert(
+      sosId: sosId,
+      patientId: data['patient_id']?.toString() ?? '',
+      patientPrenom: data['patient_prenom']?.toString() ?? 'Patient',
+    );
+  }
+
   Future<void> handleMessage(
     RemoteMessage message, {
     bool fromUserTap = false,
@@ -107,17 +123,14 @@ class PushMessagingService {
     final data = message.data;
     final kind = data['kind']?.toString() ?? '';
     if (kind == 'sos') {
-      if (fromUserTap) return;
-      final sosId = data['sos_id']?.toString() ?? '';
-      if (sosId.isEmpty) return;
-      if (!_shownSosIds.add(sosId)) return;
-      await SosAidantAlarm.show(
-        ActiveSosAlert(
-          sosId: sosId,
-          patientId: data['patient_id']?.toString() ?? '',
-          patientPrenom: data['patient_prenom']?.toString() ?? 'Patient',
-        ),
-      );
+      final alert = _alertFromData(data);
+      if (alert == null) return;
+      if (fromUserTap) {
+        openSosAidantScreen(_ref.read(appRouterProvider), alert);
+        return;
+      }
+      if (!_shownSosIds.add(alert.sosId)) return;
+      await SosAidantAlarm.show(alert);
       return;
     }
     if (kind == 'prise_confirmee' || kind == 'prise_non_confirmee') {

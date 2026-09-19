@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 
 import '../features/home/domain/aidant_models.dart';
 
@@ -9,19 +10,38 @@ class SosAidantAlarm {
   static const channelName = 'SOS patient';
   static const notificationIdBase = 92002000;
 
-  static final FlutterLocalNotificationsPlugin _plugin =
-      FlutterLocalNotificationsPlugin();
-  static bool _initialized = false;
+  /// Plugin principal (rappels) — taps routés via [ReminderActionDispatcher].
+  static FlutterLocalNotificationsPlugin? _boundPlugin;
 
-  static Future<void> _ensurePlugin() async {
-    if (_initialized) return;
+  /// Fallback isolate background (pas d’accès au plugin main).
+  static final FlutterLocalNotificationsPlugin _backgroundPlugin =
+      FlutterLocalNotificationsPlugin();
+  static bool _backgroundInitialized = false;
+
+  static String? _lastPushedSosId;
+
+  /// Lie le plugin initialisé par [ReminderAlarmService] (appel depuis `main`).
+  static Future<void> bindPlugin(FlutterLocalNotificationsPlugin plugin) async {
+    _boundPlugin = plugin;
+    await ensureChannel(plugin);
+  }
+
+  static Future<void> _ensureBackgroundPlugin() async {
+    if (_backgroundInitialized) return;
     const initSettings = InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(),
     );
-    await _plugin.initialize(initSettings);
-    await ensureChannel(_plugin);
-    _initialized = true;
+    await _backgroundPlugin.initialize(initSettings);
+    await ensureChannel(_backgroundPlugin);
+    _backgroundInitialized = true;
+  }
+
+  static Future<FlutterLocalNotificationsPlugin> _pluginForShow() async {
+    final bound = _boundPlugin;
+    if (bound != null) return bound;
+    await _ensureBackgroundPlugin();
+    return _backgroundPlugin;
   }
 
   static Future<void> ensureChannel(
@@ -42,10 +62,10 @@ class SosAidantAlarm {
   }
 
   static Future<void> show(ActiveSosAlert alert) async {
-    await _ensurePlugin();
+    final plugin = await _pluginForShow();
 
     final id = notificationIdBase + (alert.sosId.hashCode.abs() % 1000);
-    await _plugin.show(
+    await plugin.show(
       id,
       'SOS — ${alert.patientPrenom}',
       'Ton proche a besoin d’aide. Ouvre Fidel pour acquitter.',
@@ -76,10 +96,27 @@ class SosAidantAlarm {
   }
 
   static Future<void> cancel(String sosId) async {
-    await _ensurePlugin();
+    final plugin = await _pluginForShow();
     final id = notificationIdBase + (sosId.hashCode.abs() % 1000);
-    await _plugin.cancel(id);
+    await plugin.cancel(id);
   }
+}
+
+/// Ouvre `/sos-aidant` sans rejouer l’alarme. Anti-doublon si déjà sur cet SOS.
+void openSosAidantScreen(GoRouter router, ActiveSosAlert alert) {
+  if (alert.sosId.isEmpty) return;
+
+  void push() {
+    final path = router.state.uri.path;
+    if (path == '/sos-aidant' && SosAidantAlarm._lastPushedSosId == alert.sosId) {
+      return;
+    }
+    SosAidantAlarm._lastPushedSosId = alert.sosId;
+    router.push('/sos-aidant', extra: alert);
+  }
+
+  // Cold start : attendre une frame pour que le navigator soit monté.
+  WidgetsBinding.instance.addPostFrameCallback((_) => push());
 }
 
 /// Parse payload `sos:id:patientId:prenom`.

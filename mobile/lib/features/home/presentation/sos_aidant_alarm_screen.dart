@@ -38,7 +38,10 @@ class SosAidantAlarmScreen extends ConsumerStatefulWidget {
 class _SosAidantAlarmScreenState extends ConsumerState<SosAidantAlarmScreen> {
   var _busy = false;
 
+  bool get _valid => widget.sosId.trim().isNotEmpty;
+
   Future<void> _ack() async {
+    if (!_valid) return;
     final l10n = AppLocalizations.of(context);
     setState(() => _busy = true);
     try {
@@ -61,6 +64,10 @@ class _SosAidantAlarmScreenState extends ConsumerState<SosAidantAlarmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final prenom = widget.patientPrenom.trim().isEmpty
+        ? 'Patient'
+        : widget.patientPrenom;
+
     return Scaffold(
       backgroundColor: const Color(0xFF1A0505),
       body: SafeArea(
@@ -82,27 +89,39 @@ class _SosAidantAlarmScreenState extends ConsumerState<SosAidantAlarmScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                '${widget.patientPrenom} a besoin d’aide',
+                _valid
+                    ? '$prenom a besoin d’aide'
+                    : 'Alerte SOS incomplète. Réessaie depuis la notification.',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.white70,
                     ),
               ),
               const Spacer(),
-              FilledButton(
-                onPressed: _busy ? null : _ack,
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.error,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+              if (_valid)
+                FilledButton(
+                  onPressed: _busy ? null : _ack,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: _busy
+                      ? const SizedBox(
+                          height: 22,
+                          width: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('J’ai pris en charge'),
+                )
+              else
+                FilledButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: const Text('Retour'),
                 ),
-                child: _busy
-                    ? const SizedBox(
-                        height: 22,
-                        width: 22,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text('J’ai pris en charge'),
-              ),
               const SizedBox(height: 12),
               TextButton(
                 onPressed: _busy ? null : () => Navigator.of(context).pop(),
