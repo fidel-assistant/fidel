@@ -83,9 +83,11 @@ class HealthScreen extends ConsumerWidget {
       return const [HealthSkeleton()];
     }
     if (!state.hasPatient) {
+      final aidantOnly = state.profile?.isAidant == true;
       return [
         _EmptyPatientCard(
           l10n: l10n,
+          aidantOnly: aidantOnly,
           onTap: () => ref.read(homeTabIndexProvider.notifier).state = 0,
         ),
       ];
@@ -329,10 +331,15 @@ class _QuickActionChip extends StatelessWidget {
 }
 
 class _EmptyPatientCard extends StatelessWidget {
-  const _EmptyPatientCard({required this.l10n, required this.onTap});
+  const _EmptyPatientCard({
+    required this.l10n,
+    required this.onTap,
+    this.aidantOnly = false,
+  });
 
   final AppLocalizations l10n;
   final VoidCallback onTap;
+  final bool aidantOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -345,14 +352,16 @@ class _EmptyPatientCard extends StatelessWidget {
           const Icon(IconsaxPlusLinear.health, size: 28, color: AppColors.primary),
           const SizedBox(height: 12),
           Text(
-            l10n.homeCareEmptyPatientTitle,
+            aidantOnly
+                ? l10n.healthAidantOnlyTitle
+                : l10n.homeCareEmptyPatientTitle,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
           const SizedBox(height: 6),
           Text(
-            l10n.homeActivateBody,
+            aidantOnly ? l10n.healthAidantOnlyBody : l10n.homeActivateBody,
             style: TextStyle(
               fontFamily: AppTheme.fontFamily,
               fontSize: 13,
