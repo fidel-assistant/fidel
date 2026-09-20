@@ -229,19 +229,31 @@ class DashboardTraitement {
   }
 }
 
-/// `GET /patients/me/traitements` — apporte `date_fin_prevue`, absent du dashboard.
+/// `GET /patients/me/traitements` — apporte `date_fin_prevue` / `statut` / `phase`.
 class TraitementDetail {
   const TraitementDetail({
     required this.id,
     this.dateDebut,
     this.dateFinPrevue,
     this.jourTraitement,
+    this.statut = 'actif',
+    this.phase = '',
+    this.maladieNom,
+    this.maladieCode,
   });
 
   final String id;
   final DateTime? dateDebut;
   final DateTime? dateFinPrevue;
   final int? jourTraitement;
+  final String statut;
+  final String phase;
+  final String? maladieNom;
+  final String? maladieCode;
+
+  bool get isActif => statut == 'actif';
+  bool get isSuspendu => statut == 'suspendu';
+  bool get isTermine => statut == 'termine';
 
   /// Durée totale prévue en jours, `null` si la fin n’est pas connue.
   int? get dureeTotale {
@@ -252,14 +264,53 @@ class TraitementDetail {
     return days > 0 ? days : null;
   }
 
+  TraitementDetail copyWith({
+    DateTime? dateDebut,
+    DateTime? dateFinPrevue,
+    int? jourTraitement,
+    String? statut,
+    String? phase,
+    String? maladieNom,
+    String? maladieCode,
+    bool clearDateFin = false,
+  }) {
+    return TraitementDetail(
+      id: id,
+      dateDebut: dateDebut ?? this.dateDebut,
+      dateFinPrevue:
+          clearDateFin ? null : (dateFinPrevue ?? this.dateFinPrevue),
+      jourTraitement: jourTraitement ?? this.jourTraitement,
+      statut: statut ?? this.statut,
+      phase: phase ?? this.phase,
+      maladieNom: maladieNom ?? this.maladieNom,
+      maladieCode: maladieCode ?? this.maladieCode,
+    );
+  }
+
   factory TraitementDetail.fromJson(Map<String, dynamic> json) {
     return TraitementDetail(
       id: json['id'].toString(),
       dateDebut: DateTime.tryParse(json['date_debut']?.toString() ?? ''),
       dateFinPrevue: DateTime.tryParse(json['date_fin_prevue']?.toString() ?? ''),
       jourTraitement: json['jour_traitement'] as int?,
+      statut: json['statut'] as String? ?? 'actif',
+      phase: json['phase'] as String? ?? '',
+      maladieNom: json['maladie_nom'] as String?,
+      maladieCode: json['maladie_code'] as String?,
     );
   }
+
+  Map<String, dynamic> toCacheJson() => {
+        'id': id,
+        if (dateDebut != null) 'date_debut': dateDebut!.toIso8601String(),
+        if (dateFinPrevue != null)
+          'date_fin_prevue': dateFinPrevue!.toIso8601String(),
+        if (jourTraitement != null) 'jour_traitement': jourTraitement,
+        'statut': statut,
+        'phase': phase,
+        if (maladieNom != null) 'maladie_nom': maladieNom,
+        if (maladieCode != null) 'maladie_code': maladieCode,
+      };
 }
 
 /// Check-in du jour — `tres_mal` | `pas_top` | `ca_va` | `super`.

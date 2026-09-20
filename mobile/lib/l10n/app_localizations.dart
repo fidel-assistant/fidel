@@ -2072,6 +2072,156 @@ abstract class AppLocalizations {
   /// **'Treatment ended — reminders stopped.'**
   String get homeTreatmentEndedToast;
 
+  /// No description provided for @manageTraitementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage treatment'**
+  String get manageTraitementTitle;
+
+  /// No description provided for @manageTraitementSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment'**
+  String get manageTraitementSection;
+
+  /// No description provided for @manageTraitementEditMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit phase and end date'**
+  String get manageTraitementEditMeta;
+
+  /// No description provided for @manageTraitementPhaseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase'**
+  String get manageTraitementPhaseLabel;
+
+  /// No description provided for @manageTraitementSuspend.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get manageTraitementSuspend;
+
+  /// No description provided for @manageTraitementResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get manageTraitementResume;
+
+  /// No description provided for @manageTraitementSuspendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause this treatment?'**
+  String get manageTraitementSuspendTitle;
+
+  /// No description provided for @manageTraitementSuspendBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders stop for now. You can resume anytime from this screen.'**
+  String get manageTraitementSuspendBody;
+
+  /// No description provided for @manageTraitementSuspendConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, pause it'**
+  String get manageTraitementSuspendConfirm;
+
+  /// No description provided for @manageTraitementSuspendedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get manageTraitementSuspendedBadge;
+
+  /// No description provided for @manageTraitementSuspendedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment paused — reminders on hold.'**
+  String get manageTraitementSuspendedToast;
+
+  /// No description provided for @manageTraitementResumedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment resumed — reminders back on.'**
+  String get manageTraitementResumedToast;
+
+  /// No description provided for @manageTraitementUpdatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment updated.'**
+  String get manageTraitementUpdatedToast;
+
+  /// No description provided for @manageTraitementEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends {date}'**
+  String manageTraitementEndDate(String date);
+
+  /// No description provided for @manageMedsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicines'**
+  String get manageMedsSection;
+
+  /// No description provided for @manageMedsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No active medicines on this treatment.'**
+  String get manageMedsEmpty;
+
+  /// No description provided for @manageMedAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get manageMedAdd;
+
+  /// No description provided for @manageMedEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get manageMedEdit;
+
+  /// No description provided for @manageMedDeactivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate'**
+  String get manageMedDeactivate;
+
+  /// No description provided for @manageMedDeactivateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate this medicine?'**
+  String get manageMedDeactivateTitle;
+
+  /// No description provided for @manageMedDeactivateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” will no longer trigger reminders. You can add another later.'**
+  String manageMedDeactivateBody(String name);
+
+  /// No description provided for @manageMedDeactivateConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, deactivate'**
+  String get manageMedDeactivateConfirm;
+
+  /// No description provided for @manageMedDeactivatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine deactivated.'**
+  String get manageMedDeactivatedToast;
+
+  /// No description provided for @manageMedUpdatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine updated.'**
+  String get manageMedUpdatedToast;
+
+  /// No description provided for @manageMedNeedIdentity.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the name and dosage.'**
+  String get manageMedNeedIdentity;
+
   /// No description provided for @configDateFinLabel.
   ///
   /// In en, this message translates to:

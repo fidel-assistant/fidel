@@ -648,11 +648,25 @@ class HomeController extends StateNotifier<HomeUiState> {
 
   /// Marque un traitement terminé (API) puis resync alarmes / check-in.
   Future<void> terminateTraitement(String traitementId) async {
+    await _patchTraitementStatut(traitementId, 'termine');
+  }
+
+  /// Suspend un traitement (plus de rappels) — disparaît du dashboard actifs.
+  Future<void> suspendTraitement(String traitementId) async {
+    await _patchTraitementStatut(traitementId, 'suspendu');
+  }
+
+  /// Reprend un traitement suspendu.
+  Future<void> resumeTraitement(String traitementId) async {
+    await _patchTraitementStatut(traitementId, 'actif');
+  }
+
+  Future<void> _patchTraitementStatut(String traitementId, String statut) async {
     state = state.copyWith(busy: true, clearError: true);
     try {
       await _ref.read(medicamentsRepositoryProvider).updateTraitement(
             traitementId: traitementId,
-            statut: 'termine',
+            statut: statut,
           );
       await load();
       state = state.copyWith(busy: false);
@@ -663,6 +677,11 @@ class HomeController extends StateNotifier<HomeUiState> {
       );
       rethrow;
     }
+  }
+
+  /// Après mutation médoc / horaires / phase — recharge dashboard + alarmes.
+  Future<void> refreshAfterMedMutation() async {
+    await load();
   }
 
   Future<void> updateProfile(HomeProfile profile) async {

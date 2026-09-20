@@ -24,6 +24,7 @@ import '../../features/home/presentation/home_device_permissions_screen.dart';
 import '../../features/home/presentation/home_notifications_screen.dart';
 import '../../features/home/presentation/health_detail_screen.dart';
 import '../../features/home/presentation/home_shell.dart';
+import '../../features/home/presentation/manage_traitement_screen.dart';
 import '../../features/home/presentation/profile_account_screen.dart';
 import '../../features/home/presentation/alarm_health_screen.dart';
 import '../../features/home/presentation/profile_alarm_settings_screen.dart';
@@ -36,6 +37,7 @@ import '../../features/home/presentation/profile_voix_screen.dart';
 import '../../features/home/presentation/alarm_ring_screen.dart';
 import '../../features/home/presentation/sos_aidant_alarm_screen.dart';
 import '../../features/home/domain/aidant_models.dart';
+import '../../features/home/domain/dashboard_models.dart';
 import '../../features/home/presentation/sync_screens.dart';
 import '../../features/medicaments/presentation/medicament_wizard_screen.dart';
 import '../../features/onboarding/presentation/onboarding_besoin_suivi_screen.dart';
@@ -272,6 +274,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return _softPage(
             state: state,
             child: AddTraitementScreen(fromActivate: fromActivate),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/home/traitement/:id',
+        pageBuilder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          final initial = state.extra is DashboardTraitement
+              ? state.extra as DashboardTraitement
+              : null;
+          return _softPage(
+            state: state,
+            child: ManageTraitementScreen(
+              traitementId: id,
+              initial: initial,
+            ),
           );
         },
       ),

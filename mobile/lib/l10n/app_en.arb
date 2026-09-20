@@ -431,6 +431,41 @@
   "homeTreatmentEndBody": "Medicine reminders for this condition will stop. You can always add a new treatment later.",
   "homeTreatmentEndConfirm": "Yes, end it",
   "homeTreatmentEndedToast": "Treatment ended — reminders stopped.",
+  "manageTraitementTitle": "Manage treatment",
+  "manageTraitementSection": "Treatment",
+  "manageTraitementEditMeta": "Edit phase and end date",
+  "manageTraitementPhaseLabel": "Phase",
+  "manageTraitementSuspend": "Pause",
+  "manageTraitementResume": "Resume",
+  "manageTraitementSuspendTitle": "Pause this treatment?",
+  "manageTraitementSuspendBody": "Reminders stop for now. You can resume anytime from this screen.",
+  "manageTraitementSuspendConfirm": "Yes, pause it",
+  "manageTraitementSuspendedBadge": "Paused",
+  "manageTraitementSuspendedToast": "Treatment paused — reminders on hold.",
+  "manageTraitementResumedToast": "Treatment resumed — reminders back on.",
+  "manageTraitementUpdatedToast": "Treatment updated.",
+  "manageTraitementEndDate": "Ends {date}",
+  "@manageTraitementEndDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "manageMedsSection": "Medicines",
+  "manageMedsEmpty": "No active medicines on this treatment.",
+  "manageMedAdd": "Add",
+  "manageMedEdit": "Edit",
+  "manageMedDeactivate": "Deactivate",
+  "manageMedDeactivateTitle": "Deactivate this medicine?",
+  "manageMedDeactivateBody": "“{name}” will no longer trigger reminders. You can add another later.",
+  "@manageMedDeactivateBody": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "manageMedDeactivateConfirm": "Yes, deactivate",
+  "manageMedDeactivatedToast": "Medicine deactivated.",
+  "manageMedUpdatedToast": "Medicine updated.",
+  "manageMedNeedIdentity": "Enter the name and dosage.",
   "configDateFinLabel": "Expected end date (optional)",
   "configDateFinHint": "If you know it, we’ll stop reminders automatically after that day.",
   "configDateFinClear": "No end date",

@@ -416,6 +416,41 @@
   "homeTreatmentEndBody": "Les rappels médicaments pour cette maladie s’arrêtent. Tu pourras toujours en ajouter un nouveau plus tard.",
   "homeTreatmentEndConfirm": "Oui, terminer",
   "homeTreatmentEndedToast": "Traitement terminé — rappels arrêtés.",
+  "manageTraitementTitle": "Gérer le traitement",
+  "manageTraitementSection": "Traitement",
+  "manageTraitementEditMeta": "Modifier phase et date de fin",
+  "manageTraitementPhaseLabel": "Phase",
+  "manageTraitementSuspend": "Suspendre",
+  "manageTraitementResume": "Reprendre",
+  "manageTraitementSuspendTitle": "Suspendre ce traitement ?",
+  "manageTraitementSuspendBody": "Les rappels s’arrêtent temporairement. Tu pourras reprendre quand tu veux depuis cet écran.",
+  "manageTraitementSuspendConfirm": "Oui, suspendre",
+  "manageTraitementSuspendedBadge": "Suspendu",
+  "manageTraitementSuspendedToast": "Traitement suspendu — rappels en pause.",
+  "manageTraitementResumedToast": "Traitement repris — rappels réactivés.",
+  "manageTraitementUpdatedToast": "Traitement mis à jour.",
+  "manageTraitementEndDate": "Fin prévue le {date}",
+  "@manageTraitementEndDate": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "manageMedsSection": "Médicaments",
+  "manageMedsEmpty": "Aucun médicament actif sur ce traitement.",
+  "manageMedAdd": "Ajouter",
+  "manageMedEdit": "Modifier",
+  "manageMedDeactivate": "Désactiver",
+  "manageMedDeactivateTitle": "Désactiver ce médicament ?",
+  "manageMedDeactivateBody": "« {name} » ne déclenchera plus de rappels. Tu pourras en ajouter un autre plus tard.",
+  "@manageMedDeactivateBody": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "manageMedDeactivateConfirm": "Oui, désactiver",
+  "manageMedDeactivatedToast": "Médicament désactivé.",
+  "manageMedUpdatedToast": "Médicament mis à jour.",
+  "manageMedNeedIdentity": "Indique le nom et le dosage.",
   "configDateFinLabel": "Date de fin prévue (optionnel)",
   "configDateFinHint": "Si tu la connais, on arrêtera automatiquement les rappels après cette date.",
   "configDateFinClear": "Pas de date de fin",

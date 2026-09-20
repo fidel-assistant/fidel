@@ -1109,6 +1109,88 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTreatmentEndedToast => 'Treatment ended — reminders stopped.';
 
   @override
+  String get manageTraitementTitle => 'Manage treatment';
+
+  @override
+  String get manageTraitementSection => 'Treatment';
+
+  @override
+  String get manageTraitementEditMeta => 'Edit phase and end date';
+
+  @override
+  String get manageTraitementPhaseLabel => 'Phase';
+
+  @override
+  String get manageTraitementSuspend => 'Pause';
+
+  @override
+  String get manageTraitementResume => 'Resume';
+
+  @override
+  String get manageTraitementSuspendTitle => 'Pause this treatment?';
+
+  @override
+  String get manageTraitementSuspendBody =>
+      'Reminders stop for now. You can resume anytime from this screen.';
+
+  @override
+  String get manageTraitementSuspendConfirm => 'Yes, pause it';
+
+  @override
+  String get manageTraitementSuspendedBadge => 'Paused';
+
+  @override
+  String get manageTraitementSuspendedToast =>
+      'Treatment paused — reminders on hold.';
+
+  @override
+  String get manageTraitementResumedToast =>
+      'Treatment resumed — reminders back on.';
+
+  @override
+  String get manageTraitementUpdatedToast => 'Treatment updated.';
+
+  @override
+  String manageTraitementEndDate(String date) {
+    return 'Ends $date';
+  }
+
+  @override
+  String get manageMedsSection => 'Medicines';
+
+  @override
+  String get manageMedsEmpty => 'No active medicines on this treatment.';
+
+  @override
+  String get manageMedAdd => 'Add';
+
+  @override
+  String get manageMedEdit => 'Edit';
+
+  @override
+  String get manageMedDeactivate => 'Deactivate';
+
+  @override
+  String get manageMedDeactivateTitle => 'Deactivate this medicine?';
+
+  @override
+  String manageMedDeactivateBody(String name) {
+    return '“$name” will no longer trigger reminders. You can add another later.';
+  }
+
+  @override
+  String get manageMedDeactivateConfirm => 'Yes, deactivate';
+
+  @override
+  String get manageMedDeactivatedToast => 'Medicine deactivated.';
+
+  @override
+  String get manageMedUpdatedToast => 'Medicine updated.';
+
+  @override
+  String get manageMedNeedIdentity => 'Enter the name and dosage.';
+
+  @override
   String get configDateFinLabel => 'Expected end date (optional)';
 
   @override

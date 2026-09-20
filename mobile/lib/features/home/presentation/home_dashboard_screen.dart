@@ -224,8 +224,8 @@ class HomeDashboardScreen extends ConsumerWidget {
                   traitement: traitements[i],
                   detail: state.traitementDetails[traitements[i].id],
                   onTap: () => context.push(
-                    '/home/medicaments',
-                    extra: traitements[i].id,
+                    '/home/traitement/${traitements[i].id}',
+                    extra: traitements[i],
                   ),
                   onTerminate: () => _confirmTerminateTraitement(
                     context,

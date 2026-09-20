@@ -1121,6 +1121,88 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeTreatmentEndedToast => 'Traitement terminé — rappels arrêtés.';
 
   @override
+  String get manageTraitementTitle => 'Gérer le traitement';
+
+  @override
+  String get manageTraitementSection => 'Traitement';
+
+  @override
+  String get manageTraitementEditMeta => 'Modifier phase et date de fin';
+
+  @override
+  String get manageTraitementPhaseLabel => 'Phase';
+
+  @override
+  String get manageTraitementSuspend => 'Suspendre';
+
+  @override
+  String get manageTraitementResume => 'Reprendre';
+
+  @override
+  String get manageTraitementSuspendTitle => 'Suspendre ce traitement ?';
+
+  @override
+  String get manageTraitementSuspendBody =>
+      'Les rappels s’arrêtent temporairement. Tu pourras reprendre quand tu veux depuis cet écran.';
+
+  @override
+  String get manageTraitementSuspendConfirm => 'Oui, suspendre';
+
+  @override
+  String get manageTraitementSuspendedBadge => 'Suspendu';
+
+  @override
+  String get manageTraitementSuspendedToast =>
+      'Traitement suspendu — rappels en pause.';
+
+  @override
+  String get manageTraitementResumedToast =>
+      'Traitement repris — rappels réactivés.';
+
+  @override
+  String get manageTraitementUpdatedToast => 'Traitement mis à jour.';
+
+  @override
+  String manageTraitementEndDate(String date) {
+    return 'Fin prévue le $date';
+  }
+
+  @override
+  String get manageMedsSection => 'Médicaments';
+
+  @override
+  String get manageMedsEmpty => 'Aucun médicament actif sur ce traitement.';
+
+  @override
+  String get manageMedAdd => 'Ajouter';
+
+  @override
+  String get manageMedEdit => 'Modifier';
+
+  @override
+  String get manageMedDeactivate => 'Désactiver';
+
+  @override
+  String get manageMedDeactivateTitle => 'Désactiver ce médicament ?';
+
+  @override
+  String manageMedDeactivateBody(String name) {
+    return '« $name » ne déclenchera plus de rappels. Tu pourras en ajouter un autre plus tard.';
+  }
+
+  @override
+  String get manageMedDeactivateConfirm => 'Oui, désactiver';
+
+  @override
+  String get manageMedDeactivatedToast => 'Médicament désactivé.';
+
+  @override
+  String get manageMedUpdatedToast => 'Médicament mis à jour.';
+
+  @override
+  String get manageMedNeedIdentity => 'Indique le nom et le dosage.';
+
+  @override
   String get configDateFinLabel => 'Date de fin prévue (optionnel)';
 
   @override
