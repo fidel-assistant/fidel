@@ -18,11 +18,13 @@ import 'activate_suivi_flow.dart';
 import 'widgets/accompanied_section.dart';
 import 'widgets/add_constante_sheet.dart';
 import 'widgets/check_in_card.dart';
+import 'widgets/check_in_history_sheet.dart';
 import 'widgets/day_ring.dart';
 import 'widgets/dose_timeline.dart';
 import 'widgets/home_header.dart';
 import 'widgets/home_kpis_week.dart';
 import 'widgets/home_skeleton.dart';
+import 'widgets/low_stock_section.dart';
 import 'widgets/next_dose_card.dart';
 import 'widgets/snooze_sheet.dart';
 import 'widgets/soft_checklist_section.dart';
@@ -189,6 +191,18 @@ class HomeDashboardScreen extends ConsumerWidget {
                 busy: state.checkInBusy,
                 onAnswer: (statut) => _checkIn(context, ref, statut, l10n),
               ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  onPressed: () => showCheckInHistorySheet(context, ref),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(l10n.homeCheckInHistoryLink),
+                ),
+              ),
               const SizedBox(height: 10),
               Divider(height: 1, color: ThemeTokens.of(context).border),
               const SizedBox(height: 4),
@@ -203,6 +217,9 @@ class HomeDashboardScreen extends ConsumerWidget {
           ],
         ),
       ),
+
+      // 3b. Stock bas
+      const LowStockSection(),
 
       // 4. Traitement
       if (traitements.isNotEmpty) ...[
@@ -260,7 +277,8 @@ class HomeDashboardScreen extends ConsumerWidget {
           series: const [],
           known: false,
           onAdd: () => AddConstanteSheet.show(context),
-          onViewAll: () {},
+          onViewAll: () =>
+              ref.read(homeTabIndexProvider.notifier).state = 1,
         ),
       ],
     ];

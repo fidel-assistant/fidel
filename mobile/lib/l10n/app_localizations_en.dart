@@ -1077,6 +1077,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeCheckInActionSuper => 'Great';
 
   @override
+  String get homeCheckInHistoryLink => 'View history';
+
+  @override
+  String get homeCheckInHistoryTitle => 'Check-in history';
+
+  @override
+  String get homeCheckInHistorySubtitle =>
+      'Your answers from the last 30 days.';
+
+  @override
+  String get homeCheckInHistoryEmpty => 'No check-ins in this period.';
+
+  @override
+  String get homeLowStockTitle => 'Low stock';
+
+  @override
+  String homeLowStockLine(int stock, int seuil) {
+    return '$stock left (alert at $seuil)';
+  }
+
+  @override
+  String get syncBannerOffline => 'Offline — your actions will sync later.';
+
+  @override
+  String syncBannerOfflinePending(int count) {
+    return 'Offline — $count pending';
+  }
+
+  @override
+  String syncBannerPending(int count) {
+    return '$count action(s) waiting to sync';
+  }
+
+  @override
+  String get syncBannerDegraded => 'Limited connection — sync slowed.';
+
+  @override
+  String syncBannerDegradedPending(int count) {
+    return 'Limited connection — $count pending';
+  }
+
+  @override
+  String get syncBannerRetry => 'Retry';
+
+  @override
+  String get syncBannerFlushed => 'Sync complete.';
+
+  @override
+  String get syncBannerFlushFailed => 'Couldn’t sync right now. Try again.';
+
+  @override
+  String get healthMoreSection => 'More';
+
+  @override
   String homeTreatmentDay(int day) {
     return 'Day $day';
   }

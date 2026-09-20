@@ -19,6 +19,7 @@ import 'home_dashboard_screen.dart';
 import 'home_network_screen.dart';
 import 'home_profile_screen.dart';
 import 'widgets/fidel_nav_bar.dart';
+import 'widgets/sync_status_banner.dart';
 
 class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key});
@@ -204,13 +205,21 @@ class _HomeShellState extends ConsumerState<HomeShell>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         extendBody: true,
-        body: IndexedStack(
-          index: index,
-          children: const [
-            HomeDashboardScreen(),
-            HealthScreen(),
-            HomeNetworkScreen(),
-            HomeProfileScreen(),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: IndexedStack(
+                index: index,
+                children: const [
+                  HomeDashboardScreen(),
+                  HealthScreen(),
+                  HomeNetworkScreen(),
+                  HomeProfileScreen(),
+                ],
+              ),
+            ),
+            const SyncStatusBanner(),
           ],
         ),
         bottomNavigationBar: FidelNavBar(
