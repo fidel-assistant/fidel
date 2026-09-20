@@ -581,6 +581,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAccompaniedSection => 'People I support';
 
   @override
+  String get homeActiveSosSection => 'Active SOS';
+
+  @override
+  String get aidantSignalSos => 'Active SOS';
+
+  @override
+  String get aidantSignalMissed => 'Missed dose today';
+
+  @override
+  String get aidantSignalPending => 'Dose pending';
+
+  @override
+  String get aidantSignalOk => 'Doses confirmed';
+
+  @override
+  String get aidantSignalNothing => 'Nothing planned today';
+
+  @override
+  String get aidantVoixSection => 'Reminder voice';
+
+  @override
+  String get aidantVoixBody => 'Record a voice for this person’s reminders.';
+
+  @override
+  String get aidantVoixCta => 'Add a voice';
+
+  @override
+  String get aidantVoixUploaded => 'Voice sent';
+
+  @override
   String get healthAidantOnlyTitle => 'Health is your own follow-up';
 
   @override

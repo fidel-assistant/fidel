@@ -1142,6 +1142,66 @@ abstract class AppLocalizations {
   /// **'People I support'**
   String get homeAccompaniedSection;
 
+  /// No description provided for @homeActiveSosSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Active SOS'**
+  String get homeActiveSosSection;
+
+  /// No description provided for @aidantSignalSos.
+  ///
+  /// In en, this message translates to:
+  /// **'Active SOS'**
+  String get aidantSignalSos;
+
+  /// No description provided for @aidantSignalMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed dose today'**
+  String get aidantSignalMissed;
+
+  /// No description provided for @aidantSignalPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose pending'**
+  String get aidantSignalPending;
+
+  /// No description provided for @aidantSignalOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Doses confirmed'**
+  String get aidantSignalOk;
+
+  /// No description provided for @aidantSignalNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned today'**
+  String get aidantSignalNothing;
+
+  /// No description provided for @aidantVoixSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder voice'**
+  String get aidantVoixSection;
+
+  /// No description provided for @aidantVoixBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a voice for this person’s reminders.'**
+  String get aidantVoixBody;
+
+  /// No description provided for @aidantVoixCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a voice'**
+  String get aidantVoixCta;
+
+  /// No description provided for @aidantVoixUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice sent'**
+  String get aidantVoixUploaded;
+
   /// No description provided for @healthAidantOnlyTitle.
   ///
   /// In en, this message translates to:

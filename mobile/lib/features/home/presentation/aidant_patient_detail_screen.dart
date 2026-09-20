@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
@@ -6,10 +7,12 @@ import 'package:intl/intl.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/premium.dart';
+import '../../../core/ui/app_toast.dart';
 import '../../../l10n/app_localizations.dart';
 import '../application/home_controller.dart';
 import '../domain/aidant_models.dart';
 import '../domain/constante_models.dart';
+import 'profile_voix_record_sheet.dart';
 import 'widgets/constante_card.dart' show constanteLabel;
 import 'widgets/home_skeleton.dart';
 
@@ -38,6 +41,9 @@ class _AidantPatientDetailScreenState
   List<Constante> _constantes = const [];
   String? _error;
   bool _loading = true;
+  bool _voixBusy = false;
+
+  static const _maxVoixBytes = 2 * 1024 * 1024;
 
   @override
   void initState() {
@@ -316,6 +322,39 @@ class _AidantPatientDetailScreenState
                       ],
                     ),
                   ),
+                const SizedBox(height: 18),
+                _SectionLabel(label: l10n.aidantVoixSection),
+                const SizedBox(height: 8),
+                PremiumCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        l10n.aidantVoixBody,
+                        style: TextStyle(
+                          fontFamily: AppTheme.fontFamily,
+                          fontSize: 13,
+                          height: 1.4,
+                          color: tokens.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      FilledButton.icon(
+                        onPressed: _voixBusy ? null : _chooseVoixSource,
+                        icon: _voixBusy
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(IconsaxPlusLinear.microphone_2),
+                        label: Text(l10n.aidantVoixCta),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ],
           ),
@@ -330,6 +369,136 @@ class _AidantPatientDetailScreenState
     }
     final digits = c.type.decimals;
     return '${c.systolique.toStringAsFixed(digits)} ${c.unite}';
+  }
+
+  Future<void> _chooseVoixSource() async {
+    final l10n = AppLocalizations.of(context);
+    final tokens = ThemeTokens.of(context);
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        decoration: BoxDecoration(
+          color: tokens.elevated,
+          borderRadius: BorderRadius.circular(Premium.radius),
+          border: Border.all(color: tokens.border),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Text(
+                  l10n.profileVoixChooseTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(
+                  IconsaxPlusLinear.microphone_2,
+                  color: AppColors.primary,
+                ),
+                title: Text(l10n.profileVoixRecord),
+                subtitle: Text(l10n.profileVoixRecordHint),
+                onTap: () => Navigator.pop(ctx, 'record'),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(
+                  IconsaxPlusLinear.document_upload,
+                  color: AppColors.primary,
+                ),
+                title: Text(l10n.profileVoixImport),
+                subtitle: Text(l10n.profileVoixImportHint),
+                onTap: () => Navigator.pop(ctx, 'import'),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (!mounted || choice == null) return;
+    if (choice == 'record') {
+      await _recordVoix();
+    } else {
+      await _pickVoix();
+    }
+  }
+
+  Future<void> _recordVoix() async {
+    final result = await ProfileVoixRecordSheet.show(context);
+    if (result == null || !mounted) return;
+    final l10n = AppLocalizations.of(context);
+    if (result.bytesLength > _maxVoixBytes) {
+      AppToast.error(context, l10n.profileVoixTooLarge);
+      return;
+    }
+    await _uploadVoix(filename: result.filename, filePath: result.path);
+  }
+
+  Future<void> _pickVoix() async {
+    final l10n = AppLocalizations.of(context);
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: const ['mp3', 'm4a', 'aac', 'ogg', 'opus'],
+      withData: true,
+      allowMultiple: false,
+    );
+    if (result == null || result.files.isEmpty) return;
+    if (!mounted) return;
+
+    final file = result.files.single;
+    final bytes = file.bytes;
+    final path = file.path;
+    final name = file.name;
+
+    if ((bytes == null || bytes.isEmpty) && (path == null || path.isEmpty)) {
+      AppToast.error(context, l10n.profileVoixPickFailed);
+      return;
+    }
+    final size = bytes?.length ?? file.size;
+    if (size > _maxVoixBytes) {
+      AppToast.error(context, l10n.profileVoixTooLarge);
+      return;
+    }
+    await _uploadVoix(
+      filename: name,
+      bytes: bytes,
+      filePath: path,
+    );
+  }
+
+  Future<void> _uploadVoix({
+    required String filename,
+    List<int>? bytes,
+    String? filePath,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    setState(() => _voixBusy = true);
+    try {
+      await ref.read(homeRepositoryProvider).uploadAidantVoixRappel(
+            patientId: widget.patientId,
+            filename: filename,
+            bytes: bytes ?? const <int>[],
+            filePath: filePath,
+          );
+      if (!mounted) return;
+      AppToast.success(context, l10n.aidantVoixUploaded);
+    } catch (e) {
+      if (!mounted) return;
+      AppToast.error(
+        context,
+        e is ApiException ? e.message : l10n.genericError,
+      );
+    } finally {
+      if (mounted) setState(() => _voixBusy = false);
+    }
   }
 }
 
