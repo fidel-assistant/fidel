@@ -588,6 +588,37 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeAccompaniedSection => 'Personnes que j’accompagne';
 
   @override
+  String get homeActiveSosSection => 'SOS en cours';
+
+  @override
+  String get aidantSignalSos => 'SOS actif';
+
+  @override
+  String get aidantSignalMissed => 'Prise manquée aujourd’hui';
+
+  @override
+  String get aidantSignalPending => 'Prise en attente';
+
+  @override
+  String get aidantSignalOk => 'Prises confirmées';
+
+  @override
+  String get aidantSignalNothing => 'Rien de prévu aujourd’hui';
+
+  @override
+  String get aidantVoixSection => 'Voix de rappel';
+
+  @override
+  String get aidantVoixBody =>
+      'Enregistre une voix pour les rappels de cette personne.';
+
+  @override
+  String get aidantVoixCta => 'Ajouter une voix';
+
+  @override
+  String get aidantVoixUploaded => 'Voix envoyée';
+
+  @override
   String get healthAidantOnlyTitle => 'La santé, c’est ton suivi';
 
   @override

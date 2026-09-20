@@ -11,8 +11,8 @@ import '../../../core/ui/app_toast.dart';
 import '../../../l10n/app_localizations.dart';
 import '../application/cercle_controller.dart';
 import '../application/home_controller.dart';
-import '../domain/aidant_models.dart';
 import '../../../services/sos_service.dart';
+import 'widgets/accompanied_patient_tile.dart';
 import 'widgets/sticky_tab_header.dart';
 
 class HomeNetworkScreen extends ConsumerStatefulWidget {
@@ -171,8 +171,11 @@ class _HomeNetworkScreenState extends ConsumerState<HomeNetworkScreen> {
                             for (var i = 0;
                                 i < cercle.accompaniedPatients.length;
                                 i++) ...[
-                              _PatientTile(
+                              AccompaniedPatientTile(
                                 patient: cercle.accompaniedPatients[i],
+                                signal: cercle.signalFor(
+                                  cercle.accompaniedPatients[i].id,
+                                ),
                                 onTap: () => context.push(
                                   '/home/cercle/patient/${cercle.accompaniedPatients[i].id}',
                                   extra: cercle.accompaniedPatients[i],
@@ -643,89 +646,6 @@ class _CercleSkeleton extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _PatientTile extends StatelessWidget {
-  const _PatientTile({required this.patient, required this.onTap});
-
-  final AidantPatient patient;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final tokens = ThemeTokens.of(context);
-    String subtitle;
-    if (patient.permissions.observance && patient.permissions.constantes) {
-      subtitle = l10n.homeAidantsPermBoth;
-    } else if (patient.permissions.observance) {
-      subtitle = l10n.homeAidantsPermObservanceOnly;
-    } else if (patient.permissions.constantes) {
-      subtitle = l10n.homeAidantsPermConstantes;
-    } else {
-      subtitle = l10n.cerclePermissionLimited;
-    }
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 10, 14),
-          child: Row(
-            children: [
-              Container(
-                width: 46,
-                height: 46,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(
-                    alpha: tokens.isDark ? 0.2 : 0.1,
-                  ),
-                ),
-                child: Text(
-                  patient.initial,
-                  style: const TextStyle(
-                    fontFamily: AppTheme.fontFamily,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      patient.displayName,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: tokens.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontSize: 12,
-                        color: tokens.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(IconsaxPlusLinear.arrow_right_3, color: tokens.textSecondary),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

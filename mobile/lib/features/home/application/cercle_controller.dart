@@ -15,6 +15,8 @@ class CercleUiState {
     this.accompaniedPatients = const [],
     this.aidants = const [],
     this.contactsCount = 0,
+    this.activeSos = const [],
+    this.patientSignals = const {},
     this.loading = false,
     this.busy = false,
     this.error,
@@ -27,6 +29,8 @@ class CercleUiState {
   final List<AidantPatient> accompaniedPatients;
   final List<AidantRelation> aidants;
   final int contactsCount;
+  final List<ActiveSosAlert> activeSos;
+  final Map<String, AidantPatientSignal> patientSignals;
   final bool loading;
   final bool busy;
   final String? error;
@@ -39,10 +43,14 @@ class CercleUiState {
 
   bool get hasContacts => contactsCount > 0;
 
+  AidantPatientSignal? signalFor(String patientId) => patientSignals[patientId];
+
   CercleUiState copyWith({
     List<AidantPatient>? accompaniedPatients,
     List<AidantRelation>? aidants,
     int? contactsCount,
+    List<ActiveSosAlert>? activeSos,
+    Map<String, AidantPatientSignal>? patientSignals,
     bool? loading,
     bool? busy,
     String? error,
@@ -57,6 +65,8 @@ class CercleUiState {
       accompaniedPatients: accompaniedPatients ?? this.accompaniedPatients,
       aidants: aidants ?? this.aidants,
       contactsCount: contactsCount ?? this.contactsCount,
+      activeSos: activeSos ?? this.activeSos,
+      patientSignals: patientSignals ?? this.patientSignals,
       loading: loading ?? this.loading,
       busy: busy ?? this.busy,
       error: clearError ? null : (error ?? this.error),
@@ -100,6 +110,57 @@ class CercleController extends StateNotifier<CercleUiState> {
     }
   }
 
+  Future<({List<ActiveSosAlert> sos, Map<String, AidantPatientSignal> signals})>
+      _loadAidantSignals(List<AidantPatient> patients) async {
+    if (patients.isEmpty) {
+      return (sos: const <ActiveSosAlert>[], signals: const <String, AidantPatientSignal>{});
+    }
+
+    List<ActiveSosAlert> activeSos = const [];
+    try {
+      activeSos = await _repo.listActiveSosForAidant();
+    } catch (_) {
+      activeSos = const [];
+    }
+    final sosPatientIds = {
+      for (final alert in activeSos)
+        if (alert.patientId.isNotEmpty) alert.patientId,
+    };
+
+    final now = DateTime.now();
+    final day = DateTime(now.year, now.month, now.day);
+    final signals = <String, AidantPatientSignal>{};
+
+    await Future.wait(
+      patients.map((patient) async {
+        if (sosPatientIds.contains(patient.id)) {
+          signals[patient.id] = AidantPatientSignal.sosActive;
+          return;
+        }
+        if (!patient.permissions.observance) {
+          signals[patient.id] = AidantPatientSignal.permissionLimited;
+          return;
+        }
+        try {
+          final today = await _repo.fetchPatientObservance(
+            patient.id,
+            depuis: day,
+            jusquA: day,
+          );
+          signals[patient.id] = deriveAidantPatientSignal(
+            hasActiveSos: false,
+            canSeeObservance: true,
+            today: today,
+          );
+        } catch (_) {
+          signals[patient.id] = AidantPatientSignal.permissionLimited;
+        }
+      }),
+    );
+
+    return (sos: activeSos, signals: signals);
+  }
+
   Future<void> load({bool force = false}) async {
     // Évite de recharger + re-poster la notif SOS à chaque resume / tab switch.
     if (!force && state.loadedOnce && !state.loading) {
@@ -130,6 +191,8 @@ class CercleController extends StateNotifier<CercleUiState> {
         accompaniedPatients: const [],
         aidants: const [],
         contactsCount: 0,
+        activeSos: const [],
+        patientSignals: const {},
       );
       return;
     }
@@ -148,6 +211,7 @@ class CercleController extends StateNotifier<CercleUiState> {
       ]);
       if (!mounted || gen != _loadGen) return;
       final contacts = futures[2] as List<ContactUrgence>;
+      final patients = futures[0] as List<AidantPatient>;
       unawaited(_ref.read(sosServiceProvider).cacheContacts(contacts));
 
       // Raccourci lock-screen : uniquement profil patient, une seule fois
@@ -167,14 +231,24 @@ class CercleController extends StateNotifier<CercleUiState> {
         unawaited(_ref.read(sosServiceProvider).hidePersistentNotification());
       }
 
+      final aidantExtras = caps.isAidant
+          ? await _loadAidantSignals(patients)
+          : (
+              sos: const <ActiveSosAlert>[],
+              signals: const <String, AidantPatientSignal>{},
+            );
+      if (!mounted || gen != _loadGen) return;
+
       state = state.copyWith(
         loading: false,
         loadedOnce: true,
         hasPatient: caps.hasPatient,
         isAidant: caps.isAidant,
-        accompaniedPatients: futures[0] as List<AidantPatient>,
+        accompaniedPatients: patients,
         aidants: futures[1] as List<AidantRelation>,
         contactsCount: contacts.length,
+        activeSos: aidantExtras.sos,
+        patientSignals: aidantExtras.signals,
         clearError: true,
       );
     } catch (e) {
@@ -185,6 +259,22 @@ class CercleController extends StateNotifier<CercleUiState> {
         error: e is ApiException ? e.message : e.toString(),
       );
     }
+  }
+
+  /// Retire un SOS acquitté et recalcule les signaux carte.
+  Future<void> onSosAcked(String sosId) async {
+    final remaining =
+        state.activeSos.where((s) => s.sosId != sosId).toList(growable: false);
+    state = state.copyWith(activeSos: remaining);
+    if (!state.isAidant) return;
+    try {
+      final refreshed = await _loadAidantSignals(state.accompaniedPatients);
+      if (!mounted) return;
+      state = state.copyWith(
+        activeSos: refreshed.sos,
+        patientSignals: refreshed.signals,
+      );
+    } catch (_) {}
   }
 
   Future<SosTicket> triggerSos() async {

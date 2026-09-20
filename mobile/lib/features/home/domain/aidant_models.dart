@@ -100,6 +100,32 @@ class AidantPatient {
   }
 }
 
+/// Signal affiché sur les cartes Accueil / Cercle (dérivé SOS + observance du jour).
+enum AidantPatientSignal {
+  sosActive,
+  missedToday,
+  pendingToday,
+  okToday,
+  nothingToday,
+  /// Pas de signal dose — l’UI garde le libellé permission.
+  permissionLimited,
+}
+
+AidantPatientSignal deriveAidantPatientSignal({
+  required bool hasActiveSos,
+  required bool canSeeObservance,
+  AidantObservance? today,
+}) {
+  if (hasActiveSos) return AidantPatientSignal.sosActive;
+  if (!canSeeObservance || today == null) {
+    return AidantPatientSignal.permissionLimited;
+  }
+  if (today.manquees > 0) return AidantPatientSignal.missedToday;
+  if (today.enAttente > 0) return AidantPatientSignal.pendingToday;
+  if (today.confirmees > 0) return AidantPatientSignal.okToday;
+  return AidantPatientSignal.nothingToday;
+}
+
 class AidantObservance {
   const AidantObservance({
     required this.patientId,

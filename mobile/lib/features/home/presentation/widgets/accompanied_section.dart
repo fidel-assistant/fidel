@@ -10,7 +10,8 @@ import '../../../../core/ui/app_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/cercle_controller.dart';
 import '../../application/home_controller.dart';
-import '../../domain/aidant_models.dart';
+import 'accompanied_patient_tile.dart';
+import 'active_sos_section.dart';
 
 /// Liste des patients suivis — Accueil aidant seul ou bandeau de cumul.
 class AccompaniedSection extends ConsumerWidget {
@@ -35,6 +36,7 @@ class AccompaniedSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        const ActiveSosSection(),
         Text(
           l10n.homeAccompaniedSection,
           style: TextStyle(
@@ -116,8 +118,9 @@ class AccompaniedSection extends ConsumerWidget {
             child: Column(
               children: [
                 for (var i = 0; i < patients.length; i++) ...[
-                  _PatientRow(
+                  AccompaniedPatientTile(
                     patient: patients[i],
+                    signal: cercle.signalFor(patients[i].id),
                     onTap: () => context.push(
                       '/home/cercle/patient/${patients[i].id}',
                       extra: patients[i],
@@ -167,93 +170,6 @@ class AccompaniedSection extends ConsumerWidget {
         );
       }
     }
-  }
-}
-
-class _PatientRow extends StatelessWidget {
-  const _PatientRow({required this.patient, required this.onTap});
-
-  final AidantPatient patient;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final tokens = ThemeTokens.of(context);
-    final String subtitle;
-    if (patient.permissions.observance && patient.permissions.constantes) {
-      subtitle = l10n.homeAidantsPermBoth;
-    } else if (patient.permissions.observance) {
-      subtitle = l10n.homeAidantsPermObservanceOnly;
-    } else if (patient.permissions.constantes) {
-      subtitle = l10n.homeAidantsPermConstantes;
-    } else {
-      subtitle = l10n.cerclePermissionLimited;
-    }
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 10, 14),
-          child: Row(
-            children: [
-              Container(
-                width: 46,
-                height: 46,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(
-                    alpha: tokens.isDark ? 0.2 : 0.1,
-                  ),
-                ),
-                child: Text(
-                  patient.initial,
-                  style: const TextStyle(
-                    fontFamily: AppTheme.fontFamily,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      patient.displayName,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: tokens.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontFamily,
-                        fontSize: 12,
-                        color: tokens.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(
-                IconsaxPlusLinear.arrow_right_3,
-                size: 18,
-                color: tokens.textSecondary,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
 

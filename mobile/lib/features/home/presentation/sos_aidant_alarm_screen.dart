@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/ui/app_toast.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/sos_aidant_alarm.dart';
+import '../application/cercle_controller.dart';
 import '../application/home_controller.dart';
 import '../domain/aidant_models.dart';
 
@@ -49,6 +50,9 @@ class _SosAidantAlarmScreenState extends ConsumerState<SosAidantAlarmScreen> {
           .read(homeRepositoryProvider)
           .ackSosAsAidant(widget.sosId);
       await SosAidantAlarm.cancel(widget.sosId);
+      await ref
+          .read(cercleControllerProvider.notifier)
+          .onSosAcked(widget.sosId);
       if (!mounted) return;
       AppToast.success(context, msg.isEmpty ? 'SOS acquitté' : msg);
       Navigator.of(context).pop();

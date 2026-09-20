@@ -676,6 +676,39 @@ class HomeRepository {
     }
   }
 
+  Future<VoixRappel> uploadAidantVoixRappel({
+    required String patientId,
+    required String filename,
+    required List<int> bytes,
+    String? filePath,
+  }) async {
+    try {
+      final MultipartFile fichier;
+      if (bytes.isNotEmpty) {
+        fichier = MultipartFile.fromBytes(bytes, filename: filename);
+      } else if (filePath != null && filePath.isNotEmpty) {
+        fichier = await MultipartFile.fromFile(filePath, filename: filename);
+      } else {
+        throw ApiException(
+          code: 'FICHIER_AUDIO_INVALIDE',
+          message: 'Fichier audio introuvable.',
+          statusCode: 400,
+        );
+      }
+      final form = FormData.fromMap({'fichier': fichier});
+      final res = await _api.raw.post<Map<String, dynamic>>(
+        '/aidants/me/patients/$patientId/voix-rappel',
+        data: form,
+        options: Options(
+          contentType: Headers.multipartFormDataContentType,
+        ),
+      );
+      return VoixRappel.fromJson(res.data ?? {});
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
   Future<List<ActiveSosAlert>> listActiveSosForAidant() async {
     try {
       final res = await _api.get<List<dynamic>>('/aidants/me/sos/active');
