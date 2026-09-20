@@ -25,6 +25,7 @@ import 'services/live_alarm_test.dart';
 import 'services/push_messaging_service.dart';
 import 'services/reminder_sync.dart';
 import 'services/server_clock.dart';
+import 'services/sos_aidant_alarm.dart';
 import 'services/sync_lifecycle_binder.dart';
 
 Future<void> main() async {
@@ -65,6 +66,7 @@ Future<void> main() async {
       unawaited(ReminderActionDispatcher(container).handle(response));
     },
   );
+  await SosAidantAlarm.bindPlugin(alarms.plugin);
   // Réarme H0 / préavis / mark depuis le cache local (reboot / kill),
   // sans attendre le load home ni le réseau.
   try {

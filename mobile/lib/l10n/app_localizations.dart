@@ -1136,6 +1136,24 @@ abstract class AppLocalizations {
   /// **'Enter a relative’s code to follow them, with their consent.'**
   String get homeAccompanyBody;
 
+  /// No description provided for @homeAccompaniedSection.
+  ///
+  /// In en, this message translates to:
+  /// **'People I support'**
+  String get homeAccompaniedSection;
+
+  /// No description provided for @healthAidantOnlyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health is your own follow-up'**
+  String get healthAidantOnlyTitle;
+
+  /// No description provided for @healthAidantOnlyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurements here are for your own follow-up. You can start it whenever you want. The people you support stay on Home.'**
+  String get healthAidantOnlyBody;
+
   /// No description provided for @homeShareCodeTitle.
   ///
   /// In en, this message translates to:
@@ -3554,6 +3572,12 @@ abstract class AppLocalizations {
   /// **'Adherence'**
   String get cercleDetailAdherence;
 
+  /// No description provided for @cercleTodaySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get cercleTodaySection;
+
   /// No description provided for @cercleDetailVitals.
   ///
   /// In en, this message translates to:
@@ -3607,6 +3631,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No vitals shared yet.'**
   String get cercleNoVitals;
+
+  /// No description provided for @cerclePatientUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This person is no longer in your circle.'**
+  String get cerclePatientUnavailable;
 
   /// No description provided for @reminderNotifTitle.
   ///

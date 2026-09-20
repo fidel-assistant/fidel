@@ -555,8 +555,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeStatLate => 'En retard';
 
   @override
-  String get homeMissedCanStillConfirm =>
-      'Manquée — tu peux encore confirmer';
+  String get homeMissedCanStillConfirm => 'Manquée — tu peux encore confirmer';
 
   @override
   String get homeNoDoses =>
@@ -584,6 +583,16 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get homeAccompanyBody =>
       'Entre le code d’un proche pour le suivre, avec son accord.';
+
+  @override
+  String get homeAccompaniedSection => 'Personnes que j’accompagne';
+
+  @override
+  String get healthAidantOnlyTitle => 'La santé, c’est ton suivi';
+
+  @override
+  String get healthAidantOnlyBody =>
+      'Les mesures ici concernent ton propre suivi. Tu peux l’activer quand tu veux. Les personnes que tu accompagnes restent sur l’Accueil.';
 
   @override
   String get homeShareCodeTitle => 'Inviter un aidant';
@@ -1943,6 +1952,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cercleDetailAdherence => 'Observance';
 
   @override
+  String get cercleTodaySection => 'Aujourd’hui';
+
+  @override
   String get cercleDetailVitals => 'Constantes';
 
   @override
@@ -1971,6 +1983,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get cercleNoVitals => 'Aucune constante partagée pour le moment.';
+
+  @override
+  String get cerclePatientUnavailable =>
+      'Cette personne n’est plus dans ton cercle.';
 
   @override
   String get reminderNotifTitle => 'Metformine · 500 mg';

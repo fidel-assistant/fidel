@@ -212,6 +212,9 @@
   "homeActivateBody": "Reminders, treatments and doses for you, on this account.",
   "homeAccompanyTitle": "Support someone",
   "homeAccompanyBody": "Enter a relative’s code to follow them, with their consent.",
+  "homeAccompaniedSection": "People I support",
+  "healthAidantOnlyTitle": "Health is your own follow-up",
+  "healthAidantOnlyBody": "Measurements here are for your own follow-up. You can start it whenever you want. The people you support stay on Home.",
   "homeShareCodeTitle": "Invite a caregiver",
   "homeShareCodeBody": "This code expires quickly. Share it only with someone you choose.",
   "homeAidantsTitle": "Your caregivers",
@@ -717,6 +720,7 @@
     "placeholders": { "seconds": { "type": "int" } }
   },
   "cercleDetailAdherence": "Adherence",
+  "cercleTodaySection": "Today",
   "cercleDetailVitals": "Vitals",
   "cercleAdherenceWindow": "Observed window: {from} to {to}",
   "@cercleAdherenceWindow": {
@@ -732,6 +736,7 @@
   "cerclePermissionLocked": "This data is not shared with you.",
   "cerclePermissionLimited": "Limited access",
   "cercleNoVitals": "No vitals shared yet.",
+  "cerclePatientUnavailable": "This person is no longer in your circle.",
   "reminderNotifTitle": "Metformin · 500 mg",
   "reminderNotifTitleDiscreet": "Fidel · 08:00",
   "reminderNotifBodyDiscreet": "It's time for your 08:00 reminder.",

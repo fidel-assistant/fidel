@@ -316,12 +316,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home/cercle/patient/:id',
         pageBuilder: (context, state) {
-          final patient = state.extra as dynamic;
+          final extra = state.extra;
+          final patient = extra is AidantPatient ? extra : null;
           return _softPage(
             state: state,
             child: AidantPatientDetailScreen(
               patientId: state.pathParameters['id'] ?? '',
               patient: patient,
+              prenomHint: state.uri.queryParameters['prenom'],
             ),
           );
         },

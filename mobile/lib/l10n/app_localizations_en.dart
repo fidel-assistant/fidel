@@ -578,6 +578,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter a relative’s code to follow them, with their consent.';
 
   @override
+  String get homeAccompaniedSection => 'People I support';
+
+  @override
+  String get healthAidantOnlyTitle => 'Health is your own follow-up';
+
+  @override
+  String get healthAidantOnlyBody =>
+      'Measurements here are for your own follow-up. You can start it whenever you want. The people you support stay on Home.';
+
+  @override
   String get homeShareCodeTitle => 'Invite a caregiver';
 
   @override
@@ -1925,6 +1935,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cercleDetailAdherence => 'Adherence';
 
   @override
+  String get cercleTodaySection => 'Today';
+
+  @override
   String get cercleDetailVitals => 'Vitals';
 
   @override
@@ -1952,6 +1965,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cercleNoVitals => 'No vitals shared yet.';
+
+  @override
+  String get cerclePatientUnavailable =>
+      'This person is no longer in your circle.';
 
   @override
   String get reminderNotifTitle => 'Metformin · 500 mg';

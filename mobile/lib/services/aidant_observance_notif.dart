@@ -1,7 +1,19 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 
 import 'sos_aidant_alarm.dart';
+
+/// Cible d’un tap notif observance (prise confirmée / absente).
+class ObservanceNotifTarget {
+  const ObservanceNotifTarget({
+    required this.patientId,
+    required this.prenom,
+  });
+
+  final String patientId;
+  final String prenom;
+}
 
 /// Notif locale aidant pour observance (prise confirmée / absente).
 class AidantObservanceNotif {
@@ -17,12 +29,7 @@ class AidantObservanceNotif {
     required String priseId,
     required String patientId,
   }) async {
-    final plugin = FlutterLocalNotificationsPlugin();
-    const initSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      iOS: DarwinInitializationSettings(),
-    );
-    await plugin.initialize(initSettings);
+    final plugin = await SosAidantAlarm.notificationPlugin();
     await SosAidantAlarm.ensureChannel(plugin);
 
     final confirmed = kind == 'prise_confirmee';
@@ -51,8 +58,41 @@ class AidantObservanceNotif {
           presentSound: true,
         ),
       ),
-      payload: 'observance:$kind:$priseId:$patientId:$patientPrenom',
+      payload:
+          'observance:$kind:$priseId:$patientId:$patientPrenom',
     );
-    debugPrint('AidantObservanceNotif shown kind=$kind prise=$priseId');
   }
+}
+
+/// Parse `observance:kind:priseId:patientId:prenom`.
+ObservanceNotifTarget? parseObservancePayload(String? payload) {
+  if (payload == null || !payload.startsWith('observance:')) return null;
+  final parts = payload.split(':');
+  if (parts.length < 5) return null;
+  final patientId = parts[3];
+  if (patientId.isEmpty) return null;
+  return ObservanceNotifTarget(
+    patientId: patientId,
+    prenom: parts.sublist(4).join(':'),
+  );
+}
+
+/// Ouvre le détail du patient accompagné. Anti-doublon si déjà sur cet écran.
+void openAidantPatientDetail(
+  GoRouter router, {
+  required String patientId,
+  String prenom = 'Patient',
+}) {
+  if (patientId.isEmpty) return;
+
+  void push() {
+    if (router.state.uri.path == '/home/cercle/patient/$patientId') return;
+    final location = Uri(
+      path: '/home/cercle/patient/$patientId',
+      queryParameters: prenom.isEmpty ? null : {'prenom': prenom},
+    ).toString();
+    router.push(location);
+  }
+
+  WidgetsBinding.instance.addPostFrameCallback((_) => push());
 }

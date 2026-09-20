@@ -5,9 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/database/providers.dart';
 import '../core/locale/locale_controller.dart';
+import '../core/router/app_router.dart';
 import '../features/home/application/home_controller.dart';
 import '../features/home/data/home_repository.dart';
 import '../features/home/domain/dashboard_models.dart';
+import 'aidant_observance_notif.dart';
 import 'alarm_prefs.dart';
 import 'check_in_reminder_service.dart';
 import 'dose_slot.dart';
@@ -16,7 +18,6 @@ import 'reminder_sync_perf.dart';
 import 'scheduled_dose.dart';
 import 'sos_aidant_alarm.dart';
 import 'sync_engine.dart';
-import '../core/router/app_router.dart';
 
 final reminderAlarmServiceProvider = Provider<ReminderAlarmService>((ref) {
   return ReminderAlarmService(ref.watch(sharedPreferencesProvider));
@@ -52,10 +53,16 @@ class ReminderActionDispatcher {
 
     final sosAlert = parseSosPayload(response.payload);
     if (sosAlert != null) {
-      final router = _container.read(appRouterProvider);
-      router.push(
-        '/sos-aidant',
-        extra: sosAlert,
+      openSosAidantScreen(_container.read(appRouterProvider), sosAlert);
+      return;
+    }
+
+    final observance = parseObservancePayload(response.payload);
+    if (observance != null) {
+      openAidantPatientDetail(
+        _container.read(appRouterProvider),
+        patientId: observance.patientId,
+        prenom: observance.prenom,
       );
       return;
     }
