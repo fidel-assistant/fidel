@@ -13,7 +13,8 @@ android {
     namespace = "cm.fidel.fidel_assistant"
     // permission_handler_android exige API 37+.
     compileSdk = 37
-    ndkVersion = flutter.ndkVersion
+    // NDK 28.2.x local copy is corrupted (no source.properties); use installed side-by-side NDK 30.
+    ndkVersion = "30.0.16248370"
 
     compileOptions {
         // Requis par flutter_local_notifications (API Java 8+).

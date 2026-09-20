@@ -48,6 +48,7 @@ class AidantObservanceNotif {
           channelId,
           channelName,
           channelDescription: 'Alertes des patients accompagnés',
+          icon: 'ic_stat_observance',
           importance: Importance.high,
           priority: Priority.high,
           visibility: NotificationVisibility.public,

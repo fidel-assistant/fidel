@@ -83,7 +83,7 @@ class SosEscalationService : Service() {
 
     private fun buildNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_stat_sos)
             .setContentTitle("SOS Fidel")
             .setContentText("En attente des aidants…")
             .setOngoing(true)

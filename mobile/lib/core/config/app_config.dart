@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 /// Config de l’app. En local : éditer `assets/config/app.json`, puis `flutter run`.
 class AppConfig {
-  static const String appName = 'Fidel Assistant';
+  static const String appName = 'Fidel';
 
   static const String _apiDefine = String.fromEnvironment('API_BASE_URL');
   static const String _googleWebDefine = String.fromEnvironment(

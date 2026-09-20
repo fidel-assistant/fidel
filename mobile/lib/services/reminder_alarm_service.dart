@@ -211,7 +211,7 @@ class ReminderAlarmService {
       tz.setLocalLocation(tz.getLocation('UTC'));
     }
 
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidInit = AndroidInitializationSettings('@drawable/ic_stat_fidel');
     final darwinInit = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -737,6 +737,7 @@ class ReminderAlarmService {
             preavisChannelId,
             preavisChannelName,
             channelDescription: 'Avertissement avant l’heure de prise',
+            icon: 'ic_stat_rappel',
             importance: Importance.high,
             priority: Priority.high,
             category: AndroidNotificationCategory.reminder,
@@ -818,6 +819,7 @@ class ReminderAlarmService {
             markChannelId,
             markChannelName,
             channelDescription: 'Confirmation de prise (H+5)',
+            icon: 'ic_stat_rappel',
             importance: Importance.high,
             priority: Priority.high,
             category: AndroidNotificationCategory.reminder,

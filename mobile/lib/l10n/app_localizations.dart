@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'Fidel Assistant'**
+  /// **'Fidel'**
   String get appName;
 
   /// No description provided for @languageTitle.
@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @successAccountSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your account is created and ready. Welcome to Fidel Assistant.'**
+  /// **'Your account is created and ready. Welcome to Fidel.'**
   String get successAccountSubtitle;
 
   /// No description provided for @successAccountCta.
@@ -1430,6 +1430,66 @@ abstract class AppLocalizations {
   /// **'We note the condition first; medicines come right after.'**
   String get homeActionTraitementBody;
 
+  /// No description provided for @homeSoftChecklistTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A few optional steps'**
+  String get homeSoftChecklistTitle;
+
+  /// No description provided for @homeSoftPhoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your phone number'**
+  String get homeSoftPhoneTitle;
+
+  /// No description provided for @homeSoftPhoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Helpful for SOS and reaching you if needed.'**
+  String get homeSoftPhoneBody;
+
+  /// No description provided for @homeSoftContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an emergency contact'**
+  String get homeSoftContactTitle;
+
+  /// No description provided for @homeSoftContactBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone you trust for critical moments.'**
+  String get homeSoftContactBody;
+
+  /// No description provided for @homeSoftVoixTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalize your reminder voice'**
+  String get homeSoftVoixTitle;
+
+  /// No description provided for @homeSoftVoixBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A short message in your voice for alarms.'**
+  String get homeSoftVoixBody;
+
+  /// No description provided for @homeSoftPhotoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a profile photo'**
+  String get homeSoftPhotoTitle;
+
+  /// No description provided for @homeSoftPhotoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'So your circle can recognize you easily.'**
+  String get homeSoftPhotoBody;
+
+  /// No description provided for @homeSoftDismissA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss this suggestion'**
+  String get homeSoftDismissA11y;
+
   /// No description provided for @homeCareSubtitle.
   ///
   /// In en, this message translates to:
@@ -2011,6 +2071,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Treatment ended — reminders stopped.'**
   String get homeTreatmentEndedToast;
+
+  /// No description provided for @manageTraitementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage treatment'**
+  String get manageTraitementTitle;
+
+  /// No description provided for @manageTraitementSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment'**
+  String get manageTraitementSection;
+
+  /// No description provided for @manageTraitementEditMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit phase and end date'**
+  String get manageTraitementEditMeta;
+
+  /// No description provided for @manageTraitementPhaseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase'**
+  String get manageTraitementPhaseLabel;
+
+  /// No description provided for @manageTraitementSuspend.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get manageTraitementSuspend;
+
+  /// No description provided for @manageTraitementResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get manageTraitementResume;
+
+  /// No description provided for @manageTraitementSuspendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause this treatment?'**
+  String get manageTraitementSuspendTitle;
+
+  /// No description provided for @manageTraitementSuspendBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders stop for now. You can resume anytime from this screen.'**
+  String get manageTraitementSuspendBody;
+
+  /// No description provided for @manageTraitementSuspendConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, pause it'**
+  String get manageTraitementSuspendConfirm;
+
+  /// No description provided for @manageTraitementSuspendedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get manageTraitementSuspendedBadge;
+
+  /// No description provided for @manageTraitementSuspendedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment paused — reminders on hold.'**
+  String get manageTraitementSuspendedToast;
+
+  /// No description provided for @manageTraitementResumedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment resumed — reminders back on.'**
+  String get manageTraitementResumedToast;
+
+  /// No description provided for @manageTraitementUpdatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment updated.'**
+  String get manageTraitementUpdatedToast;
+
+  /// No description provided for @manageTraitementEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends {date}'**
+  String manageTraitementEndDate(String date);
+
+  /// No description provided for @manageMedsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicines'**
+  String get manageMedsSection;
+
+  /// No description provided for @manageMedsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No active medicines on this treatment.'**
+  String get manageMedsEmpty;
+
+  /// No description provided for @manageMedAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get manageMedAdd;
+
+  /// No description provided for @manageMedEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get manageMedEdit;
+
+  /// No description provided for @manageMedDeactivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate'**
+  String get manageMedDeactivate;
+
+  /// No description provided for @manageMedDeactivateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate this medicine?'**
+  String get manageMedDeactivateTitle;
+
+  /// No description provided for @manageMedDeactivateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'“{name}” will no longer trigger reminders. You can add another later.'**
+  String manageMedDeactivateBody(String name);
+
+  /// No description provided for @manageMedDeactivateConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, deactivate'**
+  String get manageMedDeactivateConfirm;
+
+  /// No description provided for @manageMedDeactivatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine deactivated.'**
+  String get manageMedDeactivatedToast;
+
+  /// No description provided for @manageMedUpdatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine updated.'**
+  String get manageMedUpdatedToast;
+
+  /// No description provided for @manageMedNeedIdentity.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the name and dosage.'**
+  String get manageMedNeedIdentity;
 
   /// No description provided for @configDateFinLabel.
   ///

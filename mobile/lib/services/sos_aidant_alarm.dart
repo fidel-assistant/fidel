@@ -29,7 +29,7 @@ class SosAidantAlarm {
   static Future<void> _ensureBackgroundPlugin() async {
     if (_backgroundInitialized) return;
     const initSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      android: AndroidInitializationSettings('@drawable/ic_stat_fidel'),
       iOS: DarwinInitializationSettings(),
     );
     await _backgroundPlugin.initialize(initSettings);
@@ -77,6 +77,7 @@ class SosAidantAlarm {
           channelId,
           channelName,
           channelDescription: 'Alertes SOS des patients accompagnés',
+          icon: 'ic_stat_sos',
           importance: Importance.max,
           priority: Priority.max,
           category: AndroidNotificationCategory.alarm,

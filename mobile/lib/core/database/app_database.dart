@@ -222,14 +222,7 @@ class AppDatabase extends _$AppDatabase {
           traitementMirrors,
           TraitementMirrorsCompanion.insert(
             id: t.id,
-            payloadJson: jsonEncode({
-              'id': t.id,
-              if (t.dateDebut != null)
-                'date_debut': t.dateDebut!.toIso8601String(),
-              if (t.dateFinPrevue != null)
-                'date_fin_prevue': t.dateFinPrevue!.toIso8601String(),
-              if (t.jourTraitement != null) 'jour_traitement': t.jourTraitement,
-            }),
+            payloadJson: jsonEncode(t.toCacheJson()),
             updatedAt: DateTime.now().toUtc(),
           ),
           mode: InsertMode.insertOrReplace,

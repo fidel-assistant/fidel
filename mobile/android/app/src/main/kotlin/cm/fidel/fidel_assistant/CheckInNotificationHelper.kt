@@ -81,7 +81,7 @@ object CheckInNotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_stat_checkin)
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())

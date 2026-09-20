@@ -27,7 +27,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            'assets/images/head.png',
+            'assets/images/brand_header_v2.png',
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => const ColoredBox(color: AppColors.primary),
           ),

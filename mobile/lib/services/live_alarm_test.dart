@@ -41,6 +41,7 @@ Future<void> maybeRunLiveAlarmTest(ReminderAlarmService alarms) async {
       android: AndroidNotificationDetails(
         ReminderAlarmService.preavisChannelId,
         ReminderAlarmService.preavisChannelName,
+        icon: 'ic_stat_rappel',
         importance: Importance.high,
         priority: Priority.high,
       ),
@@ -93,6 +94,7 @@ Future<void> maybeRunLiveAlarmTest(ReminderAlarmService alarms) async {
       android: AndroidNotificationDetails(
         ReminderAlarmService.markChannelId,
         ReminderAlarmService.markChannelName,
+        icon: 'ic_stat_rappel',
         importance: Importance.high,
         priority: Priority.high,
         actions: ReminderAlarmService.markAndroidActions(en: false),

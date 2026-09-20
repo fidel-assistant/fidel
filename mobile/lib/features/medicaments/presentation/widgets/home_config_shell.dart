@@ -61,7 +61,7 @@ class HomeConfigShell extends StatelessWidget {
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      'assets/images/head.png',
+                      'assets/images/brand_header_v2.png',
                       fit: BoxFit.cover,
                       alignment: Alignment.topCenter,
                       errorBuilder: (_, __, ___) => const SizedBox.expand(),

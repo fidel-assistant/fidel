@@ -22,9 +22,9 @@ L’URL API et Google Sign-In se lisent dans `assets/config/app.json` (IP LAN du
 - `core/config` — `AppConfig` + dart-defines
 - `core/storage` — JWT dans `flutter_secure_storage`
 - `core/network` — Dio + refresh Bearer automatique
-- `core/theme` — palette bleu (`#2563EB`) + police **Satoshi**
+- `core/theme` — palette (`#0494D0` / `#037299`) + police **Satoshi**
 - `l10n` — EN / FR (`gen-l10n`), choix de langue au premier lancement
-- Auth UI — login (design header `assets/images/head.png`) + `POST /auth/login`
+- Auth UI — login (header `assets/images/brand_header_v2.png` + `logo_mark_white.svg`) + `POST /auth/login`
 - Features dossiers : auth, onboarding, medicaments, constantes, reseau, home
 - Permissions Android : Internet, notifs, alarmes exactes, boot
 

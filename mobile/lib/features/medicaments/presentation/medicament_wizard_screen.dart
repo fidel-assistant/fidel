@@ -69,7 +69,10 @@ class _MedicamentWizardScreenState extends ConsumerState<MedicamentWizardScreen>
     try {
       final items = await ref
           .read(medicamentsRepositoryProvider)
-          .listMedicaments(traitementId: widget.traitementId);
+          .listMedicaments(
+            traitementId: widget.traitementId,
+            actifsOnly: true,
+          );
       if (!mounted) return;
       setState(() => _configured = items);
     } catch (_) {

@@ -62,7 +62,10 @@ class _MedStockSheetState extends ConsumerState<MedStockSheet> {
     try {
       final items = await ref
           .read(medicamentsRepositoryProvider)
-          .listMedicaments(traitementId: widget.traitementId);
+          .listMedicaments(
+            traitementId: widget.traitementId,
+            actifsOnly: true,
+          );
       for (final c in _stockCtrls.values) {
         c.dispose();
       }

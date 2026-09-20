@@ -9,7 +9,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appName => 'Fidel Assistant';
+  String get appName => 'Fidel';
 
   @override
   String get languageTitle => 'Choisis ta langue';
@@ -186,7 +186,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get successAccountSubtitle =>
-      'Ton compte est créé et prêt. Bienvenue sur Fidel Assistant.';
+      'Ton compte est créé et prêt. Bienvenue sur Fidel.';
 
   @override
   String get successAccountCta => 'Continuer la configuration';
@@ -746,6 +746,38 @@ class AppLocalizationsFr extends AppLocalizations {
       'On note d’abord la maladie, les médicaments viennent juste après.';
 
   @override
+  String get homeSoftChecklistTitle => 'Pour aller plus loin';
+
+  @override
+  String get homeSoftPhoneTitle => 'Ajouter ton téléphone';
+
+  @override
+  String get homeSoftPhoneBody => 'Utile pour le SOS et te joindre si besoin.';
+
+  @override
+  String get homeSoftContactTitle => 'Ajouter un contact d’urgence';
+
+  @override
+  String get homeSoftContactBody =>
+      'Une personne de confiance pour les moments critiques.';
+
+  @override
+  String get homeSoftVoixTitle => 'Personnaliser la voix de rappel';
+
+  @override
+  String get homeSoftVoixBody => 'Un message à ta voix pour les alarmes.';
+
+  @override
+  String get homeSoftPhotoTitle => 'Ajouter une photo';
+
+  @override
+  String get homeSoftPhotoBody =>
+      'Pour que ton cercle te reconnaisse facilement.';
+
+  @override
+  String get homeSoftDismissA11y => 'Masquer cette suggestion';
+
+  @override
   String get homeCareSubtitle =>
       'Mesures, prises et journal — le détail de ton suivi.';
 
@@ -1087,6 +1119,88 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeTreatmentEndedToast => 'Traitement terminé — rappels arrêtés.';
+
+  @override
+  String get manageTraitementTitle => 'Gérer le traitement';
+
+  @override
+  String get manageTraitementSection => 'Traitement';
+
+  @override
+  String get manageTraitementEditMeta => 'Modifier phase et date de fin';
+
+  @override
+  String get manageTraitementPhaseLabel => 'Phase';
+
+  @override
+  String get manageTraitementSuspend => 'Suspendre';
+
+  @override
+  String get manageTraitementResume => 'Reprendre';
+
+  @override
+  String get manageTraitementSuspendTitle => 'Suspendre ce traitement ?';
+
+  @override
+  String get manageTraitementSuspendBody =>
+      'Les rappels s’arrêtent temporairement. Tu pourras reprendre quand tu veux depuis cet écran.';
+
+  @override
+  String get manageTraitementSuspendConfirm => 'Oui, suspendre';
+
+  @override
+  String get manageTraitementSuspendedBadge => 'Suspendu';
+
+  @override
+  String get manageTraitementSuspendedToast =>
+      'Traitement suspendu — rappels en pause.';
+
+  @override
+  String get manageTraitementResumedToast =>
+      'Traitement repris — rappels réactivés.';
+
+  @override
+  String get manageTraitementUpdatedToast => 'Traitement mis à jour.';
+
+  @override
+  String manageTraitementEndDate(String date) {
+    return 'Fin prévue le $date';
+  }
+
+  @override
+  String get manageMedsSection => 'Médicaments';
+
+  @override
+  String get manageMedsEmpty => 'Aucun médicament actif sur ce traitement.';
+
+  @override
+  String get manageMedAdd => 'Ajouter';
+
+  @override
+  String get manageMedEdit => 'Modifier';
+
+  @override
+  String get manageMedDeactivate => 'Désactiver';
+
+  @override
+  String get manageMedDeactivateTitle => 'Désactiver ce médicament ?';
+
+  @override
+  String manageMedDeactivateBody(String name) {
+    return '« $name » ne déclenchera plus de rappels. Tu pourras en ajouter un autre plus tard.';
+  }
+
+  @override
+  String get manageMedDeactivateConfirm => 'Oui, désactiver';
+
+  @override
+  String get manageMedDeactivatedToast => 'Médicament désactivé.';
+
+  @override
+  String get manageMedUpdatedToast => 'Médicament mis à jour.';
+
+  @override
+  String get manageMedNeedIdentity => 'Indique le nom et le dosage.';
 
   @override
   String get configDateFinLabel => 'Date de fin prévue (optionnel)';

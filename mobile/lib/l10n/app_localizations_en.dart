@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Fidel Assistant';
+  String get appName => 'Fidel';
 
   @override
   String get languageTitle => 'Choose your language';
@@ -184,7 +184,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get successAccountSubtitle =>
-      'Your account is created and ready. Welcome to Fidel Assistant.';
+      'Your account is created and ready. Welcome to Fidel.';
 
   @override
   String get successAccountCta => 'Continue setup';
@@ -739,6 +739,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'We note the condition first; medicines come right after.';
 
   @override
+  String get homeSoftChecklistTitle => 'A few optional steps';
+
+  @override
+  String get homeSoftPhoneTitle => 'Add your phone number';
+
+  @override
+  String get homeSoftPhoneBody => 'Helpful for SOS and reaching you if needed.';
+
+  @override
+  String get homeSoftContactTitle => 'Add an emergency contact';
+
+  @override
+  String get homeSoftContactBody => 'Someone you trust for critical moments.';
+
+  @override
+  String get homeSoftVoixTitle => 'Personalize your reminder voice';
+
+  @override
+  String get homeSoftVoixBody => 'A short message in your voice for alarms.';
+
+  @override
+  String get homeSoftPhotoTitle => 'Add a profile photo';
+
+  @override
+  String get homeSoftPhotoBody => 'So your circle can recognize you easily.';
+
+  @override
+  String get homeSoftDismissA11y => 'Dismiss this suggestion';
+
+  @override
   String get homeCareSubtitle =>
       'Vitals, doses and log — the detail of your follow-up.';
 
@@ -1077,6 +1107,88 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeTreatmentEndedToast => 'Treatment ended — reminders stopped.';
+
+  @override
+  String get manageTraitementTitle => 'Manage treatment';
+
+  @override
+  String get manageTraitementSection => 'Treatment';
+
+  @override
+  String get manageTraitementEditMeta => 'Edit phase and end date';
+
+  @override
+  String get manageTraitementPhaseLabel => 'Phase';
+
+  @override
+  String get manageTraitementSuspend => 'Pause';
+
+  @override
+  String get manageTraitementResume => 'Resume';
+
+  @override
+  String get manageTraitementSuspendTitle => 'Pause this treatment?';
+
+  @override
+  String get manageTraitementSuspendBody =>
+      'Reminders stop for now. You can resume anytime from this screen.';
+
+  @override
+  String get manageTraitementSuspendConfirm => 'Yes, pause it';
+
+  @override
+  String get manageTraitementSuspendedBadge => 'Paused';
+
+  @override
+  String get manageTraitementSuspendedToast =>
+      'Treatment paused — reminders on hold.';
+
+  @override
+  String get manageTraitementResumedToast =>
+      'Treatment resumed — reminders back on.';
+
+  @override
+  String get manageTraitementUpdatedToast => 'Treatment updated.';
+
+  @override
+  String manageTraitementEndDate(String date) {
+    return 'Ends $date';
+  }
+
+  @override
+  String get manageMedsSection => 'Medicines';
+
+  @override
+  String get manageMedsEmpty => 'No active medicines on this treatment.';
+
+  @override
+  String get manageMedAdd => 'Add';
+
+  @override
+  String get manageMedEdit => 'Edit';
+
+  @override
+  String get manageMedDeactivate => 'Deactivate';
+
+  @override
+  String get manageMedDeactivateTitle => 'Deactivate this medicine?';
+
+  @override
+  String manageMedDeactivateBody(String name) {
+    return '“$name” will no longer trigger reminders. You can add another later.';
+  }
+
+  @override
+  String get manageMedDeactivateConfirm => 'Yes, deactivate';
+
+  @override
+  String get manageMedDeactivatedToast => 'Medicine deactivated.';
+
+  @override
+  String get manageMedUpdatedToast => 'Medicine updated.';
+
+  @override
+  String get manageMedNeedIdentity => 'Enter the name and dosage.';
 
   @override
   String get configDateFinLabel => 'Expected end date (optional)';
