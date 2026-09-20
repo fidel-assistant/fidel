@@ -1952,6 +1952,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cercleDetailAdherence => 'Observance';
 
   @override
+  String get cercleTodaySection => 'Aujourd’hui';
+
+  @override
   String get cercleDetailVitals => 'Constantes';
 
   @override
@@ -1980,6 +1983,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get cercleNoVitals => 'Aucune constante partagée pour le moment.';
+
+  @override
+  String get cerclePatientUnavailable =>
+      'Cette personne n’est plus dans ton cercle.';
 
   @override
   String get reminderNotifTitle => 'Metformine · 500 mg';

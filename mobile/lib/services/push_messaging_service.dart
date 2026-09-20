@@ -134,13 +134,23 @@ class PushMessagingService {
       return;
     }
     if (kind == 'prise_confirmee' || kind == 'prise_non_confirmee') {
+      final patientId = data['patient_id']?.toString() ?? '';
+      final prenom = data['patient_prenom']?.toString() ?? 'Patient';
+      if (fromUserTap) {
+        openAidantPatientDetail(
+          _ref.read(appRouterProvider),
+          patientId: patientId,
+          prenom: prenom,
+        );
+        return;
+      }
       await AidantObservanceNotif.show(
         kind: kind,
-        patientPrenom: data['patient_prenom']?.toString() ?? 'Patient',
+        patientPrenom: prenom,
         medicament: data['medicament']?.toString() ?? 'médicament',
         heure: data['heure']?.toString() ?? '',
         priseId: data['prise_id']?.toString() ?? '',
-        patientId: data['patient_id']?.toString() ?? '',
+        patientId: patientId,
       );
     }
   }

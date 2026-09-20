@@ -17,11 +17,13 @@ class AidantPatientDetailScreen extends ConsumerStatefulWidget {
   const AidantPatientDetailScreen({
     super.key,
     required this.patientId,
-    required this.patient,
+    this.patient,
+    this.prenomHint,
   });
 
   final String patientId;
-  final AidantPatient patient;
+  final AidantPatient? patient;
+  final String? prenomHint;
 
   @override
   ConsumerState<AidantPatientDetailScreen> createState() =>
@@ -30,6 +32,8 @@ class AidantPatientDetailScreen extends ConsumerStatefulWidget {
 
 class _AidantPatientDetailScreenState
     extends ConsumerState<AidantPatientDetailScreen> {
+  AidantPatient? _patient;
+  AidantObservance? _today;
   AidantObservance? _observance;
   List<Constante> _constantes = const [];
   String? _error;
@@ -47,19 +51,57 @@ class _AidantPatientDetailScreenState
       _error = null;
     });
     try {
-      final observance = widget.patient.permissions.observance
-          ? await ref.read(homeRepositoryProvider).fetchPatientObservance(
-                widget.patientId,
-              )
-          : null;
-      final constantes = widget.patient.permissions.constantes
-          ? await ref.read(homeRepositoryProvider).listAidantConstantes(
-                widget.patientId,
-              )
+      final repo = ref.read(homeRepositoryProvider);
+      var patient = widget.patient;
+      if (patient == null || patient.id != widget.patientId) {
+        final list = await repo.listAccompaniedPatients();
+        AidantPatient? found;
+        for (final item in list) {
+          if (item.id == widget.patientId) {
+            found = item;
+            break;
+          }
+        }
+        patient = found;
+      }
+      if (patient == null) {
+        if (!mounted) return;
+        setState(() {
+          _patient = null;
+          _today = null;
+          _observance = null;
+          _constantes = const [];
+          _loading = false;
+          _error = AppLocalizations.of(context).cerclePatientUnavailable;
+        });
+        return;
+      }
+
+      final now = DateTime.now();
+      final day = DateTime(now.year, now.month, now.day);
+      final canSeeDoses = patient.permissions.observance;
+      AidantObservance? today;
+      AidantObservance? week;
+      if (canSeeDoses) {
+        final results = await Future.wait([
+          repo.fetchPatientObservance(
+            widget.patientId,
+            depuis: day,
+            jusquA: day,
+          ),
+          repo.fetchPatientObservance(widget.patientId),
+        ]);
+        today = results[0];
+        week = results[1];
+      }
+      final constantes = patient.permissions.constantes
+          ? await repo.listAidantConstantes(widget.patientId)
           : const <Constante>[];
       if (!mounted) return;
       setState(() {
-        _observance = observance;
+        _patient = patient;
+        _today = today;
+        _observance = week;
         _constantes = constantes;
         _loading = false;
       });
@@ -78,12 +120,17 @@ class _AidantPatientDetailScreenState
     final tokens = ThemeTokens.of(context);
     final locale = Localizations.localeOf(context).toString();
     final dateFmt = DateFormat.MMMd(locale);
+    final patient = _patient;
+    final hint = widget.prenomHint?.trim();
+    final title = patient?.displayName ??
+        widget.patient?.displayName ??
+        ((hint != null && hint.isNotEmpty) ? hint : 'Patient');
 
     return DawnBackdrop(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-                    title: Text(widget.patient.displayName),
+          title: Text(title),
         ),
         body: RefreshIndicator(
           color: AppColors.primary,
@@ -104,21 +151,52 @@ class _AidantPatientDetailScreenState
                     ),
                   ),
                 )
-              else ...[
-                _PatientHero(patient: widget.patient),
+              else if (patient != null) ...[
+                _PatientHero(patient: patient),
                 const SizedBox(height: 18),
-                Text(
-                  l10n.cercleDetailAdherence.toUpperCase(),
-                  style: TextStyle(
-                    fontFamily: AppTheme.fontFamily,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.7,
-                    color: tokens.textSecondary,
-                  ),
-                ),
+                _SectionLabel(label: l10n.cercleTodaySection),
                 const SizedBox(height: 8),
-                if (!widget.patient.permissions.observance)
+                if (!patient.permissions.observance)
+                  PremiumCard(
+                    child: Text(
+                      l10n.cerclePermissionLocked,
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        color: tokens.textSecondary,
+                      ),
+                    ),
+                  )
+                else if (_today != null)
+                  PremiumCard(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _MetricTile(
+                            value: '${_today!.confirmees}',
+                            label: l10n.cercleAdherenceConfirmed,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _MetricTile(
+                            value: '${_today!.enAttente}',
+                            label: l10n.cercleAdherencePending,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _MetricTile(
+                            value: '${_today!.manquees}',
+                            label: l10n.cercleAdherenceMissed,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 18),
+                _SectionLabel(label: l10n.cercleDetailAdherence),
+                const SizedBox(height: 8),
+                if (!patient.permissions.observance)
                   PremiumCard(
                     child: Text(
                       l10n.cerclePermissionLocked,
@@ -184,18 +262,9 @@ class _AidantPatientDetailScreenState
                     ),
                   ),
                 const SizedBox(height: 18),
-                Text(
-                  l10n.cercleDetailVitals.toUpperCase(),
-                  style: TextStyle(
-                    fontFamily: AppTheme.fontFamily,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.7,
-                    color: tokens.textSecondary,
-                  ),
-                ),
+                _SectionLabel(label: l10n.cercleDetailVitals),
                 const SizedBox(height: 8),
-                if (!widget.patient.permissions.constantes)
+                if (!patient.permissions.constantes)
                   PremiumCard(
                     child: Text(
                       l10n.cerclePermissionLocked,
@@ -312,18 +381,13 @@ class _PatientHero extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    _Chip(
-                      label: patient.permissions.observance
-                          ? l10n.homeAidantsPermObservance
-                          : l10n.cerclePermissionLimited,
-                    ),
-                    if (patient.permissions.constantes)
-                      _Chip(label: l10n.homeAidantsPermConstantes),
-                  ],
+                Text(
+                  _visibleAccess(l10n, patient.permissions),
+                  style: TextStyle(
+                    fontFamily: AppTheme.fontFamily,
+                    fontSize: 13,
+                    color: tokens.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -379,29 +443,32 @@ class _MetricTile extends StatelessWidget {
   }
 }
 
-class _Chip extends StatelessWidget {
-  const _Chip({required this.label});
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({required this.label});
 
   final String label;
 
   @override
   Widget build(BuildContext context) {
     final tokens = ThemeTokens.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: tokens.isDark ? 0.2 : 0.08),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontFamily: AppTheme.fontFamily,
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: AppColors.primary,
-        ),
+    return Text(
+      label.toUpperCase(),
+      style: TextStyle(
+        fontFamily: AppTheme.fontFamily,
+        fontSize: 11,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.7,
+        color: tokens.textSecondary,
       ),
     );
   }
+}
+
+String _visibleAccess(AppLocalizations l10n, AidantPermissions permissions) {
+  if (permissions.observance && permissions.constantes) {
+    return l10n.homeAidantsPermBoth;
+  }
+  if (permissions.observance) return l10n.homeAidantsPermObservanceOnly;
+  if (permissions.constantes) return l10n.homeAidantsPermConstantes;
+  return l10n.cerclePermissionLimited;
 }

@@ -37,6 +37,9 @@ class SosAidantAlarm {
     _backgroundInitialized = true;
   }
 
+  static Future<FlutterLocalNotificationsPlugin> notificationPlugin() =>
+      _pluginForShow();
+
   static Future<FlutterLocalNotificationsPlugin> _pluginForShow() async {
     final bound = _boundPlugin;
     if (bound != null) return bound;

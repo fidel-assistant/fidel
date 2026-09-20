@@ -3572,6 +3572,12 @@ abstract class AppLocalizations {
   /// **'Adherence'**
   String get cercleDetailAdherence;
 
+  /// No description provided for @cercleTodaySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get cercleTodaySection;
+
   /// No description provided for @cercleDetailVitals.
   ///
   /// In en, this message translates to:
@@ -3625,6 +3631,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No vitals shared yet.'**
   String get cercleNoVitals;
+
+  /// No description provided for @cerclePatientUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This person is no longer in your circle.'**
+  String get cerclePatientUnavailable;
 
   /// No description provided for @reminderNotifTitle.
   ///

@@ -1935,6 +1935,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cercleDetailAdherence => 'Adherence';
 
   @override
+  String get cercleTodaySection => 'Today';
+
+  @override
   String get cercleDetailVitals => 'Vitals';
 
   @override
@@ -1962,6 +1965,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cercleNoVitals => 'No vitals shared yet.';
+
+  @override
+  String get cerclePatientUnavailable =>
+      'This person is no longer in your circle.';
 
   @override
   String get reminderNotifTitle => 'Metformin · 500 mg';

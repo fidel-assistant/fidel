@@ -705,6 +705,7 @@
     "placeholders": { "seconds": { "type": "int" } }
   },
   "cercleDetailAdherence": "Observance",
+  "cercleTodaySection": "Aujourd’hui",
   "cercleDetailVitals": "Constantes",
   "cercleAdherenceWindow": "Fenêtre suivie : du {from} au {to}",
   "@cercleAdherenceWindow": {
@@ -720,6 +721,7 @@
   "cerclePermissionLocked": "Cette donnée n’est pas partagée avec toi.",
   "cerclePermissionLimited": "Accès limité",
   "cercleNoVitals": "Aucune constante partagée pour le moment.",
+  "cerclePatientUnavailable": "Cette personne n’est plus dans ton cercle.",
   "reminderNotifTitle": "Metformine · 500 mg",
   "reminderNotifTitleDiscreet": "Fidel · 08:00",
   "reminderNotifBodyDiscreet": "C'est l'heure de ton rappel de 08:00.",

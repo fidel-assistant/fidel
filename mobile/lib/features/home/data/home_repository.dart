@@ -579,10 +579,25 @@ class HomeRepository {
     }
   }
 
-  Future<AidantObservance> fetchPatientObservance(String patientId) async {
+  Future<AidantObservance> fetchPatientObservance(
+    String patientId, {
+    DateTime? depuis,
+    DateTime? jusquA,
+  }) async {
     try {
+      String ymd(DateTime d) {
+        final y = d.year.toString().padLeft(4, '0');
+        final m = d.month.toString().padLeft(2, '0');
+        final day = d.day.toString().padLeft(2, '0');
+        return '$y-$m-$day';
+      }
+
+      final query = <String, dynamic>{};
+      if (depuis != null) query['depuis'] = ymd(depuis);
+      if (jusquA != null) query['jusqu_a'] = ymd(jusquA);
       final res = await _api.get<Map<String, dynamic>>(
         '/aidants/me/patients/$patientId/observance',
+        queryParameters: query.isEmpty ? null : query,
       );
       return AidantObservance.fromJson(res.data ?? {});
     } on DioException catch (e) {
