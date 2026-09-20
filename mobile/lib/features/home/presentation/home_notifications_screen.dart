@@ -38,7 +38,7 @@ class HomeNotificationsScreen extends ConsumerWidget {
             if (dash != null)
               PremiumCard(
               onTap: needsPerms
-                  ? () => context.push('/onboarding/permissions')
+                  ? () => context.push('/home/permissions')
                   : null,
               child: Row(
                 children: [

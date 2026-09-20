@@ -20,6 +20,7 @@ import '../../features/home/presentation/add_traitement_screen.dart';
 import '../../features/home/presentation/aidant_patient_detail_screen.dart';
 import '../../features/home/presentation/aidants_invite_screen.dart';
 import '../../features/home/presentation/aidants_list_screen.dart';
+import '../../features/home/presentation/home_device_permissions_screen.dart';
 import '../../features/home/presentation/home_notifications_screen.dart';
 import '../../features/home/presentation/health_detail_screen.dart';
 import '../../features/home/presentation/home_shell.dart';
@@ -266,9 +267,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/home/traitement',
+        pageBuilder: (context, state) {
+          final fromActivate = state.extra == true;
+          return _softPage(
+            state: state,
+            child: AddTraitementScreen(fromActivate: fromActivate),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/home/permissions',
         pageBuilder: (context, state) => _softPage(
           state: state,
-          child: const AddTraitementScreen(),
+          child: const HomeDevicePermissionsScreen(),
         ),
       ),
       GoRoute(

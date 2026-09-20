@@ -5,7 +5,6 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import '../../../core/config/app_config.dart';
 import '../../../core/locale/locale_controller.dart';
-import '../../../core/network/api_exception.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/premium.dart';
 import '../../../core/theme/theme_controller.dart';
@@ -13,6 +12,7 @@ import '../../../core/ui/app_toast.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/application/auth_providers.dart';
 import '../application/home_controller.dart';
+import 'activate_suivi_flow.dart';
 import 'widgets/profile_header_card.dart';
 import 'widgets/profile_settings_tile.dart';
 import 'widgets/home_skeleton.dart';
@@ -148,7 +148,12 @@ class HomeProfileScreen extends ConsumerWidget {
                     icon: IconsaxPlusLinear.health,
                     title: l10n.homeActivateTitle,
                     subtitle: l10n.homeActivateBody,
-                    onTap: () => _activateFollowUp(context, ref),
+                    onTap: () => startActivateSuiviFlow(
+                      context: context,
+                      ref: ref,
+                      l10n: l10n,
+                      showSuccessToast: true,
+                    ),
                     showDivider: false,
                   ),
               ],
@@ -351,26 +356,6 @@ class HomeProfileScreen extends ConsumerWidget {
       ref.read(homeControllerProvider.notifier).updateProfile(updated);
     } catch (_) {
       // Langue UI déjà appliquée ; sync API best-effort.
-    }
-  }
-
-  static Future<void> _activateFollowUp(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
-    final l10n = AppLocalizations.of(context);
-    try {
-      await ref.read(homeControllerProvider.notifier).activateFollowUp();
-      if (context.mounted) {
-        AppToast.success(context, l10n.profileActivateOk);
-        ref.read(homeTabIndexProvider.notifier).state = 0;
-      }
-    } catch (e) {
-      if (!context.mounted) return;
-      AppToast.error(
-        context,
-        e is ApiException ? e.message : l10n.genericError,
-      );
     }
   }
 

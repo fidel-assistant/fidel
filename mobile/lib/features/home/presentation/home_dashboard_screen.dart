@@ -13,6 +13,7 @@ import '../../../services/dose_slot.dart';
 import '../application/cercle_controller.dart';
 import '../application/home_controller.dart';
 import '../domain/dashboard_models.dart';
+import 'activate_suivi_flow.dart';
 import 'widgets/accompanied_section.dart';
 import 'widgets/add_constante_sheet.dart';
 import 'widgets/check_in_card.dart';
@@ -273,32 +274,27 @@ class HomeDashboardScreen extends ConsumerWidget {
     final dash = state.dashboard;
     if (dash == null || !state.isTodaySelected) return null;
 
-    if (dash.prochaineAction == 'activer_notifications') {
-      return _CtaBanner(
-        icon: IconsaxPlusLinear.notification,
-        title: l10n.homeActionNotifTitle,
-        subtitle: l10n.homeActionNotifBody,
-        onTap: () => context.push('/home/notifications'),
-      );
+    switch (dash.prochaineAction) {
+      case 'activer_notifications':
+        return _CtaBanner(
+          icon: IconsaxPlusLinear.notification,
+          title: l10n.homeActionNotifTitle,
+          subtitle: l10n.homeActionNotifBody,
+          onTap: () => context.push('/home/permissions'),
+        );
+      case 'configurer_medicaments':
+        final unconfigured = dash.firstUnconfigured;
+        if (unconfigured == null) return null;
+        return _CtaBanner(
+          icon: IconsaxPlusLinear.hospital,
+          title: l10n.homeActionMedsTitle,
+          subtitle: l10n.homeActionMedsFor(unconfigured.maladieNom),
+          onTap: () =>
+              context.push('/home/medicaments', extra: unconfigured.id),
+        );
+      default:
+        return null;
     }
-    if (dash.traitements.isEmpty) {
-      return _CtaBanner(
-        icon: IconsaxPlusLinear.health,
-        title: l10n.homeActionTraitementTitle,
-        subtitle: l10n.homeActionTraitementBody,
-        onTap: () => context.push('/home/traitement'),
-      );
-    }
-    final unconfigured = dash.firstUnconfigured;
-    if (unconfigured != null) {
-      return _CtaBanner(
-        icon: IconsaxPlusLinear.hospital,
-        title: l10n.homeActionMedsTitle,
-        subtitle: l10n.homeActionMedsFor(unconfigured.maladieNom),
-        onTap: () => context.push('/home/medicaments', extra: unconfigured.id),
-      );
-    }
-    return null;
   }
 
   static String? _remainingLabel(
@@ -654,21 +650,11 @@ class _ActivateBanner extends ConsumerWidget {
       subtitle: l10n.homeActivateBody,
       onTap: busy
           ? () {}
-          : () async {
-              try {
-                await ref
-                    .read(homeControllerProvider.notifier)
-                    .activateFollowUp();
-                if (context.mounted) context.push('/home/traitement');
-              } catch (e) {
-                if (context.mounted) {
-                  AppToast.error(
-                    context,
-                    e is ApiException ? e.message : l10n.genericError,
-                  );
-                }
-              }
-            },
+          : () => startActivateSuiviFlow(
+                context: context,
+                ref: ref,
+                l10n: l10n,
+              ),
     );
   }
 }

@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
-import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/premium.dart';
-import '../../../../core/ui/app_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/cercle_controller.dart';
 import '../../application/home_controller.dart';
+import '../activate_suivi_flow.dart';
 import 'accompanied_patient_tile.dart';
 import 'active_sos_section.dart';
 
@@ -145,31 +144,17 @@ class AccompaniedSection extends ConsumerWidget {
             icon: IconsaxPlusLinear.health,
             title: l10n.homeActivateTitle,
             subtitle: l10n.homeActivateBody,
-            onTap: homeBusy ? null : () => _activate(context, ref, l10n),
+            onTap: homeBusy
+                ? null
+                : () => startActivateSuiviFlow(
+                      context: context,
+                      ref: ref,
+                      l10n: l10n,
+                    ),
           ),
         ],
       ],
     );
-  }
-
-  Future<void> _activate(
-    BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-  ) async {
-    final busy = ref.read(homeControllerProvider).busy;
-    if (busy) return;
-    try {
-      await ref.read(homeControllerProvider.notifier).activateFollowUp();
-      if (context.mounted) context.push('/home/traitement');
-    } catch (e) {
-      if (context.mounted) {
-        AppToast.error(
-          context,
-          e is ApiException ? e.message : l10n.genericError,
-        );
-      }
-    }
   }
 }
 
