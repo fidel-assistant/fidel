@@ -1610,6 +1610,143 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileTimezone => 'Fuseau horaire';
 
   @override
+  String get profileEmailChangeHint => 'Touche pour changer l’email';
+
+  @override
+  String get profileEmailChange => 'Changer d’email';
+
+  @override
+  String get profileEmailNew => 'Nouvel email';
+
+  @override
+  String get profileEmailInvalid => 'Indique un email valide.';
+
+  @override
+  String get profileEmailSendOtp => 'Envoyer le code';
+
+  @override
+  String get profileEmailOtpSent => 'Code envoyé au nouvel email.';
+
+  @override
+  String get profileEmailOtpHint =>
+      'Entre le code à 6 chiffres reçu dans la nouvelle boîte.';
+
+  @override
+  String get profileEmailConfirm => 'Confirmer l’email';
+
+  @override
+  String get profileEmailChanged => 'Email mis à jour.';
+
+  @override
+  String get profilePasswordSection => 'Mot de passe';
+
+  @override
+  String get profilePasswordChange => 'Changer le mot de passe';
+
+  @override
+  String get profilePasswordSet => 'Définir un mot de passe';
+
+  @override
+  String get profilePasswordChangeHint =>
+      'Mettre à jour ton mot de passe de connexion';
+
+  @override
+  String get profilePasswordSetHint => 'Utile si tu te connectes avec Google';
+
+  @override
+  String get profilePasswordCurrent => 'Mot de passe actuel';
+
+  @override
+  String get profilePasswordNew => 'Nouveau mot de passe';
+
+  @override
+  String get profilePasswordConfirm => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get profilePasswordTooShort => 'Utilise au moins 8 caractères.';
+
+  @override
+  String get profilePasswordMismatch =>
+      'Les mots de passe ne correspondent pas.';
+
+  @override
+  String get profilePasswordCurrentRequired =>
+      'Indique ton mot de passe actuel.';
+
+  @override
+  String get profilePasswordSaved => 'Mot de passe mis à jour.';
+
+  @override
+  String get profilePhotoGallery => 'Choisir dans la galerie';
+
+  @override
+  String get profilePhotoCamera => 'Prendre une photo';
+
+  @override
+  String get profilePhotoRemove => 'Supprimer la photo';
+
+  @override
+  String get profilePhotoSaved => 'Photo de profil mise à jour.';
+
+  @override
+  String get profilePhotoRemoved => 'Photo de profil supprimée.';
+
+  @override
+  String get profileLockTitle => 'Verrouillage';
+
+  @override
+  String get profileLockTileHint => 'PIN ou biométrie sur cet appareil';
+
+  @override
+  String get profileLockHint =>
+      'Protège Fidel sur ce téléphone quand tu quittes l’app. Les alarmes sonnent quand même.';
+
+  @override
+  String get profileLockEnable => 'Demander un déverrouillage';
+
+  @override
+  String get profileLockBiometrics => 'Utiliser la biométrie';
+
+  @override
+  String get profileLockBiometricsReason => 'Déverrouiller Fidel';
+
+  @override
+  String get profileLockSetupTitle => 'Choisis un code PIN';
+
+  @override
+  String get profileLockEnterPin => 'Entre ton code PIN';
+
+  @override
+  String get profileLockDisable => 'Confirme pour désactiver';
+
+  @override
+  String get profileLockPinLabel => 'PIN (4 à 6 chiffres)';
+
+  @override
+  String get profileLockPinConfirm => 'Confirmer le PIN';
+
+  @override
+  String get profileLockPinInvalid => 'Le PIN doit faire 4 à 6 chiffres.';
+
+  @override
+  String get profileLockPinMismatch => 'Les PIN ne correspondent pas.';
+
+  @override
+  String get profileLockWrongPin => 'PIN incorrect.';
+
+  @override
+  String get profileLockEnabledToast => 'Verrouillage activé.';
+
+  @override
+  String get profileLockDisabledToast => 'Verrouillage désactivé.';
+
+  @override
+  String get profileLockUnlock => 'Déverrouiller';
+
+  @override
+  String get profileLockUseBiometrics => 'Utiliser la biométrie';
+
+  @override
   String get profilePatientSettingsTitle => 'Réglages du suivi';
 
   @override

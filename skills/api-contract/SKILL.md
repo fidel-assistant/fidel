@@ -97,6 +97,9 @@ Pas de `POST /onboarding/role`. Voir `auth-onboarding/SKILL.md`.
 | GET | `/patients/me/voix-rappel` | 🔒 | `VoixRappel` actuelle (défaut `systeme` si aucune) | `NOT_A_PATIENT` |
 | PUT | `/patients/me/voix-rappel` | 🔒 multipart : `type` (`systeme`\|`personnalisee`), `fichier` (obligatoire si `personnalisee`) — **mp3 / m4a / aac / ogg / opus**, max **2 Mo** | `VoixRappel` | `FICHIER_AUDIO_INVALIDE`, `FICHIER_AUDIO_TROP_LOURD`, `NOT_A_PATIENT` |
 | GET | `/patients/me/voix-rappel/fichier` | 🔒 | flux audio binaire | `VOIX_NOT_FOUND`, `NOT_A_PATIENT` |
+| PUT | `/patients/me/photo` | 🔒 multipart `fichier` — **jpeg / png / webp**, max **2 Mo** | objet `Patient` (`photo_url` = URL authentifiée `GET …/photo`) | `FICHIER_PHOTO_INVALIDE`, `FICHIER_PHOTO_TROP_LOURD`, `NOT_A_PATIENT` |
+| GET | `/patients/me/photo` | 🔒 | flux image binaire | `PHOTO_NOT_FOUND`, `NOT_A_PATIENT` |
+| DELETE | `/patients/me/photo` | 🔒 | objet `Patient` (`photo_url: null`) | `NOT_A_PATIENT` |
 
 ---
 

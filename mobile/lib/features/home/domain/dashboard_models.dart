@@ -12,6 +12,7 @@ class HomeProfile {
     this.rhesus,
     this.electrophorese,
     this.tailleCm,
+    this.photoUrl,
   });
 
   final String nomComplet;
@@ -26,6 +27,7 @@ class HomeProfile {
   final String? rhesus;
   final String? electrophorese;
   final int? tailleCm;
+  final String? photoUrl;
 
   /// Chip « O+ » si groupe + rhésus confirmés.
   String? get groupeRhesusLabel {
@@ -101,7 +103,9 @@ class HomeProfile {
     String? rhesus,
     String? electrophorese,
     int? tailleCm,
+    String? photoUrl,
     bool clearFicheSante = false,
+    bool clearPhoto = false,
   }) {
     return HomeProfile(
       nomComplet: nomComplet ?? this.nomComplet,
@@ -118,6 +122,7 @@ class HomeProfile {
       electrophorese:
           clearFicheSante ? null : (electrophorese ?? this.electrophorese),
       tailleCm: clearFicheSante ? null : (tailleCm ?? this.tailleCm),
+      photoUrl: clearPhoto ? null : (photoUrl ?? this.photoUrl),
     );
   }
 
@@ -135,6 +140,7 @@ class HomeProfile {
       rhesus: json['rhesus'] as String?,
       electrophorese: json['electrophorese'] as String?,
       tailleCm: (json['taille_cm'] as num?)?.toInt(),
+      photoUrl: json['photo_url'] as String?,
     );
   }
 
@@ -151,6 +157,7 @@ class HomeProfile {
         'rhesus': rhesus,
         'electrophorese': electrophorese,
         'taille_cm': tailleCm,
+        'photo_url': photoUrl,
       };
 }
 

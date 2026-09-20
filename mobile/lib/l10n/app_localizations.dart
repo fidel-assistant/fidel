@@ -2978,6 +2978,270 @@ abstract class AppLocalizations {
   /// **'Time zone'**
   String get profileTimezone;
 
+  /// No description provided for @profileEmailChangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to change email'**
+  String get profileEmailChangeHint;
+
+  /// No description provided for @profileEmailChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email'**
+  String get profileEmailChange;
+
+  /// No description provided for @profileEmailNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New email'**
+  String get profileEmailNew;
+
+  /// No description provided for @profileEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email.'**
+  String get profileEmailInvalid;
+
+  /// No description provided for @profileEmailSendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Send verification code'**
+  String get profileEmailSendOtp;
+
+  /// No description provided for @profileEmailOtpSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Code sent to the new email.'**
+  String get profileEmailOtpSent;
+
+  /// No description provided for @profileEmailOtpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code from the new inbox.'**
+  String get profileEmailOtpHint;
+
+  /// No description provided for @profileEmailConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm email'**
+  String get profileEmailConfirm;
+
+  /// No description provided for @profileEmailChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Email updated.'**
+  String get profileEmailChanged;
+
+  /// No description provided for @profilePasswordSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get profilePasswordSection;
+
+  /// No description provided for @profilePasswordChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get profilePasswordChange;
+
+  /// No description provided for @profilePasswordSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a password'**
+  String get profilePasswordSet;
+
+  /// No description provided for @profilePasswordChangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your sign-in password'**
+  String get profilePasswordChangeHint;
+
+  /// No description provided for @profilePasswordSetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Useful if you signed in with Google'**
+  String get profilePasswordSetHint;
+
+  /// No description provided for @profilePasswordCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get profilePasswordCurrent;
+
+  /// No description provided for @profilePasswordNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get profilePasswordNew;
+
+  /// No description provided for @profilePasswordConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get profilePasswordConfirm;
+
+  /// No description provided for @profilePasswordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters.'**
+  String get profilePasswordTooShort;
+
+  /// No description provided for @profilePasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords don’t match.'**
+  String get profilePasswordMismatch;
+
+  /// No description provided for @profilePasswordCurrentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password.'**
+  String get profilePasswordCurrentRequired;
+
+  /// No description provided for @profilePasswordSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated.'**
+  String get profilePasswordSaved;
+
+  /// No description provided for @profilePhotoGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get profilePhotoGallery;
+
+  /// No description provided for @profilePhotoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get profilePhotoCamera;
+
+  /// No description provided for @profilePhotoRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get profilePhotoRemove;
+
+  /// No description provided for @profilePhotoSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile photo updated.'**
+  String get profilePhotoSaved;
+
+  /// No description provided for @profilePhotoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile photo removed.'**
+  String get profilePhotoRemoved;
+
+  /// No description provided for @profileLockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock'**
+  String get profileLockTitle;
+
+  /// No description provided for @profileLockTileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN or biometrics on this device'**
+  String get profileLockTileHint;
+
+  /// No description provided for @profileLockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Protect Fidel on this phone when you leave the app. Alarms still ring.'**
+  String get profileLockHint;
+
+  /// No description provided for @profileLockEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Require unlock'**
+  String get profileLockEnable;
+
+  /// No description provided for @profileLockBiometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Use biometrics'**
+  String get profileLockBiometrics;
+
+  /// No description provided for @profileLockBiometricsReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Fidel'**
+  String get profileLockBiometricsReason;
+
+  /// No description provided for @profileLockSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a PIN'**
+  String get profileLockSetupTitle;
+
+  /// No description provided for @profileLockEnterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your PIN'**
+  String get profileLockEnterPin;
+
+  /// No description provided for @profileLockDisable.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm to disable lock'**
+  String get profileLockDisable;
+
+  /// No description provided for @profileLockPinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN (4–6 digits)'**
+  String get profileLockPinLabel;
+
+  /// No description provided for @profileLockPinConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm PIN'**
+  String get profileLockPinConfirm;
+
+  /// No description provided for @profileLockPinInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN must be 4 to 6 digits.'**
+  String get profileLockPinInvalid;
+
+  /// No description provided for @profileLockPinMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'PINs don’t match.'**
+  String get profileLockPinMismatch;
+
+  /// No description provided for @profileLockWrongPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong PIN.'**
+  String get profileLockWrongPin;
+
+  /// No description provided for @profileLockEnabledToast.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock enabled.'**
+  String get profileLockEnabledToast;
+
+  /// No description provided for @profileLockDisabledToast.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock disabled.'**
+  String get profileLockDisabledToast;
+
+  /// No description provided for @profileLockUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get profileLockUnlock;
+
+  /// No description provided for @profileLockUseBiometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Use biometrics'**
+  String get profileLockUseBiometrics;
+
   /// No description provided for @profilePatientSettingsTitle.
   ///
   /// In en, this message translates to:

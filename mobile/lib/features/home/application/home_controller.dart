@@ -296,6 +296,7 @@ class HomeController extends StateNotifier<HomeUiState> {
             rhesus: settings.rhesus,
             electrophorese: settings.electrophorese,
             tailleCm: settings.tailleCm,
+            photoUrl: settings.photoUrl,
           );
         } catch (_) {}
       }

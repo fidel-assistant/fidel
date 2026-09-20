@@ -269,6 +269,53 @@ class AuthRepository {
     }
   }
 
+  Future<void> changePassword({
+    String? currentPassword,
+    required String nouveauPassword,
+  }) async {
+    try {
+      await _api.post<Map<String, dynamic>>(
+        '/auth/change-password',
+        data: {
+          'nouveau_password': nouveauPassword,
+          if (currentPassword != null && currentPassword.isNotEmpty)
+            'current_password': currentPassword,
+        },
+      );
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
+  Future<void> requestEmailChange({required String nouvelEmail}) async {
+    try {
+      await _api.post<Map<String, dynamic>>(
+        '/auth/request-email-change',
+        data: {'nouvel_email': nouvelEmail.trim().toLowerCase()},
+      );
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
+  Future<String> confirmEmailChange({
+    required String nouvelEmail,
+    required String code,
+  }) async {
+    try {
+      final res = await _api.post<Map<String, dynamic>>(
+        '/auth/confirm-email-change',
+        data: {
+          'nouvel_email': nouvelEmail.trim().toLowerCase(),
+          'code': code.trim(),
+        },
+      );
+      return res.data?['email']?.toString() ?? nouvelEmail.trim().toLowerCase();
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
   Future<void> acceptCgu({
     String? tempToken,
     required String version,

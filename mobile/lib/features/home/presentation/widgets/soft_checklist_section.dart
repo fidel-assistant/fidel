@@ -10,6 +10,7 @@ import '../../../../core/theme/premium.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/home_controller.dart';
 import '../../application/soft_checklist_controller.dart';
+import '../profile_photo_flow.dart';
 
 /// Nudges Accueil non bloquants — téléphone, contact, voix, photo.
 class SoftChecklistSection extends ConsumerStatefulWidget {
@@ -82,6 +83,9 @@ class _SoftChecklistSectionState extends ConsumerState<SoftChecklistSection> {
         nav = context.push('/home/profile/voix');
       case SoftChecklistKind.photo:
         ref.read(homeTabIndexProvider.notifier).state = 3;
+        // Ouvre directement le flux photo via un event léger sur le tab Profil.
+        ref.read(profilePhotoPromptProvider.notifier).state =
+            DateTime.now().millisecondsSinceEpoch;
         nav = null;
     }
     nav?.then((_) {
