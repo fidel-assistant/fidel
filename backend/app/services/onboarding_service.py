@@ -502,13 +502,18 @@ def _apply_fiche_sante(patient: Patient, data: dict) -> None:
 
 
 def _serialize_patient(patient: Patient) -> dict:
+    photo = patient.photo_url
+    if photo and photo.startswith("photos/"):
+        from app.services.patient_photo_service import public_photo_url
+
+        photo = public_photo_url()
     return {
         "user_id": patient.user_id,
         "nom_complet": patient.nom_complet,
         "date_naissance": patient.date_naissance,
         "sexe": patient.sexe,
         "localisation": patient.localisation,
-        "photo_url": patient.photo_url,
+        "photo_url": photo,
         "notifications_accordees": patient.notifications_accordees,
         "batterie_exemptee": patient.batterie_exemptee,
         "notifications_discretes": patient.notifications_discretes,

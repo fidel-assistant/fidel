@@ -45,6 +45,7 @@ class Settings(BaseSettings):
     prise_manquee_grace_hours: int = 12
     media_root: str = "media"
     voix_rappel_max_bytes: int = 2 * 1024 * 1024  # 2 Mo
+    patient_photo_max_bytes: int = 2 * 1024 * 1024  # 2 Mo
     login_max_attempts: int = 8
     login_window_minutes: int = 15
     # Rate limits /auth — par IP

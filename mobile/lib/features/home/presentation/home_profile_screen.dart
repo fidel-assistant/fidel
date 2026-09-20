@@ -13,9 +13,10 @@ import '../../../l10n/app_localizations.dart';
 import '../../auth/application/auth_providers.dart';
 import '../application/home_controller.dart';
 import 'activate_suivi_flow.dart';
+import 'profile_photo_flow.dart';
+import 'widgets/home_skeleton.dart';
 import 'widgets/profile_header_card.dart';
 import 'widgets/profile_settings_tile.dart';
-import 'widgets/home_skeleton.dart';
 import 'widgets/sticky_tab_header.dart';
 
 class HomeProfileScreen extends ConsumerWidget {
@@ -28,6 +29,15 @@ class HomeProfileScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeControllerProvider);
     final locale = ref.watch(localeControllerProvider);
     final profile = state.profile;
+
+    ref.listen<int>(profilePhotoPromptProvider, (prev, next) {
+      if (next == 0 || next == prev) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          promptProfilePhotoFlow(context: context, ref: ref);
+        }
+      });
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,6 +74,13 @@ class HomeProfileScreen extends ConsumerWidget {
                   title: l10n.profileAccountTitle,
                   subtitle: l10n.profileAccountTileHint,
                   onTap: () => context.push('/home/profile/account'),
+                  showDivider: true,
+                ),
+                ProfileSettingsTile(
+                  icon: IconsaxPlusLinear.lock_1,
+                  title: l10n.profileLockTitle,
+                  subtitle: l10n.profileLockTileHint,
+                  onTap: () => context.push('/home/profile/lock'),
                   showDivider: false,
                 ),
               ],
@@ -193,9 +210,7 @@ class HomeProfileScreen extends ConsumerWidget {
                   title: l10n.profileCgu,
                   subtitle:
                       l10n.profileCguVersion(AppConfig.cguCurrentVersion),
-                  onTap: null,
-                  enabled: false,
-                  trailing: const SizedBox.shrink(),
+                  onTap: () => context.push('/home/profile/cgu'),
                 ),
                 ProfileSettingsTile(
                   icon: IconsaxPlusLinear.trash,

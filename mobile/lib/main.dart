@@ -17,6 +17,7 @@ import 'core/theme/theme_controller.dart';
 import 'features/auth/application/auth_providers.dart';
 import 'features/auth/data/auth_repository.dart';
 import 'features/home/presentation/alarm_ring_screen.dart';
+import 'features/home/presentation/widgets/app_lock_gate.dart';
 import 'l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -146,6 +147,12 @@ class FidelApp extends ConsumerWidget {
         routerConfig: router,
         builder: (context, child) {
           final media = MediaQuery.of(context);
+          final loc =
+              router.routerDelegate.currentConfiguration.uri.path;
+          final lockExempt = loc == '/alarm-ring' ||
+              loc.startsWith('/alarm-ring') ||
+              loc.contains('sos-aidant');
+          final session = ref.watch(authSessionProvider);
           // Fond bleu pendant les transitions (évite le flash noir Android).
           return ColoredBox(
             color: AppColors.primary,
@@ -156,7 +163,10 @@ class FidelApp extends ConsumerWidget {
                   maxScaleFactor: 1.6,
                 ),
               ),
-              child: child ?? const SizedBox.shrink(),
+              child: AppLockGate(
+                locked: session != null && !lockExempt,
+                child: child ?? const SizedBox.shrink(),
+              ),
             ),
           );
         },

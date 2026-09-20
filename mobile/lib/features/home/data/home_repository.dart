@@ -104,6 +104,48 @@ class HomeRepository {
     }
   }
 
+  Future<PatientSettings> uploadPatientPhoto({
+    required String filename,
+    required List<int> bytes,
+  }) async {
+    try {
+      final form = FormData.fromMap({
+        'fichier': MultipartFile.fromBytes(bytes, filename: filename),
+      });
+      final res = await _api.raw.put<Map<String, dynamic>>(
+        '/patients/me/photo',
+        data: form,
+        options: Options(contentType: Headers.multipartFormDataContentType),
+      );
+      return PatientSettings.fromJson(res.data ?? {});
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
+  Future<PatientSettings> deletePatientPhoto() async {
+    try {
+      final res = await _api.delete<Map<String, dynamic>>('/patients/me/photo');
+      return PatientSettings.fromJson(res.data ?? {});
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
+  Future<List<int>?> downloadPatientPhoto() async {
+    try {
+      final res = await _api.raw.get<List<int>>(
+        '/patients/me/photo',
+        options: Options(responseType: ResponseType.bytes),
+      );
+      final data = res.data;
+      if (data == null || data.isEmpty) return null;
+      return data;
+    } on DioException {
+      return null;
+    }
+  }
+
   Future<List<ContactUrgence>> listContactsUrgence() async {
     try {
       final res = await _api.get<dynamic>('/patients/me/contacts-urgence');

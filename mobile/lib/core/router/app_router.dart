@@ -26,6 +26,8 @@ import '../../features/home/presentation/health_detail_screen.dart';
 import '../../features/home/presentation/home_shell.dart';
 import '../../features/home/presentation/manage_traitement_screen.dart';
 import '../../features/home/presentation/profile_account_screen.dart';
+import '../../features/home/presentation/profile_cgu_screen.dart';
+import '../../features/home/presentation/profile_lock_screen.dart';
 import '../../features/home/presentation/alarm_health_screen.dart';
 import '../../features/home/presentation/profile_alarm_settings_screen.dart';
 import '../../features/home/presentation/profile_consent_screen.dart';
@@ -412,6 +414,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _softPage(
           state: state,
           child: const ProfileAccountScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/home/profile/lock',
+        pageBuilder: (context, state) => _softPage(
+          state: state,
+          child: const ProfileLockScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/home/profile/cgu',
+        pageBuilder: (context, state) => _softPage(
+          state: state,
+          child: const ProfileCguScreen(),
         ),
       ),
       GoRoute(

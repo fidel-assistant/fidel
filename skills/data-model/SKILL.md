@@ -143,7 +143,7 @@ Un user **sans** ligne `Patient` peut quand même être aidant.
 | nom_complet | string | souvent aligné sur `User.nom_complet` à la création |
 | date_naissance | date | idem |
 | sexe | enum | idem |
-| photo_url | string | nullable |
+| photo_url | string | nullable — URL publique ou chemin relatif `photos/<patient_id>/<uuid>.{jpg\|png\|webp}` (upload via `PUT /patients/me/photo`) |
 | notifications_accordees | boolean | |
 | batterie_exemptee | boolean | |
 | notifications_discretes | boolean | défaut false — ex. VIH |

@@ -7,6 +7,8 @@ from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.audio_validation import read_upload_limited
+from app.core.config import settings
+from app.core.image_validation import read_photo_upload_limited
 from app.deps import get_current_user, get_db
 from app.models import User
 from app.schemas.aidant import (
@@ -36,6 +38,7 @@ from app.services import (
     constante_service,
     contact_urgence_service,
     onboarding_service,
+    patient_photo_service,
     voix_rappel_service,
 )
 
@@ -291,3 +294,46 @@ async def download_voix_rappel(
         filename=path.name,
         content_disposition_type="inline",
     )
+
+
+@router.put("/me/photo", response_model=PatientOut)
+async def put_patient_photo(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+    fichier: Annotated[UploadFile, File()],
+) -> PatientOut:
+    data = await read_photo_upload_limited(
+        fichier, max_bytes=settings.patient_photo_max_bytes
+    )
+    return PatientOut(
+        **await patient_photo_service.upload_photo(
+            db,
+            user=user,
+            filename=fichier.filename,
+            content_type=fichier.content_type,
+            data=data,
+        )
+    )
+
+
+@router.get("/me/photo")
+async def get_patient_photo(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+) -> FileResponse:
+    path, media_type = await patient_photo_service.resolve_photo_file(db, user=user)
+    return FileResponse(
+        path,
+        media_type=media_type,
+        filename=path.name,
+        content_disposition_type="inline",
+    )
+
+
+@router.delete("/me/photo", response_model=PatientOut)
+async def delete_patient_photo(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+) -> PatientOut:
+    return PatientOut(**await patient_photo_service.delete_photo(db, user=user))
+

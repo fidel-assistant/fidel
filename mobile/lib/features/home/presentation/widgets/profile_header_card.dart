@@ -1,20 +1,71 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/premium.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../application/home_controller.dart';
 import '../../domain/dashboard_models.dart';
+import '../profile_photo_flow.dart';
 
-/// En-tête compte : avatar, nom, fiche santé (bande clinique), email, rôles.
-class ProfileHeaderCard extends StatelessWidget {
-  const ProfileHeaderCard({super.key, required this.profile});
+/// En-tête compte : avatar (photo ou initiale), nom, fiche santé, email, rôles.
+class ProfileHeaderCard extends ConsumerStatefulWidget {
+  const ProfileHeaderCard({
+    super.key,
+    required this.profile,
+    this.onPhotoChanged,
+  });
 
   final HomeProfile profile;
+  final VoidCallback? onPhotoChanged;
 
+  @override
+  ConsumerState<ProfileHeaderCard> createState() => _ProfileHeaderCardState();
+}
+
+class _ProfileHeaderCardState extends ConsumerState<ProfileHeaderCard> {
+  Uint8List? _bytes;
+  bool _loadingPhoto = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadPhoto());
+  }
+
+  @override
+  void didUpdateWidget(covariant ProfileHeaderCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.profile.photoUrl != widget.profile.photoUrl) {
+      _loadPhoto();
+    }
+  }
+
+  Future<void> _loadPhoto() async {
+    final url = widget.profile.photoUrl?.trim() ?? '';
+    if (url.isEmpty || !widget.profile.hasPatientProfile) {
+      if (mounted) setState(() => _bytes = null);
+      return;
+    }
+    setState(() => _loadingPhoto = true);
+    final data =
+        await ref.read(homeRepositoryProvider).downloadPatientPhoto();
+    if (!mounted) return;
+    setState(() {
+      _bytes = data == null ? null : Uint8List.fromList(data);
+      _loadingPhoto = false;
+    });
+  }
+
+  Future<void> _showPhotoActions() =>
+      promptProfilePhotoFlow(context: context, ref: ref);
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final tokens = ThemeTokens.of(context);
+    final profile = widget.profile;
     final name = profile.headerName.isEmpty
         ? l10n.profileFallbackName
         : profile.headerName;
@@ -36,25 +87,65 @@ class ProfileHeaderCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: tokens.border),
-              color: tokens.isDark
-                  ? AppColors.primary.withValues(alpha: 0.12)
-                  : AppColors.primary.withValues(alpha: 0.06),
-            ),
-            child: Text(
-              profile.initial,
-              style: TextStyle(
-                fontFamily: AppTheme.fontFamily,
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primary,
-              ),
+          GestureDetector(
+            onTap: profile.hasPatientProfile ? _showPhotoActions : null,
+            child: Stack(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: tokens.border),
+                    color: tokens.isDark
+                        ? AppColors.primary.withValues(alpha: 0.12)
+                        : AppColors.primary.withValues(alpha: 0.06),
+                    image: _bytes != null
+                        ? DecorationImage(
+                            image: MemoryImage(_bytes!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  child: _bytes != null
+                      ? null
+                      : _loadingPhoto
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(
+                              profile.initial,
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontFamily,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                ),
+                if (profile.hasPatientProfile)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: tokens.surface, width: 1.5),
+                      ),
+                      child: const Icon(
+                        Icons.edit,
+                        size: 10,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
           const SizedBox(width: 14),
