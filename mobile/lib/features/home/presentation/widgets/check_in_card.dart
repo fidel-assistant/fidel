@@ -37,7 +37,7 @@ class CheckInRow extends StatelessWidget {
     return switch (statut) {
       'tres_mal' => const Color(0xFFDC2626),
       'pas_top' => const Color(0xFFF59E0B),
-      'ca_va' => const Color(0xFF2563EB),
+      'ca_va' => const Color(0xFF0494D0),
       'super' => const Color(0xFF16A34A),
       _ => const Color(0xFF64748B),
     };

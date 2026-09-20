@@ -12,6 +12,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../services/dose_slot.dart';
 import '../application/cercle_controller.dart';
 import '../application/home_controller.dart';
+import '../application/soft_checklist_controller.dart';
 import '../domain/dashboard_models.dart';
 import 'activate_suivi_flow.dart';
 import 'widgets/accompanied_section.dart';
@@ -24,6 +25,7 @@ import 'widgets/home_kpis_week.dart';
 import 'widgets/home_skeleton.dart';
 import 'widgets/next_dose_card.dart';
 import 'widgets/snooze_sheet.dart';
+import 'widgets/soft_checklist_section.dart';
 import 'widgets/today_summary_card.dart';
 import 'widgets/treatment_card.dart';
 
@@ -55,6 +57,11 @@ class HomeDashboardScreen extends ConsumerWidget {
                 await ref
                     .read(cercleControllerProvider.notifier)
                     .load(force: true);
+              }
+              if (ref.read(homeControllerProvider).hasPatient) {
+                await ref
+                    .read(softChecklistControllerProvider.notifier)
+                    .refresh();
               }
             },
             child: ListView(
@@ -109,8 +116,9 @@ class HomeDashboardScreen extends ConsumerWidget {
     final nextSlot = DoseSlot.findNextUntaken(prises, now);
 
     return [
-      // 1. CTA setup puis hero action
+      // 1. CTA setup puis soft checklist puis hero action
       if (cta != null) ...[cta, const SizedBox(height: 16)],
+      if (state.isTodaySelected) const SoftChecklistSection(),
       if (state.isTodaySelected)
         if (prises.isNotEmpty) ...[
           RepaintBoundary(

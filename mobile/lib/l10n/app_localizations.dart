@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'Fidel Assistant'**
+  /// **'Fidel'**
   String get appName;
 
   /// No description provided for @languageTitle.
@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @successAccountSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your account is created and ready. Welcome to Fidel Assistant.'**
+  /// **'Your account is created and ready. Welcome to Fidel.'**
   String get successAccountSubtitle;
 
   /// No description provided for @successAccountCta.
@@ -1429,6 +1429,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We note the condition first; medicines come right after.'**
   String get homeActionTraitementBody;
+
+  /// No description provided for @homeSoftChecklistTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A few optional steps'**
+  String get homeSoftChecklistTitle;
+
+  /// No description provided for @homeSoftPhoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your phone number'**
+  String get homeSoftPhoneTitle;
+
+  /// No description provided for @homeSoftPhoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Helpful for SOS and reaching you if needed.'**
+  String get homeSoftPhoneBody;
+
+  /// No description provided for @homeSoftContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an emergency contact'**
+  String get homeSoftContactTitle;
+
+  /// No description provided for @homeSoftContactBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone you trust for critical moments.'**
+  String get homeSoftContactBody;
+
+  /// No description provided for @homeSoftVoixTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalize your reminder voice'**
+  String get homeSoftVoixTitle;
+
+  /// No description provided for @homeSoftVoixBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A short message in your voice for alarms.'**
+  String get homeSoftVoixBody;
+
+  /// No description provided for @homeSoftPhotoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a profile photo'**
+  String get homeSoftPhotoTitle;
+
+  /// No description provided for @homeSoftPhotoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'So your circle can recognize you easily.'**
+  String get homeSoftPhotoBody;
+
+  /// No description provided for @homeSoftDismissA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss this suggestion'**
+  String get homeSoftDismissA11y;
 
   /// No description provided for @homeCareSubtitle.
   ///

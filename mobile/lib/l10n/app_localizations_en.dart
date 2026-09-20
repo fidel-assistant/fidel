@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Fidel Assistant';
+  String get appName => 'Fidel';
 
   @override
   String get languageTitle => 'Choose your language';
@@ -184,7 +184,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get successAccountSubtitle =>
-      'Your account is created and ready. Welcome to Fidel Assistant.';
+      'Your account is created and ready. Welcome to Fidel.';
 
   @override
   String get successAccountCta => 'Continue setup';
@@ -737,6 +737,36 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeActionTraitementBody =>
       'We note the condition first; medicines come right after.';
+
+  @override
+  String get homeSoftChecklistTitle => 'A few optional steps';
+
+  @override
+  String get homeSoftPhoneTitle => 'Add your phone number';
+
+  @override
+  String get homeSoftPhoneBody => 'Helpful for SOS and reaching you if needed.';
+
+  @override
+  String get homeSoftContactTitle => 'Add an emergency contact';
+
+  @override
+  String get homeSoftContactBody => 'Someone you trust for critical moments.';
+
+  @override
+  String get homeSoftVoixTitle => 'Personalize your reminder voice';
+
+  @override
+  String get homeSoftVoixBody => 'A short message in your voice for alarms.';
+
+  @override
+  String get homeSoftPhotoTitle => 'Add a profile photo';
+
+  @override
+  String get homeSoftPhotoBody => 'So your circle can recognize you easily.';
+
+  @override
+  String get homeSoftDismissA11y => 'Dismiss this suggestion';
 
   @override
   String get homeCareSubtitle =>

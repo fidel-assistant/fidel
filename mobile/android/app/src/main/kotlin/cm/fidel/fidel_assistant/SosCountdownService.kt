@@ -175,7 +175,7 @@ class SosCountdownService : Service() {
                 },
         )
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_stat_sos)
             .setContentTitle("SOS Fidel")
             .setContentText("Annuler dans ${secondsLeft}s")
             .setContentIntent(open)

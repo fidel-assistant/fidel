@@ -12,9 +12,11 @@ Plateforme mobile **gratuite et open source** d’accompagnement des patients da
 | Auth API (email OTP, Google IdP, sessions, Resend) | **Fait** — sur `main`, tests verts |
 | Onboarding capacités (infos → suivi? → home ; sync aidant) | **Fait** — sur `main` (step C léger) |
 | Dashboard + médicaments / horaires / prises (API) | **Fait** — sur `main` |
-| App Flutter auth + onboarding + alarmes locales | Scaffold — **prochain chantier** |
-| Rappels médicaments offline-first (app) | À faire (API sync déjà là) |
-| Constantes / réseau aidant / SOS / notifications | À faire |
+| App Flutter auth + onboarding + alarmes locales patient | **Fait** (socle) |
+| Rappels offline-first + sync V2 | **Fait** (Phase 6) |
+| Constantes / SOS / FCM aidant / cron manquée | **Fait** (API + jobs) |
+| UI patient (Accueil / Santé) | **Avancé** |
+| UI aidant (phases A→D) | **Prochaine** — [`.cursor/architecture.md`](.cursor/architecture.md) |
 
 Pour contribuer : commence par [CONTRIBUTING.md](CONTRIBUTING.md). Pour comprendre le produit et les contrats : [`docs/`](docs/) et [`skills/`](skills/).
 

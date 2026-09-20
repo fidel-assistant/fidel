@@ -6,6 +6,7 @@ class PatientSettings {
     required this.notificationsDiscretes,
     this.localisation,
     this.nomComplet,
+    this.photoUrl,
     this.groupeSanguin,
     this.rhesus,
     this.electrophorese,
@@ -17,6 +18,7 @@ class PatientSettings {
   final bool notificationsDiscretes;
   final String? localisation;
   final String? nomComplet;
+  final String? photoUrl;
   final String? groupeSanguin;
   final String? rhesus;
   final String? electrophorese;
@@ -29,6 +31,7 @@ class PatientSettings {
       notificationsDiscretes: json['notifications_discretes'] as bool? ?? false,
       localisation: json['localisation'] as String?,
       nomComplet: json['nom_complet'] as String?,
+      photoUrl: json['photo_url'] as String?,
       groupeSanguin: json['groupe_sanguin'] as String?,
       rhesus: json['rhesus'] as String?,
       electrophorese: json['electrophorese'] as String?,

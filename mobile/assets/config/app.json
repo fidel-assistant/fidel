@@ -1,5 +1,5 @@
 {
-  "API_BASE_URL": "http://192.168.1.230:8000",
+  "API_BASE_URL": "http://127.0.0.1:8000",
   "GOOGLE_CLIENT_ID_WEB": "685728073410-aegnsrl10a6etloqdolqcq5s7p24hrll.apps.googleusercontent.com",
   "GOOGLE_CLIENT_ID_ANDROID": "685728073410-o9jm3thvqpvg9bjvobbgkcbffl7gs00a.apps.googleusercontent.com",
   "GOOGLE_CLIENT_ID_IOS": "685728073410-5lbriqvo5mdknvqu803uhbdqikqgqgat.apps.googleusercontent.com"

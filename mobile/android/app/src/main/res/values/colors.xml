@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="fidel_primary">#2563EB</color>
+    <color name="fidel_primary">#0494D0</color>
+    <color name="fidel_primary_dark">#037299</color>
+    <color name="ic_launcher_background">#0494D0</color>
 </resources>

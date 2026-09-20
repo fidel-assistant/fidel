@@ -59,7 +59,7 @@ object SosNotificationHelper {
             pendingFlags(),
         )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_stat_sos)
             .setContentTitle(title)
             .setContentText(body)
             .setContentIntent(open)

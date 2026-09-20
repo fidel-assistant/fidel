@@ -5,7 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'onboarding_lottie.dart';
 
-/// Shell onboarding — même chrome que l’auth (head.png + feuille), avec
+/// Shell onboarding — même chrome que l’auth (brand_header_v2 + feuille), avec
 /// progression claire et LottieFiles en héros.
 class OnboardingShell extends StatelessWidget {
   const OnboardingShell({
@@ -69,7 +69,7 @@ class OnboardingShell extends StatelessWidget {
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      'assets/images/head.png',
+                      'assets/images/brand_header_v2.png',
                       fit: BoxFit.cover,
                       alignment: Alignment.topCenter,
                       errorBuilder: (_, __, ___) => const SizedBox.expand(),

@@ -2,10 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
-/// Layout auth : fond bleu [head.png] + feuille surface arrondie (light/dark).
+/// Layout auth : fond marque [brand_header_v2.png] + feuille surface arrondie.
 class AuthShell extends StatelessWidget {
   const AuthShell({
     super.key,
@@ -43,7 +44,7 @@ class AuthShell extends StatelessWidget {
               child: ColoredBox(
                 color: AppColors.primary,
                 child: Image.asset(
-                  'assets/images/head.png',
+                  'assets/images/brand_header_v2.png',
                   fit: BoxFit.cover,
                   alignment: Alignment.topCenter,
                   width: double.infinity,
@@ -137,61 +138,17 @@ class _BrandMark extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       label: 'Fidel',
-      child: CustomPaint(
-        size: const Size(42, 46),
-        painter: _ShieldStarPainter(),
+      child: SvgPicture.asset(
+        'assets/images/logo_mark_white.svg',
+        width: 168,
+        height: 52,
+        fit: BoxFit.contain,
+        // flutter_svg ignore souvent les <style> CSS → sans ça le fill tombe en noir.
+        colorFilter: const ColorFilter.mode(
+          AppColors.textOnPrimary,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }
-}
-
-class _ShieldStarPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final stroke = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.2
-      ..strokeJoin = StrokeJoin.round;
-
-    final shield = Path()
-      ..moveTo(size.width * 0.5, 1.5)
-      ..lineTo(size.width - 2.5, size.height * 0.2)
-      ..lineTo(size.width - 2.5, size.height * 0.52)
-      ..quadraticBezierTo(
-        size.width * 0.5,
-        size.height + 1,
-        2.5,
-        size.height * 0.52,
-      )
-      ..lineTo(2.5, size.height * 0.2)
-      ..close();
-
-    canvas.drawPath(shield, stroke);
-
-    final fill = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-
-    final cx = size.width * 0.5;
-    final cy = size.height * 0.4;
-    final outerR = size.width * 0.16;
-    final innerR = size.width * 0.055;
-    final star = Path();
-    for (var i = 0; i < 8; i++) {
-      final r = i.isEven ? outerR : innerR;
-      final a = (i * 45 - 90) * math.pi / 180;
-      final p = Offset(cx + r * math.cos(a), cy + r * math.sin(a));
-      if (i == 0) {
-        star.moveTo(p.dx, p.dy);
-      } else {
-        star.lineTo(p.dx, p.dy);
-      }
-    }
-    star.close();
-    canvas.drawPath(star, fill);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
