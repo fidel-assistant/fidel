@@ -221,6 +221,11 @@ class PatientAidant(Base):
         nullable=False,
         server_default=text('\'{"observance": true, "constantes": false}\'::jsonb'),
     )
+    notification_prefs: Mapped[dict] = mapped_column(
+        JSONB,
+        nullable=False,
+        server_default=text("'{}'"),
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )

@@ -1202,6 +1202,36 @@ abstract class AppLocalizations {
   /// **'Voice sent'**
   String get aidantVoixUploaded;
 
+  /// No description provided for @aidantNotifSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get aidantNotifSection;
+
+  /// No description provided for @aidantMutePriseConfirmee.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute confirmed doses'**
+  String get aidantMutePriseConfirmee;
+
+  /// No description provided for @aidantMutePriseNonConfirmee.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute unconfirmed doses'**
+  String get aidantMutePriseNonConfirmee;
+
+  /// No description provided for @aidantMuteSos.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute SOS'**
+  String get aidantMuteSos;
+
+  /// No description provided for @aidantMuteSosHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You won’t be alerted if this person triggers an SOS.'**
+  String get aidantMuteSosHint;
+
   /// No description provided for @healthAidantOnlyTitle.
   ///
   /// In en, this message translates to:

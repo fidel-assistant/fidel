@@ -19,21 +19,28 @@ class DoseTimeline extends StatelessWidget {
     required this.prises,
     required this.now,
     required this.busy,
-    required this.onConfirmSlot,
+    this.onConfirmSlot,
     this.embedded = true,
     this.heroHandlesNext = false,
-  });
+    this.readOnly = false,
+  }) : assert(
+          readOnly || onConfirmSlot != null,
+          'onConfirmSlot is required when readOnly is false',
+        );
 
   final List<PriseDuJour> prises;
   final DateTime now;
   final bool busy;
 
   /// Confirm V1 = tout le créneau (prises encore `en_attente`).
-  final ValueChanged<DoseSlot> onConfirmSlot;
+  final ValueChanged<DoseSlot>? onConfirmSlot;
   final bool embedded;
 
   /// Si true, le hero Accueil gère le CTA du prochain slot (pas de doublon).
   final bool heroHandlesNext;
+
+  /// Observation seule — aucun bouton confirmer (vue aidant).
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +101,13 @@ class DoseTimeline extends StatelessWidget {
             isFirst: index == 0,
             isLast: index == lastIndex,
             isNext: isNext,
-            onConfirm: pendingIds.isEmpty || (heroHandlesNext && isNext)
+            readOnly: readOnly,
+            onConfirm: readOnly ||
+                    pendingIds.isEmpty ||
+                    (heroHandlesNext && isNext) ||
+                    onConfirmSlot == null
                 ? null
-                : () => onConfirmSlot(slot),
+                : () => onConfirmSlot!(slot),
           ),
         );
         index++;
@@ -174,6 +185,7 @@ class _SlotCard extends StatelessWidget {
     required this.isLast,
     required this.isNext,
     required this.onConfirm,
+    this.readOnly = false,
   });
 
   final DoseSlot slot;
@@ -184,6 +196,7 @@ class _SlotCard extends StatelessWidget {
   final bool isLast;
   final bool isNext;
   final VoidCallback? onConfirm;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -335,24 +348,38 @@ class _SlotCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: allTaken
-                ? Text(
-                    l10n.homeTakenBadge,
-                    style: const TextStyle(
-                      fontFamily: AppTheme.fontFamily,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.success,
+          if (!readOnly)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: allTaken
+                  ? Text(
+                      l10n.homeTakenBadge,
+                      style: const TextStyle(
+                        fontFamily: AppTheme.fontFamily,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.success,
+                      ),
+                    )
+                  : _ConfirmButton(
+                      accent: accent,
+                      tooltip: l10n.homeTakeCta,
+                      onTap: busy || onConfirm == null ? null : onConfirm,
                     ),
-                  )
-                : _ConfirmButton(
-                    accent: accent,
-                    tooltip: l10n.homeTakeCta,
-                    onTap: busy || onConfirm == null ? null : onConfirm,
-                  ),
-          ),
+            )
+          else if (allTaken)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                l10n.homeTakenBadge,
+                style: const TextStyle(
+                  fontFamily: AppTheme.fontFamily,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.success,
+                ),
+              ),
+            ),
         ],
       ),
     );

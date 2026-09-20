@@ -119,6 +119,34 @@ async def test_aidant_list_permissions_revoke_observance(
     assert obs["total"] == 0
     assert obs["taux_observance"] is None
 
+    r = await client.get(
+        f"{api}/aidants/me/patients/{patient_id}/prises", headers=headers_a
+    )
+    assert r.status_code == 200, r.text
+    assert r.json() == []
+
+    r = await client.get(
+        f"{api}/aidants/me/patients/{patient_id}/notification-prefs",
+        headers=headers_a,
+    )
+    assert r.status_code == 200, r.text
+    prefs = r.json()
+    assert prefs == {
+        "mute_prise_confirmee": False,
+        "mute_prise_non_confirmee": False,
+        "mute_sos": False,
+    }
+
+    r = await client.patch(
+        f"{api}/aidants/me/patients/{patient_id}/notification-prefs",
+        headers=headers_a,
+        json={"mute_prise_confirmee": True, "mute_sos": True},
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["mute_prise_confirmee"] is True
+    assert r.json()["mute_prise_non_confirmee"] is False
+    assert r.json()["mute_sos"] is True
+
     r = await client.patch(
         f"{api}/patients/me/aidants/{aidant_id}/permissions",
         headers=headers_p,
@@ -133,6 +161,20 @@ async def test_aidant_list_permissions_revoke_observance(
     )
     assert r.status_code == 403
     assert r.json()["error"]["code"] == "PERMISSION_REFUSEE"
+
+    r = await client.get(
+        f"{api}/aidants/me/patients/{patient_id}/prises", headers=headers_a
+    )
+    assert r.status_code == 403
+    assert r.json()["error"]["code"] == "PERMISSION_REFUSEE"
+
+    # Prefs restent accessibles sans observance (relation active).
+    r = await client.get(
+        f"{api}/aidants/me/patients/{patient_id}/notification-prefs",
+        headers=headers_a,
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["mute_sos"] is True
 
     r = await client.patch(
         f"{api}/patients/me/aidants/{aidant_id}/permissions",

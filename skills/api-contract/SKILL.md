@@ -178,8 +178,13 @@ Notes :
 |---|---|---|---|---|
 | GET | `/aidants/me/patients` | 🔒 | `[{patient_id, prenom, niveau_permission}]` | `NOT_AN_AIDANT` |
 | GET | `/aidants/me/patients/{patient_id}/observance` | 🔒 `depuis?`, `jusqu_a?` (défaut: 7 derniers jours) | `{patient_id, patient_prenom, depuis, jusqu_a, total, confirmees, manquees, en_attente, taux_observance}` — selon `niveau_permission.observance` | `PERMISSION_REFUSEE`, `PATIENT_NOT_FOUND` |
+| GET | `/aidants/me/patients/{patient_id}/prises` | 🔒 `date?` (défaut: aujourd'hui, TZ patient) | `[Prise]` — mêmes champs que `GET /patients/me/prises` ; **lecture seule** des prises déjà créées (pas d’ensure / pas de confirmation côté aidant) ; gate `niveau_permission.observance` | `PERMISSION_REFUSEE`, `PATIENT_NOT_FOUND`, `NOT_AN_AIDANT` |
+| GET | `/aidants/me/patients/{patient_id}/notification-prefs` | 🔒 | `{mute_prise_confirmee, mute_prise_non_confirmee, mute_sos}` (défauts `false`) — prefs **aidant** sur cette relation | `PERMISSION_REFUSEE`, `NOT_AN_AIDANT` |
+| PATCH | `/aidants/me/patients/{patient_id}/notification-prefs` | 🔒 `mute_prise_confirmee?`, `mute_prise_non_confirmee?`, `mute_sos?` | prefs mises à jour | `PERMISSION_REFUSEE`, `NOT_AN_AIDANT` |
 | GET | `/aidants/me/patients/{patient_id}/constantes` | 🔒 | `[Constante]` (selon `niveau_permission`) | `PERMISSION_REFUSEE` |
 | POST | `/aidants/me/patients/{patient_id}/voix-rappel` | 🔒 multipart `fichier` — mêmes règles audio (mp3/m4a/aac/ogg/opus, ≤ 2 Mo) | `VoixRappel` créée/mise à jour pour ce patient | `PERMISSION_REFUSEE`, `FICHIER_AUDIO_INVALIDE`, `FICHIER_AUDIO_TROP_LOURD` |
+
+> **Parité soft aidant** : pas de `POST /prises/{id}/confirmer` ni `/reporter` pour l’aidant. La timeline est observation seule. `notification_prefs` = mute boîte de réception de l’aidant (par patient) ; orthogonal à `PreferenceConsentement` (opt-in **patient** pour envoyer des alertes) et à `niveau_permission` (accès aux données).
 
 ---
 

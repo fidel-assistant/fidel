@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.core.exceptions import AppException
 from app.models import CheckIn, ContactUrgence, PatientAidant, SosAlerte, User
 from app.services import device_push_service, fcm_service, notification_service
-from app.services.aidant_service import _prenom
+from app.services.aidant_service import _normalize_notification_prefs, _prenom
 from app.services.onboarding_service import _require_patient, get_user_with_capabilities, is_aidant
 
 VALID_CHECKIN = {"tres_mal", "pas_top", "ca_va", "super"}
@@ -374,16 +374,21 @@ async def _finalize_sos(
         for c in contacts
     ]
 
-    aidant_ids = (
+    aidant_rows = (
         await db.execute(
-            select(PatientAidant.aidant_id).where(
+            select(PatientAidant).where(
                 PatientAidant.patient_id == sos.patient_id,
                 PatientAidant.statut == "actif",
                 PatientAidant.revoked_at.is_(None),
             )
         )
     ).scalars().all()
-    aidant_ids_list = list(aidant_ids)
+    aidant_ids_list = [
+        rel.aidant_id
+        for rel in aidant_rows
+        if _normalize_notification_prefs(rel.notification_prefs).get("mute_sos")
+        is not True
+    ]
 
     patient_user = await db.get(User, sos.patient_id)
     prenom = _prenom(patient_user.nom_complet if patient_user else None)
