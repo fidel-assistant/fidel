@@ -15,7 +15,10 @@ import '../../onboarding/presentation/widgets/onboarding_option_tile.dart';
 import 'widgets/home_skeleton.dart';
 
 class AddTraitementScreen extends ConsumerStatefulWidget {
-  const AddTraitementScreen({super.key});
+  const AddTraitementScreen({super.key, this.fromActivate = false});
+
+  /// Après « Activer mon suivi » : enchaîne sur les permissions device (step D).
+  final bool fromActivate;
 
   @override
   ConsumerState<AddTraitementScreen> createState() => _AddTraitementScreenState();
@@ -96,6 +99,10 @@ class _AddTraitementScreenState extends ConsumerState<AddTraitementScreen> {
           );
       await ref.read(homeControllerProvider.notifier).load();
       if (!mounted) return;
+      if (widget.fromActivate) {
+        context.pushReplacement('/home/permissions');
+        return;
+      }
       context.pushReplacement('/home/medicaments', extra: id);
     } catch (e) {
       if (!mounted) return;
