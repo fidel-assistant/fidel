@@ -47,3 +47,15 @@ class ObservanceOut(BaseModel):
         default=None,
         description="confirmees / (confirmees + manquees), null si aucune prise passée",
     )
+
+
+class AidantNotificationPrefs(BaseModel):
+    mute_prise_confirmee: bool = False
+    mute_prise_non_confirmee: bool = False
+    mute_sos: bool = False
+
+
+class AidantNotificationPrefsPatch(BaseModel):
+    mute_prise_confirmee: bool | None = None
+    mute_prise_non_confirmee: bool | None = None
+    mute_sos: bool | None = None

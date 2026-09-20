@@ -258,3 +258,50 @@ class ActiveSosAlert {
     );
   }
 }
+
+class AidantNotificationPrefs {
+  const AidantNotificationPrefs({
+    this.mutePriseConfirmee = false,
+    this.mutePriseNonConfirmee = false,
+    this.muteSos = false,
+  });
+
+  final bool mutePriseConfirmee;
+  final bool mutePriseNonConfirmee;
+  final bool muteSos;
+
+  factory AidantNotificationPrefs.fromJson(Map<String, dynamic> json) {
+    return AidantNotificationPrefs(
+      mutePriseConfirmee: json['mute_prise_confirmee'] as bool? ?? false,
+      mutePriseNonConfirmee: json['mute_prise_non_confirmee'] as bool? ?? false,
+      muteSos: json['mute_sos'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toPatchJson({
+    bool? mutePriseConfirmee,
+    bool? mutePriseNonConfirmee,
+    bool? muteSos,
+  }) {
+    return {
+      if (mutePriseConfirmee != null)
+        'mute_prise_confirmee': mutePriseConfirmee,
+      if (mutePriseNonConfirmee != null)
+        'mute_prise_non_confirmee': mutePriseNonConfirmee,
+      if (muteSos != null) 'mute_sos': muteSos,
+    };
+  }
+
+  AidantNotificationPrefs copyWith({
+    bool? mutePriseConfirmee,
+    bool? mutePriseNonConfirmee,
+    bool? muteSos,
+  }) {
+    return AidantNotificationPrefs(
+      mutePriseConfirmee: mutePriseConfirmee ?? this.mutePriseConfirmee,
+      mutePriseNonConfirmee:
+          mutePriseNonConfirmee ?? this.mutePriseNonConfirmee,
+      muteSos: muteSos ?? this.muteSos,
+    );
+  }
+}

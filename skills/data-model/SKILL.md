@@ -367,11 +367,14 @@ Contrainte : `mutation_id` unique globalement. Un second POST avec le même id r
 | patient_id | UUID (FK → Patient) | |
 | aidant_id | UUID (FK → User) | le compte qui accompagne — pas besoin d’un « rôle » exclusif |
 | statut | enum | `actif`, `revoque` |
-| niveau_permission | json | ex: `{"observance": true, "constantes": false}` |
+| niveau_permission | json | ex: `{"observance": true, "constantes": false}` — **accès aux données** contrôlé avec le patient |
+| notification_prefs | json | prefs **aidant** (boîte de réception) : `{"mute_prise_confirmee": false, "mute_prise_non_confirmee": false, "mute_sos": false}` — défauts `false` ; orthogonal à `niveau_permission` |
 | created_at | timestamp | |
 | revoked_at | timestamp | nullable |
 
 Un patient peut avoir plusieurs aidants, un aidant peut suivre plusieurs patients.
+
+`niveau_permission` = ce que l’aidant **peut voir**. `notification_prefs` = ce que l’aidant **accepte de recevoir** en push (mute par type, par relation). Ne pas fusionner les deux.
 
 ---
 

@@ -20,7 +20,7 @@ from app.models import (
     User,
 )
 from app.services import device_push_service, fcm_service, notification_service
-from app.services.aidant_service import _prenom
+from app.services.aidant_service import _normalize_notification_prefs, _prenom
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +28,11 @@ TYPE_PRISE_CONFIRMEE = "prise_confirmee_aidant"
 TYPE_PRISE_NON_CONFIRMEE = "prise_non_confirmee_aidant"
 DEFAULT_DELAI_HEURES = 2
 CHANNEL_AIDANT = "fidel_sos_aidant"  # canal natif déjà créé (SOS)
+
+_MUTE_KEY_BY_KIND = {
+    "prise_confirmee": "mute_prise_confirmee",
+    "prise_non_confirmee": "mute_prise_non_confirmee",
+}
 
 
 def _aware(dt: datetime) -> datetime:
@@ -63,7 +68,9 @@ async def _already_notified(
     return False
 
 
-async def _observance_aidant_ids(db: AsyncSession, *, patient_id: UUID) -> list[UUID]:
+async def _observance_aidant_ids(
+    db: AsyncSession, *, patient_id: UUID, mute_key: str | None = None
+) -> list[UUID]:
     rows = (
         await db.execute(
             select(PatientAidant).where(
@@ -76,8 +83,13 @@ async def _observance_aidant_ids(db: AsyncSession, *, patient_id: UUID) -> list[
     out: list[UUID] = []
     for rel in rows:
         perms = rel.niveau_permission or {}
-        if perms.get("observance", True) is True:
-            out.append(rel.aidant_id)
+        if perms.get("observance", True) is not True:
+            continue
+        if mute_key:
+            prefs = _normalize_notification_prefs(rel.notification_prefs)
+            if prefs.get(mute_key) is True:
+                continue
+        out.append(rel.aidant_id)
     return out
 
 
@@ -120,7 +132,11 @@ async def _push_to_aidants(
     if await _already_notified(db, type_alerte=type_alerte, prise_id=UUID(contexte["prise_id"])):
         return False
 
-    aidant_ids = await _observance_aidant_ids(db, patient_id=patient_id)
+    aidant_ids = await _observance_aidant_ids(
+        db,
+        patient_id=patient_id,
+        mute_key=_MUTE_KEY_BY_KIND.get(kind),
+    )
     log = await notification_service.trigger(
         db,
         type_alerte=type_alerte,

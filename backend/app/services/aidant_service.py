@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime, time, timedelta
 from uuid import UUID
 
 from sqlalchemy import func, select
@@ -24,8 +24,14 @@ from app.services.onboarding_service import (
     get_user_with_capabilities,
     is_aidant,
 )
+from app.services.patient_suivi_service import _combine_local, _patient_tz
 
 DEFAULT_PERMISSIONS = {"observance": True, "constantes": False}
+DEFAULT_NOTIFICATION_PREFS = {
+    "mute_prise_confirmee": False,
+    "mute_prise_non_confirmee": False,
+    "mute_sos": False,
+}
 OBSERVANCE_WINDOW_DAYS = 7
 
 
@@ -37,6 +43,16 @@ def _normalize_permissions(raw: dict | None) -> dict:
         base["observance"] = bool(raw["observance"])
     if "constantes" in raw:
         base["constantes"] = bool(raw["constantes"])
+    return base
+
+
+def _normalize_notification_prefs(raw: dict | None) -> dict:
+    base = dict(DEFAULT_NOTIFICATION_PREFS)
+    if not raw:
+        return base
+    for key in DEFAULT_NOTIFICATION_PREFS:
+        if key in raw:
+            base[key] = bool(raw[key])
     return base
 
 
@@ -207,6 +223,97 @@ async def get_patient_observance(
         "en_attente": en_attente,
         "taux_observance": taux,
     }
+
+
+async def list_patient_prises(
+    db: AsyncSession,
+    *,
+    user: User,
+    patient_id: UUID,
+    target_date: date | None = None,
+) -> list[dict]:
+    """Prises du jour déjà créées — lecture seule, sans ensure."""
+    await assert_aidant_permission(
+        db, user=user, patient_id=patient_id, permission="observance"
+    )
+    patient_user = await db.get(User, patient_id)
+    if patient_user is None:
+        raise AppException(
+            "PATIENT_NOT_FOUND",
+            "Ce suivi patient est introuvable.",
+            status_code=404,
+        )
+
+    tz = _patient_tz(patient_user)
+    day = target_date or datetime.now(tz).date()
+    day_start = _combine_local(day, time.min, tz)
+    day_end = _combine_local(day, time(23, 59, 59), tz)
+
+    result = await db.execute(
+        select(Prise, Medicament, PatientTraitement)
+        .join(MedicamentHoraire, Prise.medicament_horaire_id == MedicamentHoraire.id)
+        .join(Medicament, MedicamentHoraire.medicament_id == Medicament.id)
+        .join(PatientTraitement, Medicament.patient_traitement_id == PatientTraitement.id)
+        .where(
+            PatientTraitement.patient_id == patient_id,
+            PatientTraitement.statut == "actif",
+            Medicament.actif.is_(True),
+            Prise.heure_prevue >= day_start,
+            Prise.heure_prevue <= day_end,
+        )
+        .options(selectinload(PatientTraitement.maladie))
+        .order_by(Prise.heure_prevue)
+    )
+    rows = []
+    for prise, med, traitement in result.all():
+        maladie = traitement.maladie
+        rows.append(
+            {
+                "id": prise.id,
+                "medicament_id": med.id,
+                "medicament_nom": med.nom,
+                "dosage": med.dosage,
+                "heure_prevue": prise.heure_prevue,
+                "statut": prise.statut,
+                "confirmee_at": prise.confirmee_at,
+                "canal": prise.canal,
+                "traitement_id": traitement.id,
+                "maladie_id": traitement.maladie_id,
+                "maladie_nom": maladie.nom
+                if maladie
+                else (traitement.maladie_libelle or ""),
+            }
+        )
+    return rows
+
+
+async def get_notification_prefs(
+    db: AsyncSession, *, user: User, patient_id: UUID
+) -> dict:
+    rel = await require_aidant_of_patient(
+        db, aidant_id=user.id, patient_id=patient_id
+    )
+    return _normalize_notification_prefs(rel.notification_prefs)
+
+
+async def patch_notification_prefs(
+    db: AsyncSession,
+    *,
+    user: User,
+    patient_id: UUID,
+    patch: dict,
+) -> dict:
+    rel = await require_aidant_of_patient(
+        db, aidant_id=user.id, patient_id=patient_id
+    )
+    current = _normalize_notification_prefs(rel.notification_prefs)
+    for key in DEFAULT_NOTIFICATION_PREFS:
+        if key in patch and patch[key] is not None:
+            current[key] = bool(patch[key])
+    rel.notification_prefs = current
+    await db.commit()
+    await db.refresh(rel)
+    return _normalize_notification_prefs(rel.notification_prefs)
 
 
 async def assert_aidant_permission(

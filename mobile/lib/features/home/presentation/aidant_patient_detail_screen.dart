@@ -12,8 +12,10 @@ import '../../../l10n/app_localizations.dart';
 import '../application/home_controller.dart';
 import '../domain/aidant_models.dart';
 import '../domain/constante_models.dart';
+import '../domain/dashboard_models.dart';
 import 'profile_voix_record_sheet.dart';
 import 'widgets/constante_card.dart' show constanteLabel;
+import 'widgets/dose_timeline.dart';
 import 'widgets/home_skeleton.dart';
 
 class AidantPatientDetailScreen extends ConsumerStatefulWidget {
@@ -38,10 +40,13 @@ class _AidantPatientDetailScreenState
   AidantPatient? _patient;
   AidantObservance? _today;
   AidantObservance? _observance;
+  List<PriseDuJour> _prises = const [];
   List<Constante> _constantes = const [];
+  AidantNotificationPrefs _notifPrefs = const AidantNotificationPrefs();
   String? _error;
   bool _loading = true;
   bool _voixBusy = false;
+  bool _prefsBusy = false;
 
   static const _maxVoixBytes = 2 * 1024 * 1024;
 
@@ -76,6 +81,7 @@ class _AidantPatientDetailScreenState
           _patient = null;
           _today = null;
           _observance = null;
+          _prises = const [];
           _constantes = const [];
           _loading = false;
           _error = AppLocalizations.of(context).cerclePatientUnavailable;
@@ -88,6 +94,7 @@ class _AidantPatientDetailScreenState
       final canSeeDoses = patient.permissions.observance;
       AidantObservance? today;
       AidantObservance? week;
+      List<PriseDuJour> prises = const [];
       if (canSeeDoses) {
         final results = await Future.wait([
           repo.fetchPatientObservance(
@@ -96,19 +103,27 @@ class _AidantPatientDetailScreenState
             jusquA: day,
           ),
           repo.fetchPatientObservance(widget.patientId),
+          repo.listAidantPrises(widget.patientId, date: day),
         ]);
-        today = results[0];
-        week = results[1];
+        today = results[0] as AidantObservance;
+        week = results[1] as AidantObservance;
+        prises = results[2] as List<PriseDuJour>;
       }
       final constantes = patient.permissions.constantes
           ? await repo.listAidantConstantes(widget.patientId)
           : const <Constante>[];
+      AidantNotificationPrefs prefs = const AidantNotificationPrefs();
+      try {
+        prefs = await repo.fetchAidantNotificationPrefs(widget.patientId);
+      } catch (_) {}
       if (!mounted) return;
       setState(() {
         _patient = patient;
         _today = today;
         _observance = week;
+        _prises = prises;
         _constantes = constantes;
+        _notifPrefs = prefs;
         _loading = false;
       });
     } catch (e) {
@@ -174,27 +189,40 @@ class _AidantPatientDetailScreenState
                   )
                 else if (_today != null)
                   PremiumCard(
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(
-                          child: _MetricTile(
-                            value: '${_today!.confirmees}',
-                            label: l10n.cercleAdherenceConfirmed,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _MetricTile(
+                                value: '${_today!.confirmees}',
+                                label: l10n.cercleAdherenceConfirmed,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _MetricTile(
+                                value: '${_today!.enAttente}',
+                                label: l10n.cercleAdherencePending,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _MetricTile(
+                                value: '${_today!.manquees}',
+                                label: l10n.cercleAdherenceMissed,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _MetricTile(
-                            value: '${_today!.enAttente}',
-                            label: l10n.cercleAdherencePending,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _MetricTile(
-                            value: '${_today!.manquees}',
-                            label: l10n.cercleAdherenceMissed,
-                          ),
+                        const SizedBox(height: 14),
+                        DoseTimeline(
+                          prises: _prises,
+                          now: DateTime.now(),
+                          busy: false,
+                          readOnly: true,
+                          embedded: true,
                         ),
                       ],
                     ),
@@ -323,6 +351,40 @@ class _AidantPatientDetailScreenState
                     ),
                   ),
                 const SizedBox(height: 18),
+                _SectionLabel(label: l10n.aidantNotifSection),
+                const SizedBox(height: 8),
+                PremiumCard(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      SwitchListTile(
+                        title: Text(l10n.aidantMutePriseConfirmee),
+                        value: _notifPrefs.mutePriseConfirmee,
+                        onChanged: _prefsBusy
+                            ? null
+                            : (v) => _patchPref(mutePriseConfirmee: v),
+                      ),
+                      Divider(height: 1, color: tokens.border),
+                      SwitchListTile(
+                        title: Text(l10n.aidantMutePriseNonConfirmee),
+                        value: _notifPrefs.mutePriseNonConfirmee,
+                        onChanged: _prefsBusy
+                            ? null
+                            : (v) => _patchPref(mutePriseNonConfirmee: v),
+                      ),
+                      Divider(height: 1, color: tokens.border),
+                      SwitchListTile(
+                        title: Text(l10n.aidantMuteSos),
+                        subtitle: Text(l10n.aidantMuteSosHint),
+                        value: _notifPrefs.muteSos,
+                        onChanged: _prefsBusy
+                            ? null
+                            : (v) => _patchPref(muteSos: v),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
                 _SectionLabel(label: l10n.aidantVoixSection),
                 const SizedBox(height: 8),
                 PremiumCard(
@@ -369,6 +431,34 @@ class _AidantPatientDetailScreenState
     }
     final digits = c.type.decimals;
     return '${c.systolique.toStringAsFixed(digits)} ${c.unite}';
+  }
+
+  Future<void> _patchPref({
+    bool? mutePriseConfirmee,
+    bool? mutePriseNonConfirmee,
+    bool? muteSos,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    setState(() => _prefsBusy = true);
+    try {
+      final prefs =
+          await ref.read(homeRepositoryProvider).patchAidantNotificationPrefs(
+                widget.patientId,
+                mutePriseConfirmee: mutePriseConfirmee,
+                mutePriseNonConfirmee: mutePriseNonConfirmee,
+                muteSos: muteSos,
+              );
+      if (!mounted) return;
+      setState(() => _notifPrefs = prefs);
+    } catch (e) {
+      if (!mounted) return;
+      AppToast.error(
+        context,
+        e is ApiException ? e.message : l10n.genericError,
+      );
+    } finally {
+      if (mounted) setState(() => _prefsBusy = false);
+    }
   }
 
   Future<void> _chooseVoixSource() async {

@@ -8,10 +8,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.audio_validation import read_upload_limited
 from app.deps import get_current_user, get_db
 from app.models import User
-from app.schemas.aidant import AidantPatientOut, ObservanceOut
+from app.schemas.aidant import (
+    AidantNotificationPrefs,
+    AidantNotificationPrefsPatch,
+    AidantPatientOut,
+    ObservanceOut,
+)
 from app.schemas.checkin_sos import MessageOut as SosMessageOut
 from app.schemas.checkin_sos import SosActiveAidantOut
 from app.schemas.constante import ConstanteOut
+from app.schemas.medication import PriseOut
 from app.schemas.onboarding import AidantSyncIn, AidantSyncOut
 from app.schemas.voix_rappel import VoixRappelOut
 from app.services import (
@@ -59,6 +65,55 @@ async def patient_observance(
             patient_id=patient_id,
             depuis=depuis,
             jusqu_a=jusqu_a,
+        )
+    )
+
+
+@router.get("/me/patients/{patient_id}/prises", response_model=list[PriseOut])
+async def patient_prises(
+    patient_id: UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+    date: Annotated[date | None, Query()] = None,
+) -> list[PriseOut]:
+    rows = await aidant_service.list_patient_prises(
+        db, user=user, patient_id=patient_id, target_date=date
+    )
+    return [PriseOut(**row) for row in rows]
+
+
+@router.get(
+    "/me/patients/{patient_id}/notification-prefs",
+    response_model=AidantNotificationPrefs,
+)
+async def get_notification_prefs(
+    patient_id: UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+) -> AidantNotificationPrefs:
+    return AidantNotificationPrefs(
+        **await aidant_service.get_notification_prefs(
+            db, user=user, patient_id=patient_id
+        )
+    )
+
+
+@router.patch(
+    "/me/patients/{patient_id}/notification-prefs",
+    response_model=AidantNotificationPrefs,
+)
+async def patch_notification_prefs(
+    patient_id: UUID,
+    body: AidantNotificationPrefsPatch,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user: Annotated[User, Depends(get_current_user)],
+) -> AidantNotificationPrefs:
+    return AidantNotificationPrefs(
+        **await aidant_service.patch_notification_prefs(
+            db,
+            user=user,
+            patient_id=patient_id,
+            patch=body.model_dump(exclude_unset=True),
         )
     )
 

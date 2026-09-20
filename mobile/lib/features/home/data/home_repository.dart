@@ -709,6 +709,63 @@ class HomeRepository {
     }
   }
 
+  Future<List<PriseDuJour>> listAidantPrises(
+    String patientId, {
+    DateTime? date,
+  }) async {
+    try {
+      final day = date ?? DateTime.now();
+      final res = await _api.get<dynamic>(
+        '/aidants/me/patients/$patientId/prises',
+        queryParameters: {'date': _isoDate(day)},
+      );
+      final data = res.data;
+      if (data is! List) return const [];
+      return data
+          .whereType<Map>()
+          .map((e) => PriseDuJour.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
+  Future<AidantNotificationPrefs> fetchAidantNotificationPrefs(
+    String patientId,
+  ) async {
+    try {
+      final res = await _api.get<Map<String, dynamic>>(
+        '/aidants/me/patients/$patientId/notification-prefs',
+      );
+      return AidantNotificationPrefs.fromJson(res.data ?? {});
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
+  Future<AidantNotificationPrefs> patchAidantNotificationPrefs(
+    String patientId, {
+    bool? mutePriseConfirmee,
+    bool? mutePriseNonConfirmee,
+    bool? muteSos,
+  }) async {
+    try {
+      final res = await _api.patch<Map<String, dynamic>>(
+        '/aidants/me/patients/$patientId/notification-prefs',
+        data: {
+          if (mutePriseConfirmee != null)
+            'mute_prise_confirmee': mutePriseConfirmee,
+          if (mutePriseNonConfirmee != null)
+            'mute_prise_non_confirmee': mutePriseNonConfirmee,
+          if (muteSos != null) 'mute_sos': muteSos,
+        },
+      );
+      return AidantNotificationPrefs.fromJson(res.data ?? {});
+    } on DioException catch (e) {
+      ApiClient.throwApi(e);
+    }
+  }
+
   Future<List<ActiveSosAlert>> listActiveSosForAidant() async {
     try {
       final res = await _api.get<List<dynamic>>('/aidants/me/sos/active');

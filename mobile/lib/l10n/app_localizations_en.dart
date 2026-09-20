@@ -611,6 +611,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aidantVoixUploaded => 'Voice sent';
 
   @override
+  String get aidantNotifSection => 'Notifications';
+
+  @override
+  String get aidantMutePriseConfirmee => 'Mute confirmed doses';
+
+  @override
+  String get aidantMutePriseNonConfirmee => 'Mute unconfirmed doses';
+
+  @override
+  String get aidantMuteSos => 'Mute SOS';
+
+  @override
+  String get aidantMuteSosHint =>
+      'You won’t be alerted if this person triggers an SOS.';
+
+  @override
   String get healthAidantOnlyTitle => 'Health is your own follow-up';
 
   @override

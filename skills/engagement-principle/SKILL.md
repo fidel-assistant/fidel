@@ -90,6 +90,8 @@ Chaque `type_alerte` est déclaré une seule fois, avec son comportement par dé
 
 > **Observance aidant (FCM)** : `prise_confirmee_aidant` et `prise_non_confirmee_aidant` ne partent **jamais** par défaut. Opt-in patient via `PreferenceConsentement` (`toujours_demander=false` + `regle_auto`). Dédup 1 notif / `prise_id` via `NotificationLog.declencheur.prise_id`. Envoi via `aidant_push_service` (journal + FCM), pas d’appel FCM brut depuis un router. Job absence : `POST /internal/jobs/scan-prises-non-confirmees` (header `X-Cron-Secret`) — pas de Celery ; le serveur ne ping pas l’app.
 
+> **Mute aidant (recipient)** : après l’opt-in patient et le filtre `observance=true`, exclure tout aidant dont `PatientAidant.notification_prefs` mute le type (`mute_prise_confirmee` / `mute_prise_non_confirmee`). Pour SOS (`sos_declenche`), exclure `mute_sos` au moment de `_finalize_sos`. Le mute est **par relation** (aidant × patient), pas un `PreferenceConsentement` global.
+
 > **Marquage `manquee` (métier, pas alerte tiers)** : job distinct `POST /internal/jobs/mark-prises-manquees` — `en_attente` → `manquee` après `heure_prevue + PRISE_MANQUEE_GRACE_HOURS` (défaut 12 h, typiquement **après** le délai aidant). Aucun FCM / `NotificationEngine` à la bascule. Timeline attendue : H0 → (opt-in) notif aidant à H0+`delai_heures` → `manquee` à H0+12 h → confirmation tardive possible.
 
 ## Templates de messages
