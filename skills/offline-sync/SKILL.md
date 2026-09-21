@@ -47,7 +47,7 @@ Flux type :
 3. Au passage `online` (après hystérésis) : push outbox puis pull delta ; merge selon règles de conflit.
 4. Acquittement serveur → retirer de l’outbox + appliquer la réponse au snapshot.
 
-État actuel : **Phase 6 livrée** — SyncMetrics (`sync_last_pass_v1`) + checklist QA automatisée + runbook [`docs/sync-runbook.md`](../../docs/sync-runbook.md). Prefs alarme / caches `reminder_*` hors Drift. **Client Flutter V1** : flush via `SyncEngine` → `POST /sync/push` + `GET /sync/pull` uniquement — pas d’appel à `POST /prises/sync-offline` (API legacy conservée côté serveur). **§F appliqué sur `/sync/push`** (Phase B polish) : arbitrage `client_ts` vs `Prise.updated_at` pour `confirm` / `report`. **Dead letters UI** (Phase C) : bandeau + sheet Effacer / Réessayer pour `failed_permanent`.
+État actuel : **Phase 6 livrée** — SyncMetrics (`sync_last_pass_v1`) + checklist QA automatisée + runbook [`docs/sync-runbook.md`](../../docs/sync-runbook.md). Prefs alarme / caches `reminder_*` hors Drift. **Client Flutter V1** : flush via `SyncEngine` → `POST /sync/push` + `GET /sync/pull` uniquement — pas d’appel à `POST /prises/sync-offline` (API legacy conservée côté serveur). **§F appliqué sur `/sync/push`** (Phase B polish) : arbitrage `client_ts` vs `Prise.updated_at` pour `confirm` / `report`. **Dead letters UI** (Phase C) : bandeau + sheet Effacer / Réessayer pour `failed_permanent`. **Phase D polish QA** : mapping tests A–C + smoke bandeau + checklist device dans le runbook.
 
 ## C. Matrice d’entités
 
