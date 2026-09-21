@@ -398,6 +398,36 @@
   "homeCheckInActionPasTop": "Pas top",
   "homeCheckInActionCaVa": "Ça va",
   "homeCheckInActionSuper": "Super",
+  "homeCheckInHistoryLink": "Voir l’historique",
+  "homeCheckInHistoryTitle": "Historique check-in",
+  "homeCheckInHistorySubtitle": "Tes réponses des 30 derniers jours.",
+  "homeCheckInHistoryEmpty": "Aucun check-in sur cette période.",
+  "homeLowStockTitle": "Stock bas",
+  "homeLowStockLine": "Reste {stock} (seuil {seuil})",
+  "@homeLowStockLine": {
+    "placeholders": {
+      "stock": { "type": "int" },
+      "seuil": { "type": "int" }
+    }
+  },
+  "syncBannerOffline": "Hors ligne — tes actions seront synchronisées plus tard.",
+  "syncBannerOfflinePending": "Hors ligne — {count} en attente",
+  "@syncBannerOfflinePending": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerPending": "{count} action(s) en attente de sync",
+  "@syncBannerPending": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerDegraded": "Connexion limitée — sync ralentie.",
+  "syncBannerDegradedPending": "Connexion limitée — {count} en attente",
+  "@syncBannerDegradedPending": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerRetry": "Réessayer",
+  "syncBannerFlushed": "Synchronisation terminée.",
+  "syncBannerFlushFailed": "Sync impossible pour le moment. Réessaie.",
+  "healthMoreSection": "Plus",
   "homeTreatmentDay": "Jour {day}",
   "@homeTreatmentDay": {
     "placeholders": { "day": { "type": "int" } }

@@ -1089,6 +1089,62 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeCheckInActionSuper => 'Super';
 
   @override
+  String get homeCheckInHistoryLink => 'Voir l’historique';
+
+  @override
+  String get homeCheckInHistoryTitle => 'Historique check-in';
+
+  @override
+  String get homeCheckInHistorySubtitle =>
+      'Tes réponses des 30 derniers jours.';
+
+  @override
+  String get homeCheckInHistoryEmpty => 'Aucun check-in sur cette période.';
+
+  @override
+  String get homeLowStockTitle => 'Stock bas';
+
+  @override
+  String homeLowStockLine(int stock, int seuil) {
+    return 'Reste $stock (seuil $seuil)';
+  }
+
+  @override
+  String get syncBannerOffline =>
+      'Hors ligne — tes actions seront synchronisées plus tard.';
+
+  @override
+  String syncBannerOfflinePending(int count) {
+    return 'Hors ligne — $count en attente';
+  }
+
+  @override
+  String syncBannerPending(int count) {
+    return '$count action(s) en attente de sync';
+  }
+
+  @override
+  String get syncBannerDegraded => 'Connexion limitée — sync ralentie.';
+
+  @override
+  String syncBannerDegradedPending(int count) {
+    return 'Connexion limitée — $count en attente';
+  }
+
+  @override
+  String get syncBannerRetry => 'Réessayer';
+
+  @override
+  String get syncBannerFlushed => 'Synchronisation terminée.';
+
+  @override
+  String get syncBannerFlushFailed =>
+      'Sync impossible pour le moment. Réessaie.';
+
+  @override
+  String get healthMoreSection => 'Plus';
+
+  @override
   String homeTreatmentDay(int day) {
     return 'Jour $day';
   }

@@ -413,6 +413,36 @@
   "homeCheckInActionPasTop": "Not great",
   "homeCheckInActionCaVa": "Okay",
   "homeCheckInActionSuper": "Great",
+  "homeCheckInHistoryLink": "View history",
+  "homeCheckInHistoryTitle": "Check-in history",
+  "homeCheckInHistorySubtitle": "Your answers from the last 30 days.",
+  "homeCheckInHistoryEmpty": "No check-ins in this period.",
+  "homeLowStockTitle": "Low stock",
+  "homeLowStockLine": "{stock} left (alert at {seuil})",
+  "@homeLowStockLine": {
+    "placeholders": {
+      "stock": { "type": "int" },
+      "seuil": { "type": "int" }
+    }
+  },
+  "syncBannerOffline": "Offline — your actions will sync later.",
+  "syncBannerOfflinePending": "Offline — {count} pending",
+  "@syncBannerOfflinePending": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerPending": "{count} action(s) waiting to sync",
+  "@syncBannerPending": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerDegraded": "Limited connection — sync slowed.",
+  "syncBannerDegradedPending": "Limited connection — {count} pending",
+  "@syncBannerDegradedPending": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerRetry": "Retry",
+  "syncBannerFlushed": "Sync complete.",
+  "syncBannerFlushFailed": "Couldn’t sync right now. Try again.",
+  "healthMoreSection": "More",
   "homeTreatmentDay": "Day {day}",
   "@homeTreatmentDay": {
     "placeholders": { "day": { "type": "int" } }

@@ -2018,6 +2018,96 @@ abstract class AppLocalizations {
   /// **'Great'**
   String get homeCheckInActionSuper;
 
+  /// No description provided for @homeCheckInHistoryLink.
+  ///
+  /// In en, this message translates to:
+  /// **'View history'**
+  String get homeCheckInHistoryLink;
+
+  /// No description provided for @homeCheckInHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in history'**
+  String get homeCheckInHistoryTitle;
+
+  /// No description provided for @homeCheckInHistorySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answers from the last 30 days.'**
+  String get homeCheckInHistorySubtitle;
+
+  /// No description provided for @homeCheckInHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No check-ins in this period.'**
+  String get homeCheckInHistoryEmpty;
+
+  /// No description provided for @homeLowStockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Low stock'**
+  String get homeLowStockTitle;
+
+  /// No description provided for @homeLowStockLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{stock} left (alert at {seuil})'**
+  String homeLowStockLine(int stock, int seuil);
+
+  /// No description provided for @syncBannerOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline — your actions will sync later.'**
+  String get syncBannerOffline;
+
+  /// No description provided for @syncBannerOfflinePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline — {count} pending'**
+  String syncBannerOfflinePending(int count);
+
+  /// No description provided for @syncBannerPending.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} action(s) waiting to sync'**
+  String syncBannerPending(int count);
+
+  /// No description provided for @syncBannerDegraded.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited connection — sync slowed.'**
+  String get syncBannerDegraded;
+
+  /// No description provided for @syncBannerDegradedPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited connection — {count} pending'**
+  String syncBannerDegradedPending(int count);
+
+  /// No description provided for @syncBannerRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get syncBannerRetry;
+
+  /// No description provided for @syncBannerFlushed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync complete.'**
+  String get syncBannerFlushed;
+
+  /// No description provided for @syncBannerFlushFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t sync right now. Try again.'**
+  String get syncBannerFlushFailed;
+
+  /// No description provided for @healthMoreSection.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get healthMoreSection;
+
   /// No description provided for @homeTreatmentDay.
   ///
   /// In en, this message translates to:

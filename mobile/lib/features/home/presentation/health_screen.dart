@@ -125,20 +125,8 @@ class HealthScreen extends ConsumerWidget {
           vm: vm,
           onTypeTap: (type) => context.push('/home/sante/${type.code}'),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
       ],
-      _CareQuickActions(
-        onTraitement: () => context.push('/home/traitement'),
-        onMeds: medsTargetId == null
-            ? null
-            : () => context.push(
-                  '/home/medicaments',
-                  extra: medsTargetId,
-                ),
-        onVital: () => AddConstanteSheet.show(context),
-        medsNeedsConfig: unconfigured != null,
-      ),
-      const SizedBox(height: 20),
       _SectionLabel(title: l10n.healthAllMetrics),
       const SizedBox(height: 10),
       RepaintBoundary(
@@ -157,6 +145,20 @@ class HealthScreen extends ConsumerWidget {
           items: vm.recentConstantes,
           onItemTap: (type) => context.push('/home/sante/${type.code}'),
         ),
+      ),
+      const SizedBox(height: 22),
+      _SectionLabel(title: l10n.healthMoreSection),
+      const SizedBox(height: 10),
+      _CareQuickActions(
+        onTraitement: () => context.push('/home/traitement'),
+        onMeds: medsTargetId == null
+            ? null
+            : () => context.push(
+                  '/home/medicaments',
+                  extra: medsTargetId,
+                ),
+        onVital: () => AddConstanteSheet.show(context),
+        medsNeedsConfig: unconfigured != null,
       ),
     ];
   }
