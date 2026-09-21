@@ -1,4 +1,4 @@
-# Runbook sync offline (Phase 6)
+# Runbook sync offline (Phase 6 + polish A–D)
 
 Diagnostic rapide des pannes SyncEngine / outbox / pull — contexte connexion instable.
 
@@ -46,7 +46,7 @@ Diagnostic rapide des pannes SyncEngine / outbox / pull — contexte connexion i
 2. Cursor corrompu : effacer `sync_pull_cursor_v1` → prochain pull full fenêtre.
 3. Outbox pending sur la même `entity_id` protège le snapshot local (volontaire).
 
-## Checklist QA (automatisée)
+## Checklist QA automatisée (Phase 6 + polish A–C)
 
 | # | Critère | Test |
 |---|---|---|
@@ -54,15 +54,37 @@ Diagnostic rapide des pannes SyncEngine / outbox / pull — contexte connexion i
 | 2 | Coupure mid-push + retry | `mobile/test/sync_engine_test.dart` QA#2 |
 | 3 | Flapping ≤2 flush / 60s | `mobile/test/sync_flapping_test.dart` |
 | 4 | Horloge device −3 h | `mobile/test/sync_engine_test.dart` QA#4 |
-| 5 | Anti-downgrade `confirmee` | `backend/.../test_sync_offline_no_downgrade_confirmee` |
+| 5 | Anti-downgrade `confirmee` | `test_sync_offline_no_downgrade_confirmee` |
+| 6 | §F manquee + confirm `client_ts` stale → applied | `test_sync_push_manquee_confirm_stale_client_ts_applied` |
+| 7 | §F confirm stale → `SYNC_CONFLICT` | `test_sync_push_stale_confirm_rejected` |
+| 8 | §F report stale / fresh | `test_sync_push_report_stale_client_ts_rejected`, `test_sync_push_report_fresh_client_ts_applied` |
+| 9 | Dead letters outbox requeue | `mobile/test/sync_outbox_test.dart` |
+| 10 | Bandeau dead letters visible | `mobile/test/sync_status_banner_test.dart` |
 
 ```bash
 # Backend
 cd backend && .venv/Scripts/python.exe -m pytest app/tests/test_sync_api.py -q
 
 # Mobile
-cd mobile && flutter test test/sync_engine_test.dart test/sync_flapping_test.dart test/sync_pull_merge_test.dart
+cd mobile && flutter test \
+  test/sync_engine_test.dart \
+  test/sync_flapping_test.dart \
+  test/sync_pull_merge_test.dart \
+  test/sync_outbox_test.dart \
+  test/sync_status_banner_test.dart
 ```
+
+**Dernière exécution locale (Phase D)** : suites ci-dessus **vertes** (à rejouer après changement SyncEngine / push).
+
+## Checklist device (Phase D)
+
+À cocher manuellement sur téléphone / émulateur (Accueil patient authentifié, au moins une prise du jour) :
+
+- [ ] **1. Offline** — Mode avion ON → bandeau offline ; confirmer une prise → compteur « en attente » (ou pending au retour)
+- [ ] **2. Flush** — Mode avion OFF → tap bandeau → toast sync OK ; bandeau disparaît si outbox vide
+- [ ] **3. Dead letter** — Forcer un conflit (ex. report après prise déjà confirmée, ou rejouer une mutation rejetée) → bandeau dead letters (« Voir ») → sheet Effacer **ou** Réessayer
+- [ ] **4. Accueil** — Pull-to-refresh après flush → doses / statuts à jour
+- [ ] **5. (Optionnel) Horloge −3 h** — Confirmer une prise puis sync ; pas de doublon ni conflit absurde
 
 ## Commandes support (device)
 
