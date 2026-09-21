@@ -2090,6 +2090,12 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get syncBannerRetry;
 
+  /// No description provided for @syncBannerView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get syncBannerView;
+
   /// No description provided for @syncBannerFlushed.
   ///
   /// In en, this message translates to:
@@ -2101,6 +2107,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn’t sync right now. Try again.'**
   String get syncBannerFlushFailed;
+
+  /// No description provided for @syncBannerDeadLetters.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} action(s) failed to sync'**
+  String syncBannerDeadLetters(int count);
+
+  /// No description provided for @syncBannerPendingAndDead.
+  ///
+  /// In en, this message translates to:
+  /// **'{pending} pending · {dead} failed'**
+  String syncBannerPendingAndDead(int pending, int dead);
+
+  /// No description provided for @syncDeadLettersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed sync actions'**
+  String get syncDeadLettersTitle;
+
+  /// No description provided for @syncDeadLettersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'These actions were permanently rejected. You can discard or retry them.'**
+  String get syncDeadLettersSubtitle;
+
+  /// No description provided for @syncDeadLettersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No failed actions.'**
+  String get syncDeadLettersEmpty;
+
+  /// No description provided for @syncDeadLetterDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get syncDeadLetterDiscard;
+
+  /// No description provided for @syncDeadLetterRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get syncDeadLetterRetry;
+
+  /// No description provided for @syncDeadLetterDiscarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Action discarded.'**
+  String get syncDeadLetterDiscarded;
+
+  /// No description provided for @syncDeadLetterRequeued.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry started.'**
+  String get syncDeadLetterRequeued;
+
+  /// No description provided for @syncDeadLetterOpConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose confirmation'**
+  String get syncDeadLetterOpConfirm;
+
+  /// No description provided for @syncDeadLetterOpReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose snooze'**
+  String get syncDeadLetterOpReport;
+
+  /// No description provided for @syncDeadLetterOpConstante.
+  ///
+  /// In en, this message translates to:
+  /// **'Health reading'**
+  String get syncDeadLetterOpConstante;
+
+  /// No description provided for @syncDeadLetterOpCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in'**
+  String get syncDeadLetterOpCheckIn;
 
   /// No description provided for @healthMoreSection.
   ///

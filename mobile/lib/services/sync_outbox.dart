@@ -265,4 +265,25 @@ class SyncOutbox {
       all[idx].copyWith(state: SyncOutboxState.failedPermanent),
     );
   }
+
+  /// Dead letters — rejets permanents exclus du flush.
+  Future<List<SyncOutboxEntry>> listFailedPermanent() async {
+    await ensureMigrated();
+    return _db.listFailedPermanentOutbox();
+  }
+
+  /// Remet une dead letter en file (pending) pour un nouvel essai.
+  Future<void> requeue(String mutationId) async {
+    await ensureMigrated();
+    final all = await _db.listAllOutbox();
+    final idx = all.indexWhere((e) => e.mutationId == mutationId);
+    if (idx < 0) return;
+    await _db.updateOutboxEntry(
+      all[idx].copyWith(
+        attempts: 0,
+        nextAttemptAt: DateTime.now().toUtc(),
+        state: SyncOutboxState.pending,
+      ),
+    );
+  }
 }

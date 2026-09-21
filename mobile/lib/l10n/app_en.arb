@@ -440,8 +440,31 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "syncBannerRetry": "Retry",
+  "syncBannerView": "View",
   "syncBannerFlushed": "Sync complete.",
   "syncBannerFlushFailed": "Couldn’t sync right now. Try again.",
+  "syncBannerDeadLetters": "{count} action(s) failed to sync",
+  "@syncBannerDeadLetters": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerPendingAndDead": "{pending} pending · {dead} failed",
+  "@syncBannerPendingAndDead": {
+    "placeholders": {
+      "pending": { "type": "int" },
+      "dead": { "type": "int" }
+    }
+  },
+  "syncDeadLettersTitle": "Failed sync actions",
+  "syncDeadLettersSubtitle": "These actions were permanently rejected. You can discard or retry them.",
+  "syncDeadLettersEmpty": "No failed actions.",
+  "syncDeadLetterDiscard": "Discard",
+  "syncDeadLetterRetry": "Retry",
+  "syncDeadLetterDiscarded": "Action discarded.",
+  "syncDeadLetterRequeued": "Retry started.",
+  "syncDeadLetterOpConfirm": "Dose confirmation",
+  "syncDeadLetterOpReport": "Dose snooze",
+  "syncDeadLetterOpConstante": "Health reading",
+  "syncDeadLetterOpCheckIn": "Check-in",
   "healthMoreSection": "More",
   "homeTreatmentDay": "Day {day}",
   "@homeTreatmentDay": {

@@ -425,8 +425,31 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "syncBannerRetry": "Réessayer",
+  "syncBannerView": "Voir",
   "syncBannerFlushed": "Synchronisation terminée.",
   "syncBannerFlushFailed": "Sync impossible pour le moment. Réessaie.",
+  "syncBannerDeadLetters": "{count} action(s) non synchronisée(s)",
+  "@syncBannerDeadLetters": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "syncBannerPendingAndDead": "{pending} en attente · {dead} échec(s)",
+  "@syncBannerPendingAndDead": {
+    "placeholders": {
+      "pending": { "type": "int" },
+      "dead": { "type": "int" }
+    }
+  },
+  "syncDeadLettersTitle": "Actions non synchronisées",
+  "syncDeadLettersSubtitle": "Ces actions ont été refusées définitivement. Tu peux les effacer ou réessayer.",
+  "syncDeadLettersEmpty": "Aucune action en échec.",
+  "syncDeadLetterDiscard": "Effacer",
+  "syncDeadLetterRetry": "Réessayer",
+  "syncDeadLetterDiscarded": "Action effacée.",
+  "syncDeadLetterRequeued": "Nouvelle tentative lancée.",
+  "syncDeadLetterOpConfirm": "Confirmation de prise",
+  "syncDeadLetterOpReport": "Report de prise",
+  "syncDeadLetterOpConstante": "Mesure de santé",
+  "syncDeadLetterOpCheckIn": "Check-in",
   "healthMoreSection": "Plus",
   "homeTreatmentDay": "Jour {day}",
   "@homeTreatmentDay": {

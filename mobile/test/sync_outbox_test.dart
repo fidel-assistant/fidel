@@ -86,4 +86,33 @@ void main() {
     expect(read, isNotNull);
     expect(read!.prisesAujourdhui.single.id, 'p1');
   });
+
+  test('markPermanent then listFailedPermanent; requeue restores pending',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final outbox = SyncOutbox(db, prefs: prefs);
+
+    final entry = await outbox.enqueue(
+      entity: 'prise',
+      entityId: 'p-dead',
+      op: 'report',
+      payload: {'nouvelle_heure': '2026-09-10T12:00:00Z'},
+    );
+    await outbox.markPermanent(entry.mutationId);
+
+    final failed = await outbox.listFailedPermanent();
+    expect(failed.single.mutationId, entry.mutationId);
+    expect(failed.single.state, SyncOutboxState.failedPermanent);
+
+    final active = await outbox.listPendingForProjection();
+    expect(active, isEmpty);
+
+    await outbox.requeue(entry.mutationId);
+    final pending = await outbox.listPendingForProjection();
+    expect(pending.single.mutationId, entry.mutationId);
+    expect(pending.single.state, SyncOutboxState.pending);
+    expect(pending.single.attempts, 0);
+    expect(await outbox.listFailedPermanent(), isEmpty);
+  });
 }
