@@ -33,9 +33,9 @@ Permissions notifs/batterie : seulement si branche suivi perso (option A).
 | API dashboard, traitements, médicaments, horaires, prises + `POST /prises/sync-offline` | **Fait** | Prises pré-générées à la création d’horaire |
 | Aidants, contacts urgence, check-in / SOS, constantes, préférences consentement, voix de rappel, réglages patient | **Fait** | API + FCM ; UI aidant = phases ci-dessous |
 | App Flutter (auth, onboarding, alarmes locales patient) | **Fait** (socle) | Préavis H0−Δ + alarme H0 + notif marquage H+5 |
-| UI patient (Accueil doses, Santé, manquée, confirm) | **Avancé** | Socle OK ; suite = phases **1→5** ci-dessous |
+| UI patient (Accueil doses, Santé, manquée, confirm) | **Fait** | Phases **1→5** livrées (activation, checklist, traitements, profil, sync visible) |
 | UI aidant (Accueil, détail, deep links, Cercle, timeline mute) | **Fait** | Phases A→D livrées |
-| Sync offline V2 (outbox, Drift, push/pull) | **Fait** (Phase 6) | Voir `offline-sync` — contrat + runbook |
+| Sync offline V2 (outbox, Drift, push/pull) | **Fait** (Phase 6 + polish A–D) | Voir `offline-sync` — contrat + runbook |
 
 **Rappels médicaments** : 100 % **locaux** sur le téléphone (offline, même avion). Timeline par prise : **préavis** (notif H0−Δ, défaut 5 min) → **H0** = alarme applicative Fidel (son insistent + UI) **et** notif en parallèle → **H0+5 min** = notif de marquage (actions). Les notifs ne sont **pas** remplacées par l’alarme : elles s’ajoutent. FastAPI ne sonne pas et ne poll pas les doses. Pas de Celery/Redis en V1. **FCM aidant** : SOS + observance (`prise_confirmee_aidant` à la sync confirm, `prise_non_confirmee_aidant` via cron `POST /internal/jobs/scan-prises-non-confirmees`) — uniquement via `engagement-principle` (`regle_auto` opt-in — jamais d’alerte tiers automatique). **Marquage manqué** : cron distinct `POST /internal/jobs/mark-prises-manquees` (`en_attente` → `manquee` après grâce 12 h) — pas de FCM. Confirmation tardive OK. Détail : `skills/engagement-principle/SKILL.md` + `skills/mobile-flutter/SKILL.md`.
 
@@ -68,9 +68,9 @@ Permissions notifs/batterie : seulement si branche suivi perso (option A).
 | **C — Cercle & actions** | Signaux, voix, liste SOS Accueil | **Fait** |
 | **D — Parité soft** | Timeline doses lecture seule + mute notifs par patient | **Fait** |
 
-## Directive UI — Interface patient (suite V1)
+## Directive UI — Interface patient (V1)
 
-**Constat** : Accueil doses (confirm / snooze / manquée), Santé constantes, alarmes H0−Δ / H0 / H+5, check-in du jour, wizard création médocs, SOS Cercle, profil de base = **OK**. Il manque surtout l’**activation tardive complète**, la **checklist soft**, la **gestion** (éditer traitements / médocs), le **compte**, et la **visibilité sync**.
+**Constat** : phases **1→5 faites** — Accueil doses (confirm / snooze / manquée), Santé constantes, alarmes H0−Δ / H0 / H+5, check-in, wizard médocs, SOS Cercle, profil / compte, sync visible. Hors scope V2 : inbox engagement, rôles ASC / médecin.
 
 **Règles** :
 
@@ -80,7 +80,7 @@ Permissions notifs/batterie : seulement si branche suivi perso (option A).
 - Offline-first inchangé — ne casser ni outbox ni alarmes locales
 - Ordre strict phases **1→5** ; une phase = un PR / une itération
 
-### Phases d’implémentation — UI patient (reste)
+### Phases d’implémentation — UI patient
 
 | Phase | Objectif | Livrables | Done quand |
 |---|---|---|---|
