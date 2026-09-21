@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.tests.test_patient_suivi_api import _onboard_patient
@@ -57,6 +58,8 @@ async def test_sync_push_idempotent_and_pull(
     prise_id = await _setup_prise(client, headers, api)
     mutation_id = str(uuid4())
 
+    from datetime import UTC, datetime
+
     body = {
         "mutations": [
             {
@@ -65,7 +68,7 @@ async def test_sync_push_idempotent_and_pull(
                 "entity_id": prise_id,
                 "op": "confirm",
                 "payload": {"canal": "app"},
-                "client_ts": "2026-09-11T08:00:00+00:00",
+                "client_ts": datetime.now(UTC).isoformat(),
             }
         ]
     }
@@ -317,3 +320,215 @@ async def test_sync_offline_no_downgrade_confirmee(
     assert r.status_code == 200, r.text
     matches = [p for p in r.json() if p["id"] == prise_id]
     assert matches[0]["statut"] == "confirmee"
+
+
+@pytest.mark.asyncio
+async def test_sync_push_manquee_confirm_stale_client_ts_applied(
+    client: AsyncClient,
+    db_session: AsyncSession,
+    auth_prefix: str,
+    onboarding_prefix: str,
+    otp_inbox: dict[str, str],
+    cgu_version: str,
+) -> None:
+    """§F — manquee + confirm applique même si client_ts < updated_at."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.models import Prise
+
+    api = settings.api_v1_prefix
+    headers, _ = await _onboard_patient(
+        client,
+        auth_prefix,
+        onboarding_prefix,
+        otp_inbox,
+        cgu_version,
+        email="sync.manquee.confirm@example.com",
+    )
+    prise_id = await _setup_prise(client, headers, api)
+    prise = await db_session.get(Prise, UUID(prise_id))
+    assert prise is not None
+    prise.statut = "manquee"
+    prise.updated_at = datetime.now(UTC)
+    await db_session.commit()
+
+    r = await client.post(
+        f"{api}/sync/push",
+        headers=headers,
+        json={
+            "mutations": [
+                {
+                    "mutation_id": str(uuid4()),
+                    "entity": "prise",
+                    "entity_id": prise_id,
+                    "op": "confirm",
+                    "payload": {"canal": "app"},
+                    "client_ts": (datetime.now(UTC) - timedelta(days=2)).isoformat(),
+                }
+            ]
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["results"][0]["status"] == "applied"
+    await db_session.refresh(prise)
+    assert prise.statut == "confirmee"
+
+
+@pytest.mark.asyncio
+async def test_sync_push_stale_confirm_rejected(
+    client: AsyncClient,
+    db_session: AsyncSession,
+    auth_prefix: str,
+    onboarding_prefix: str,
+    otp_inbox: dict[str, str],
+    cgu_version: str,
+) -> None:
+    """§F — client_ts < updated_at sur en_attente → SYNC_CONFLICT."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.models import Prise
+
+    api = settings.api_v1_prefix
+    headers, _ = await _onboard_patient(
+        client,
+        auth_prefix,
+        onboarding_prefix,
+        otp_inbox,
+        cgu_version,
+        email="sync.stale.confirm@example.com",
+    )
+    prise_id = await _setup_prise(client, headers, api)
+    prise = await db_session.get(Prise, UUID(prise_id))
+    assert prise is not None
+    assert prise.statut == "en_attente"
+    prise.updated_at = datetime.now(UTC)
+    await db_session.commit()
+
+    r = await client.post(
+        f"{api}/sync/push",
+        headers=headers,
+        json={
+            "mutations": [
+                {
+                    "mutation_id": str(uuid4()),
+                    "entity": "prise",
+                    "entity_id": prise_id,
+                    "op": "confirm",
+                    "payload": {"canal": "app"},
+                    "client_ts": (datetime.now(UTC) - timedelta(hours=3)).isoformat(),
+                }
+            ]
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["results"][0]["status"] == "rejected"
+    assert r.json()["results"][0]["reason"] == "SYNC_CONFLICT"
+    await db_session.refresh(prise)
+    assert prise.statut == "en_attente"
+
+
+@pytest.mark.asyncio
+async def test_sync_push_report_stale_client_ts_rejected(
+    client: AsyncClient,
+    db_session: AsyncSession,
+    auth_prefix: str,
+    onboarding_prefix: str,
+    otp_inbox: dict[str, str],
+    cgu_version: str,
+) -> None:
+    """§F — report avec client_ts ancien → rejected."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.models import Prise
+
+    api = settings.api_v1_prefix
+    headers, _ = await _onboard_patient(
+        client,
+        auth_prefix,
+        onboarding_prefix,
+        otp_inbox,
+        cgu_version,
+        email="sync.stale.report@example.com",
+    )
+    prise_id = await _setup_prise(client, headers, api)
+    prise = await db_session.get(Prise, UUID(prise_id))
+    assert prise is not None
+    prise.updated_at = datetime.now(UTC)
+    await db_session.commit()
+
+    r = await client.post(
+        f"{api}/sync/push",
+        headers=headers,
+        json={
+            "mutations": [
+                {
+                    "mutation_id": str(uuid4()),
+                    "entity": "prise",
+                    "entity_id": prise_id,
+                    "op": "report",
+                    "payload": {
+                        "nouvelle_heure": (
+                            datetime.now(UTC) + timedelta(hours=1)
+                        ).isoformat(),
+                    },
+                    "client_ts": (datetime.now(UTC) - timedelta(hours=5)).isoformat(),
+                }
+            ]
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["results"][0]["status"] == "rejected"
+    assert r.json()["results"][0]["reason"] == "SYNC_CONFLICT"
+
+
+@pytest.mark.asyncio
+async def test_sync_push_report_fresh_client_ts_applied(
+    client: AsyncClient,
+    db_session: AsyncSession,
+    auth_prefix: str,
+    onboarding_prefix: str,
+    otp_inbox: dict[str, str],
+    cgu_version: str,
+) -> None:
+    """§F — report avec client_ts ≥ updated_at → applied."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.models import Prise
+
+    api = settings.api_v1_prefix
+    headers, _ = await _onboard_patient(
+        client,
+        auth_prefix,
+        onboarding_prefix,
+        otp_inbox,
+        cgu_version,
+        email="sync.fresh.report@example.com",
+    )
+    prise_id = await _setup_prise(client, headers, api)
+    prise = await db_session.get(Prise, UUID(prise_id))
+    assert prise is not None
+    old_heure = prise.heure_prevue
+    prise.updated_at = datetime.now(UTC) - timedelta(hours=1)
+    await db_session.commit()
+
+    new_heure = (datetime.now(UTC) + timedelta(hours=2)).isoformat()
+    r = await client.post(
+        f"{api}/sync/push",
+        headers=headers,
+        json={
+            "mutations": [
+                {
+                    "mutation_id": str(uuid4()),
+                    "entity": "prise",
+                    "entity_id": prise_id,
+                    "op": "report",
+                    "payload": {"nouvelle_heure": new_heure},
+                    "client_ts": datetime.now(UTC).isoformat(),
+                }
+            ]
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["results"][0]["status"] == "applied"
+    await db_session.refresh(prise)
+    assert prise.heure_prevue != old_heure

@@ -145,8 +145,9 @@ Notes :
 
 - `status: duplicate` = succès idempotent (même effet que `applied` pour le client : retirer de l’outbox).
 - `MUTATION_DUPLICATE` comme code d’erreur HTTP **n’est pas** requis si le batch renvoie `duplicate` dans `results` (préférer 200 + `results`).
-- `SYNC_CONFLICT` : conflit métier non auto-résolu (ex. downgrade `confirmee` → `en_attente`) ; le client suit `offline-sync` § conflits.
+- `SYNC_CONFLICT` : conflit métier non auto-résolu — downgrade `confirmee`, ou intention locale plus ancienne que `Prise.updated_at` (`client_ts` < `updated_at`, matrice `offline-sync` §F). Exceptions : `manquee` + `confirm` toujours appliqué ; `confirm` sur déjà `confirmee` reste idempotent.
 - Après un push réussi (ou partiel), le client enchaîne un pull avec son cursor.
+- **§F sur push** : le serveur compare `client_ts` (corrigé horloge côté app) à `updated_at` avant d’appliquer `confirm` / `report`.
 
 ---
 

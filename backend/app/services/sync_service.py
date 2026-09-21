@@ -91,6 +91,7 @@ async def push_mutations(
                     entity_id=entity_id,
                     op=op,
                     payload=payload,
+                    client_ts=raw.get("client_ts"),
                     results=results,
                 )
             elif entity == "constante" and op == "create_constante":
@@ -164,6 +165,95 @@ def _as_dt(raw: object) -> datetime:
     return datetime.fromisoformat(str(raw))
 
 
+def _as_utc(dt: datetime | None) -> datetime | None:
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=UTC)
+    return dt.astimezone(UTC)
+
+
+def _parse_client_ts(raw: object) -> datetime | None:
+    if raw is None:
+        return None
+    try:
+        return _as_utc(_as_dt(raw))
+    except (ValueError, TypeError):
+        return None
+
+
+_STATUT_RANK = {
+    "confirmee": 3,
+    "manquee": 2,
+    "en_attente": 1,
+}
+
+
+def _client_wins(
+    *, client_ts: datetime | None, updated_at: datetime | None
+) -> bool | None:
+    """True = intention locale gagne ; False = serveur ; None = pas de gate ts."""
+    if client_ts is None:
+        return None
+    server = _as_utc(updated_at)
+    if server is None:
+        return True
+    if client_ts > server:
+        return True
+    if client_ts < server:
+        return False
+    return None  # égalité → hiérarchie
+
+
+def _intention_rank(op: str) -> int:
+    if op == "confirm":
+        return _STATUT_RANK["confirmee"]
+    # report ne downgrade pas le statut ; rang « neutre » pour la hiérarchie
+    return _STATUT_RANK["en_attente"]
+
+
+def _should_apply_prise_op(
+    *, op: str, statut: str, updated_at: datetime | None, client_ts: datetime | None
+) -> bool:
+    """Matrice offline-sync §F pour confirm / report."""
+    # Serveur manquee + confirm → toujours appliquer (confirmation tardive).
+    if op == "confirm" and statut == "manquee":
+        return True
+    # Anti-downgrade : report sur confirmee.
+    if op == "report" and statut == "confirmee":
+        return False
+    # Confirm sur déjà confirmee → idempotent (confirmer_prise).
+    if op == "confirm" and statut == "confirmee":
+        return True
+
+    wins = _client_wins(client_ts=client_ts, updated_at=updated_at)
+    if wins is True:
+        return True
+    if wins is False:
+        return False
+    # Pas de client_ts → comportement historique.
+    if client_ts is None:
+        return True
+    # Égalité horloge → hiérarchie d'intention.
+    server_rank = _STATUT_RANK.get(statut, 0)
+    intent = _intention_rank(op)
+    if intent > server_rank:
+        return True
+    if intent < server_rank:
+        return False
+    return True
+
+
+def _reject_conflict(results: list[dict], mutation_id: UUID) -> None:
+    results.append(
+        {
+            "mutation_id": mutation_id,
+            "status": "rejected",
+            "reason": "SYNC_CONFLICT",
+        }
+    )
+
+
 async def _push_prise(
     db: AsyncSession,
     *,
@@ -172,8 +262,33 @@ async def _push_prise(
     entity_id: UUID,
     op: str,
     payload: dict,
+    client_ts: object,
     results: list[dict],
 ) -> None:
+    if op not in ("confirm", "report"):
+        results.append(
+            {
+                "mutation_id": mutation_id,
+                "status": "rejected",
+                "reason": "MUTATION_REJECTED",
+            }
+        )
+        return
+
+    patient = suivi._require_patient(user)
+    prise = await suivi._prise_for_patient(
+        db, patient_id=patient.user_id, prise_id=entity_id
+    )
+    parsed_ts = _parse_client_ts(client_ts)
+    if not _should_apply_prise_op(
+        op=op,
+        statut=prise.statut,
+        updated_at=prise.updated_at,
+        client_ts=parsed_ts,
+    ):
+        _reject_conflict(results, mutation_id)
+        return
+
     if op == "confirm":
         await suivi.confirmer_prise(
             db,
@@ -189,33 +304,11 @@ async def _push_prise(
                 "reason": None,
             }
         )
-    elif op == "report":
-        raw_heure = payload.get("nouvelle_heure")
-        if not raw_heure:
-            results.append(
-                {
-                    "mutation_id": mutation_id,
-                    "status": "rejected",
-                    "reason": "MUTATION_REJECTED",
-                }
-            )
-            return
-        when = _as_dt(raw_heure)
-        await suivi.reporter_prise(
-            db,
-            user=user,
-            prise_id=entity_id,
-            nouvelle_heure=when,
-            client_mutation_id=mutation_id,
-        )
-        results.append(
-            {
-                "mutation_id": mutation_id,
-                "status": "applied",
-                "reason": None,
-            }
-        )
-    else:
+        return
+
+    # report
+    raw_heure = payload.get("nouvelle_heure")
+    if not raw_heure:
         results.append(
             {
                 "mutation_id": mutation_id,
@@ -223,6 +316,22 @@ async def _push_prise(
                 "reason": "MUTATION_REJECTED",
             }
         )
+        return
+    when = _as_dt(raw_heure)
+    await suivi.reporter_prise(
+        db,
+        user=user,
+        prise_id=entity_id,
+        nouvelle_heure=when,
+        client_mutation_id=mutation_id,
+    )
+    results.append(
+        {
+            "mutation_id": mutation_id,
+            "status": "applied",
+            "reason": None,
+        }
+    )
 
 
 async def pull_delta(
