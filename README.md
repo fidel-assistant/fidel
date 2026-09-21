@@ -1,3 +1,5 @@
+![Fidel Assistant](docs/logo/couverture_github.png)
+
 # Fidel Assistant
 
 Plateforme mobile **gratuite et open source** d’accompagnement des patients dans la prise de leurs médicaments et le suivi de leur santé — en particulier pour les traitements chroniques (tuberculose, diabète, hypertension, VIH, etc.), avec un focus sur le contexte camerounais et africain (connectivité faible, téléphones basiques, réseau familial fort).
@@ -13,12 +15,12 @@ Plateforme mobile **gratuite et open source** d’accompagnement des patients da
 | Onboarding capacités (infos → suivi? → home ; sync aidant) | **Fait** — sur `main` (step C léger) |
 | Dashboard + médicaments / horaires / prises (API) | **Fait** — sur `main` |
 | App Flutter auth + onboarding + alarmes locales patient | **Fait** (socle) |
-| Rappels offline-first + sync V2 | **Fait** (Phase 6) |
-| Constantes / SOS / FCM aidant / cron manquée | **Fait** (API + jobs) |
-| UI patient (Accueil / Santé) | **Avancé** |
-| UI aidant (phases A→D) | **Prochaine** — [`.cursor/architecture.md`](.cursor/architecture.md) |
+| Rappels offline-first + sync V2 | **Fait** (Phase 6 + polish A–D) |
+| Constantes / SOS / FCM aidant / cron manquée | **Fait** (API + jobs + UI Santé) |
+| UI patient (phases 1→5) | **Fait** — activation, checklist, traitements, profil, sync visible |
+| UI aidant (phases A→D) | **Fait** — Accueil, détail/alertes, Cercle, timeline + mute |
 
-Pour contribuer : commence par [CONTRIBUTING.md](CONTRIBUTING.md). Pour comprendre le produit et les contrats : [`docs/`](docs/) et [`skills/`](skills/).
+Détail des phases : [`.cursor/architecture.md`](.cursor/architecture.md). Pour contribuer : [CONTRIBUTING.md](CONTRIBUTING.md). Specs : [`docs/`](docs/) et [`skills/`](skills/).
 
 ## Règle produit absolue
 

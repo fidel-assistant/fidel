@@ -21,10 +21,11 @@
 | 1a | Auth API (OTP, Google IdP, sessions, Resend) | **Fait** |
 | 1b | Onboarding capacités + API dashboard / médicaments / prises | **Fait** |
 | 1c | Auth + onboarding Flutter + alarmes locales patient | **Fait** (socle) |
-| 2 | Rappels offline-first + sync V2 (Drift / push-pull) | **Fait** (Phase 6 `offline-sync`) |
-| 3 | Constantes de santé (API + onglet Santé) | **Avancé** |
+| 2 | Rappels offline-first + sync V2 (Drift / push-pull) | **Fait** (Phase 6 + polish A–D) |
+| 3 | Constantes de santé (API + onglet Santé) | **Fait** |
 | 4a | Réseau aidant + check-in + SOS (API / FCM) | **Fait** |
-| 4b | UI aidant — phases A→D | **Prochaine** — voir `.cursor/architecture.md` |
+| 4b | UI aidant — phases A→D | **Fait** |
 | 5 | Moteur notification / consentement + cron manquée | **Fait** (jobs + opt-in) |
+| 6 | UI patient — phases 1→5 | **Fait** |
 
-Détail phases UI aidant (A Accueil → B Détail/alertes → C Cercle/voix → D timeline optionnelle) : [`.cursor/architecture.md`](../.cursor/architecture.md).
+Détail : [`.cursor/architecture.md`](../.cursor/architecture.md) (UI aidant A→D, UI patient 1→5, sync offline).
