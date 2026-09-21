@@ -1135,11 +1135,58 @@ class AppLocalizationsFr extends AppLocalizations {
   String get syncBannerRetry => 'Réessayer';
 
   @override
+  String get syncBannerView => 'Voir';
+
+  @override
   String get syncBannerFlushed => 'Synchronisation terminée.';
 
   @override
   String get syncBannerFlushFailed =>
       'Sync impossible pour le moment. Réessaie.';
+
+  @override
+  String syncBannerDeadLetters(int count) {
+    return '$count action(s) non synchronisée(s)';
+  }
+
+  @override
+  String syncBannerPendingAndDead(int pending, int dead) {
+    return '$pending en attente · $dead échec(s)';
+  }
+
+  @override
+  String get syncDeadLettersTitle => 'Actions non synchronisées';
+
+  @override
+  String get syncDeadLettersSubtitle =>
+      'Ces actions ont été refusées définitivement. Tu peux les effacer ou réessayer.';
+
+  @override
+  String get syncDeadLettersEmpty => 'Aucune action en échec.';
+
+  @override
+  String get syncDeadLetterDiscard => 'Effacer';
+
+  @override
+  String get syncDeadLetterRetry => 'Réessayer';
+
+  @override
+  String get syncDeadLetterDiscarded => 'Action effacée.';
+
+  @override
+  String get syncDeadLetterRequeued => 'Nouvelle tentative lancée.';
+
+  @override
+  String get syncDeadLetterOpConfirm => 'Confirmation de prise';
+
+  @override
+  String get syncDeadLetterOpReport => 'Report de prise';
+
+  @override
+  String get syncDeadLetterOpConstante => 'Mesure de santé';
+
+  @override
+  String get syncDeadLetterOpCheckIn => 'Check-in';
 
   @override
   String get healthMoreSection => 'Plus';

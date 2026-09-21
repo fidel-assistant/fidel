@@ -24,7 +24,7 @@ Diagnostic rapide des pannes SyncEngine / outbox / pull — contexte connexion i
 1. Lire `sync_last_pass_v1` : `error` ? `skipped_reason` (`offline` / `circuit` / `cooldown`) ?
 2. Si `circuit` : attendre 2 min (breaker) ou redémarrer après résolution 5xx backend.
 3. Si `offline` / `degraded` : vérifier `/health` et Wi‑Fi réel (pas seulement connectivité OS).
-4. Entrées `failed_permanent` : conflit métier (ex. report sur prise déjà `confirmee`) — ne bloquent pas le reste.
+4. Entrées `failed_permanent` : conflit métier (ex. report sur prise déjà `confirmee`) — ne bloquent pas le reste. **UI** : bandeau Accueil (`SyncStatusBanner`) affiche le compteur ; tap (si plus de pending) → sheet **Effacer** / **Réessayer** (`requeue` → flush).
 
 ### Doublons perçus côté UI
 

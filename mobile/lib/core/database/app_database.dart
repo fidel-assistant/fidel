@@ -290,6 +290,16 @@ class AppDatabase extends _$AppDatabase {
     return rows.map(_outboxFromRow).toList();
   }
 
+  Future<List<SyncOutboxEntry>> listFailedPermanentOutbox() async {
+    final rows = await (select(syncOutboxEntries)
+          ..where(
+            (t) => t.state.equals(SyncOutboxState.failedPermanent.wireName),
+          )
+          ..orderBy([(t) => OrderingTerm.asc(t.sortIndex)]))
+        .get();
+    return rows.map(_outboxFromRow).toList();
+  }
+
   Future<void> updateOutboxEntry(SyncOutboxEntry entry) async {
     await (update(syncOutboxEntries)
           ..where((t) => t.mutationId.equals(entry.mutationId)))

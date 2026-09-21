@@ -1122,10 +1122,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syncBannerRetry => 'Retry';
 
   @override
+  String get syncBannerView => 'View';
+
+  @override
   String get syncBannerFlushed => 'Sync complete.';
 
   @override
   String get syncBannerFlushFailed => 'Couldn’t sync right now. Try again.';
+
+  @override
+  String syncBannerDeadLetters(int count) {
+    return '$count action(s) failed to sync';
+  }
+
+  @override
+  String syncBannerPendingAndDead(int pending, int dead) {
+    return '$pending pending · $dead failed';
+  }
+
+  @override
+  String get syncDeadLettersTitle => 'Failed sync actions';
+
+  @override
+  String get syncDeadLettersSubtitle =>
+      'These actions were permanently rejected. You can discard or retry them.';
+
+  @override
+  String get syncDeadLettersEmpty => 'No failed actions.';
+
+  @override
+  String get syncDeadLetterDiscard => 'Discard';
+
+  @override
+  String get syncDeadLetterRetry => 'Retry';
+
+  @override
+  String get syncDeadLetterDiscarded => 'Action discarded.';
+
+  @override
+  String get syncDeadLetterRequeued => 'Retry started.';
+
+  @override
+  String get syncDeadLetterOpConfirm => 'Dose confirmation';
+
+  @override
+  String get syncDeadLetterOpReport => 'Dose snooze';
+
+  @override
+  String get syncDeadLetterOpConstante => 'Health reading';
+
+  @override
+  String get syncDeadLetterOpCheckIn => 'Check-in';
 
   @override
   String get healthMoreSection => 'More';
