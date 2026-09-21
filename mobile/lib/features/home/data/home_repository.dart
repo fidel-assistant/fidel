@@ -405,17 +405,6 @@ class HomeRepository {
     }
   }
 
-  Future<void> syncPrisesOffline(List<Map<String, dynamic>> items) async {
-    try {
-      await _api.post<Map<String, dynamic>>(
-        '/prises/sync-offline',
-        data: items,
-      );
-    } on DioException catch (e) {
-      ApiClient.throwApi(e);
-    }
-  }
-
   Future<List<TraitementDetail>> listTraitements() async {
     try {
       final res = await _api.get<dynamic>('/patients/me/traitements');

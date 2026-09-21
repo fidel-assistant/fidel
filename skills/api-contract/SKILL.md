@@ -128,7 +128,7 @@ Pas de `POST /onboarding/role`. Voir `auth-onboarding/SKILL.md`.
 | POST | `/prises/{id}/reporter` | 🔒 `nouvelle_heure`, `client_mutation_id?` (UUID — **requis** dès Phase 1 mobile) | `Prise` mise à jour ; idempotent si `client_mutation_id` déjà vu | `PRISE_NOT_FOUND` |
 | POST | `/prises/sync-offline` | 🔒 `[{id, statut, confirmee_at, client_mutation_id?}]` | `{synced: [...], conflicts: [...], duplicates?: [...]}` — lot hors-ligne ; `duplicates` = mutations déjà appliquées | — |
 
-> `/prises/sync-offline` est essentiel pour le mode offline-first (`mobile-flutter` + `offline-sync`) : l’app envoie en une fois les confirmations faites sans réseau. **Phase 1** : persister `client_mutation_id` côté serveur (table `client_mutations`, voir `data-model`).
+> `/prises/sync-offline` = **legacy / statut-batch** (rétrocompat, tests, outils). Le client Flutter V1 n’appelle plus cet endpoint : chemin app = Sync V2 (`POST /sync/push`, `GET /sync/pull`) via `SyncEngine`. L’API reste exposée ; idempotence `client_mutation_id` via table `client_mutations` (`data-model`).
 
 ---
 

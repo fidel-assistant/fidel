@@ -5,8 +5,9 @@ Diagnostic rapide des pannes SyncEngine / outbox / pull — contexte connexion i
 ## Prérequis
 
 - App Flutter avec Drift + prefs
-- Backend `POST /api/v1/sync/push` + `GET /api/v1/sync/pull`
+- Backend `POST /api/v1/sync/push` + `GET /api/v1/sync/pull` (chemin flush app V1)
 - Logs debug : filtre `SyncMetrics` / `NetworkStatus` / `SyncEngine`
+- `POST /api/v1/prises/sync-offline` = API **legacy** (statut-batch) — hors flush `SyncEngine` ; ne pas s’en servir pour diagnostiquer l’app V1
 
 ## Clés prefs utiles
 

@@ -33,7 +33,9 @@ lib/
 │   └── l10n/                        # fichiers de traduction (intl)
 └── services/
     ├── notification_service.dart     # planification des rappels locaux
-    └── sync_service.dart               # file de synchronisation offline → serveur
+    ├── sync_engine.dart              # SyncEngine — outbox → POST /sync/push + pull
+    ├── sync_outbox.dart              # outbox Drift + migration legacy
+    └── network_status.dart           # hystérésis / probe / circuit breaker
 ```
 
 Chaque feature suit le même découpage interne : `presentation/` (écrans, widgets), `application/` (state/providers), `domain/` (modèles), `data/` (repository, appels API).
