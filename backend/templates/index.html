@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy wrap">
+    <h1>Parce que personne ne devrait affronter la maladie seul.</h1>
+    <p class="hero-lead">
+      Fidél connecte patients, familles et aidants autour d’un même suivi —
+      rappels de médicaments, soutien au quotidien, gratuit et open source.
+    </p>
+  </div>
+  <div class="hero-stage" id="telecharger">
+    <img
+      class="hero-visual"
+      src="/static/img/mockup_accueil.png?v=9"
+      alt="Aperçu Fidel — prochaines prises, rappels et cercle d’aidants"
+      width="1920"
+      height="1080"
+      loading="eager"
+    />
+  </div>
+</section>
+
+<section class="section section-soft" id="fonctionnalites">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Conçu pour une connexion instable</h2>
+      <p>Le cœur du produit reste utile sans réseau. La sync suit quand le signal revient.</p>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">1</div>
+        <h3>Alarmes locales</h3>
+        <p>Préavis, sonnerie H0 et rappel de marquage — sur le téléphone, même en mode avion.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">2</div>
+        <h3>Sync au retour</h3>
+        <p>Tes confirmations partent en file d’attente, puis rejoignent le serveur sans te bloquer.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon" aria-hidden="true">3</div>
+        <h3>Cercle &amp; consentement</h3>
+        <p>Un aidant n’est prévenu que si tu as explicitement autorisé la règle — jamais automatiquement.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comment">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Comment ça marche</h2>
+      <p>Trois étapes. Pas de jargon médical généré.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Crée ton compte</h3>
+        <p>Email ou Google. Active un suivi pour toi, et/ou accompagne quelqu’un via code.</p>
+      </div>
+      <div class="step">
+        <h3>Configure tes prises</h3>
+        <p>Traitements et horaires depuis l’app. Fidel te rappelle au bon moment, sur l’appareil.</p>
+      </div>
+      <div class="step">
+        <h3>Invite ton cercle</h3>
+        <p>Choisis ce que tu partages. SOS et alertes d’observance restent sous ton contrôle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="wrap">
+    <div class="trust">
+      <p>
+        <strong>Gratuit et open source.</strong>
+        Pensé pour le contexte camerounais et africain —
+        ce n’est jamais un outil de diagnostic ni un substitut au médecin.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}
