@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% if title %}{{ title }} · {% endif %}{{ app_name }}</title>
+  <meta name="description" content="Fidel — compagnon d’accompagnement pour la prise de médicaments et le suivi de santé, pensé pour une connectivité limitée." />
+  <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/static/css/site.css?v=26" />
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="nav-shell">
+      <nav class="nav" aria-label="Principale">
+        <div class="nav-brand">
+          <a class="nav-brand-logo" href="/" aria-label="Fidel — accueil">
+            <img src="/static/img/logo_wordmark.svg" alt="" />
+          </a>
+          <a
+            class="nav-brand-meta"
+            href="https://github.com/fidel-assistant/fidel"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Voir le projet sur GitHub"
+          >
+            <span>open source</span>
+            <svg class="nav-github" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M12 2C6.477 2 2 6.584 2 12.253c0 4.527 2.865 8.363 6.839 9.718.5.094.683-.222.683-.494 0-.243-.009-.888-.014-1.743-2.782.618-3.369-1.37-3.369-1.37-.454-1.18-1.11-1.494-1.11-1.494-.908-.636.069-.623.069-.623 1.004.072 1.532 1.057 1.532 1.057.892 1.568 2.341 1.115 2.91.853.091-.663.35-1.115.636-1.371-2.22-.259-4.555-1.138-4.555-5.066 0-1.119.39-2.033 1.029-2.75-.103-.258-.446-1.302.098-2.714 0 0 .84-.275 2.75 1.05A9.35 9.35 0 0 1 12 7.14a9.35 9.35 0 0 1 2.504.345c1.91-1.325 2.748-1.05 2.748-1.05.546 1.412.203 2.456.1 2.714.64.717 1.028 1.631 1.028 2.75 0 3.938-2.339 4.804-4.566 5.058.36.318.679.944.679 1.904 0 1.374-.012 2.481-.012 2.818 0 .274.18.593.688.492C19.138 20.613 22 16.777 22 12.253 22 6.584 17.523 2 12 2Z"/>
+            </svg>
+          </a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="/#fonctionnalites">Produit</a></li>
+          <li><a href="/#comment">Comment ça marche</a></li>
+          <li><a href="/contact" {% if current_path == '/contact' %}aria-current="page"{% endif %}>Contact</a></li>
+        </ul>
+        <div class="nav-end">
+          <a class="nav-quiet" href="/confidentialite">Confidentialité</a>
+          <a class="nav-cta" href="#telecharger">Télécharger</a>
+        </div>
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-panel" aria-label="Ouvrir le menu">
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </div>
+    <div class="nav-panel" id="nav-panel" hidden>
+      <div class="nav-shell nav-shell--panel">
+        <a href="/#fonctionnalites">Produit</a>
+        <a href="/#comment">Comment ça marche</a>
+        <a href="/contact">Contact</a>
+        <a href="/confidentialite">Confidentialité</a>
+        <a href="https://github.com/fidel-assistant/fidel" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="nav-cta" href="#telecharger">Télécharger</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="/static/img/logo_wordmark.svg" alt="Fidel" width="110" height="26" />
+          <p>Compagnon d’accompagnement — gratuit et open source.</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/confidentialite">Confidentialité</a></li>
+          <li><a href="/cgu">CGU</a></li>
+          <li><a href="/docs">API docs</a></li>
+        </ul>
+      </div>
+      <p class="footer-note">
+        Fidel n’est jamais un outil de diagnostic ni un substitut au médecin.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById("nav-toggle");
+      var panel = document.getElementById("nav-panel");
+      if (!toggle || !panel) return;
+      function close() {
+        panel.hidden = true;
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Ouvrir le menu");
+      }
+      toggle.addEventListener("click", function () {
+        var open = panel.hidden;
+        panel.hidden = !open;
+        toggle.classList.toggle("is-open", open);
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        toggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+      });
+      panel.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", close);
+      });
+      var header = document.getElementById("site-header");
+      function onScroll() {
+        if (!header) return;
+        header.classList.toggle("is-scrolled", window.scrollY > 8);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    })();
+  </script>
+</body>
+</html>

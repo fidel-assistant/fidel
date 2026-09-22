@@ -1,4 +1,5 @@
 import asyncio
+import html as html_lib
 import logging
 
 import resend
@@ -104,6 +105,64 @@ async def send_otp_email(*, to_email: str, code: str, purpose: str) -> None:
                 purpose,
                 to_email,
                 code,
+            )
+            return
+        raise
+
+
+async def send_contact_message(
+    *,
+    name: str,
+    reply_email: str,
+    message: str,
+) -> None:
+    """Envoie un message du formulaire contact. Sans clé API : log (dev)."""
+    to = settings.contact_to_email.strip()
+    subject = f"[Contact Fidel] Message de {name}"
+    text = (
+        f"Nom : {name}\n"
+        f"Email : {reply_email}\n\n"
+        f"{message}\n"
+    )
+    safe_name = html_lib.escape(name)
+    safe_email = html_lib.escape(reply_email)
+    safe_message = html_lib.escape(message)
+    html = f"""\
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8" /></head>
+<body style="font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0f172a;">
+<p><strong>Nom :</strong> {safe_name}</p>
+<p><strong>Email :</strong> <a href="mailto:{safe_email}">{safe_email}</a></p>
+<pre style="white-space:pre-wrap;font-family:inherit;">{safe_message}</pre>
+</body></html>
+"""
+
+    if not settings.resend_api_key:
+        logger.warning(
+            "RESEND_API_KEY manquant — contact de %s <%s> : %s",
+            name,
+            reply_email,
+            message[:200],
+        )
+        return
+
+    try:
+        email_id = await asyncio.to_thread(
+            _send_via_resend,
+            to_email=to,
+            subject=subject,
+            text=text,
+            html=html,
+        )
+        logger.info("Contact de %s envoyé à %s (id=%s)", reply_email, to, email_id)
+    except Exception:
+        logger.exception("Échec envoi contact Resend de %s", reply_email)
+        if settings.app_env == "development" or settings.debug:
+            logger.warning(
+                "Fallback dev — contact de %s <%s> : %s",
+                name,
+                reply_email,
+                message[:200],
             )
             return
         raise

@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
@@ -23,6 +24,8 @@ from app.routers import (
     sync,
     traitements,
 )
+from app.web.paths import STATIC_DIR
+from app.web.router import router as web_router
 
 
 @asynccontextmanager
@@ -48,6 +51,9 @@ app.add_middleware(
 )
 
 register_exception_handlers(app)
+
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+app.include_router(web_router)
 
 app.include_router(health.router, prefix=settings.api_v1_prefix, tags=["health"])
 app.include_router(auth.router, prefix=settings.api_v1_prefix)

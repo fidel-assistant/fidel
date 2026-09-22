@@ -62,6 +62,8 @@ class Settings(BaseSettings):
     # Resend (OTP / emails transactionnels) — prioritaire sur SMTP
     resend_api_key: str = ""
     email_from: str = "Fidel Assistant <noreply@educampro.edu.cm>"
+    # Landing / contact form
+    contact_to_email: str = "hello@educampro.edu.cm"
 
     smtp_host: str = ""
     smtp_port: int = 587
