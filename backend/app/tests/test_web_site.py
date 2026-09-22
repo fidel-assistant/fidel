@@ -16,7 +16,10 @@ def test_home_and_static() -> None:
         assert "/static/img/mockup_accueil.png" in r.text
         assert "id=\"telecharger\"" in r.text
         assert "btn-download" not in r.text
-        assert "google-play.svg" not in r.text
+        assert "Un cercle qui reste là." in r.text
+        assert "cercle-reseau.jpg" in r.text
+        assert "google-play.svg" in r.text
+        assert "apple-store.svg" in r.text
 
         css = client.get("/static/css/site.css")
         assert css.status_code == 200
