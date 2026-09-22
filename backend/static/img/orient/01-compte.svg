@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="0" x2="560" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123f58"/>
+      <stop offset="1" stop-color="#0b2c3d"/>
+    </linearGradient>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#021018" flood-opacity="0.38"/>
+    </filter>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <g filter="url(#sh)">
+    <rect x="118" y="78" width="78" height="78" rx="20" fill="#f4f8fb"/>
+    <rect x="444" y="64" width="78" height="78" rx="20" fill="#f4f8fb"/>
+    <rect x="168" y="188" width="304" height="86" rx="24" fill="#0494d0"/>
+  </g>
+  <g stroke="#037299" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="140" y="104" width="34" height="24" rx="4"/>
+    <path d="M142 107l15 11 15-11"/>
+  </g>
+  <g stroke="#037299" stroke-width="2.2" stroke-linecap="round">
+    <circle cx="483" cy="94" r="8"/>
+    <path d="M468 124c2.2-8 8-12 15-12s12.8 4 15 12"/>
+  </g>
+  <text x="320" y="240" text-anchor="middle" fill="#fff" font-family="Satoshi, Segoe UI, sans-serif" font-size="32" font-weight="700">Continuer</text>
+  <path fill="#fff" d="M412 248l0 28 8-8 7 14 5-2.5-7-13.5 11-.2z"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="0" x2="560" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123f58"/>
+      <stop offset="1" stop-color="#0b2c3d"/>
+    </linearGradient>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#021018" flood-opacity="0.36"/>
+    </filter>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <g filter="url(#sh)">
+    <circle cx="250" cy="168" r="62" fill="#d7eef8"/>
+    <circle cx="390" cy="168" r="62" fill="#0494d0"/>
+    <circle cx="320" cy="246" r="62" fill="#f7fafc"/>
+    <rect x="176" y="318" width="288" height="58" rx="18" fill="#f4f8fb"/>
+  </g>
+  <g stroke="#037299" stroke-width="2.3" stroke-linecap="round">
+    <circle cx="250" cy="156" r="12"/>
+    <path d="M228 196c3-12 11-18 22-18s19 6 22 18"/>
+  </g>
+  <g stroke="#fff" stroke-width="2.3" stroke-linecap="round">
+    <circle cx="390" cy="156" r="12"/>
+    <path d="M368 196c3-12 11-18 22-18s19 6 22 18"/>
+  </g>
+  <g stroke="#037299" stroke-width="2.3" stroke-linecap="round">
+    <circle cx="320" cy="232" r="12"/>
+    <path d="M298 274c3-12 11-18 22-18s19 6 22 18"/>
+  </g>
+  <text x="320" y="354" text-anchor="middle" fill="#0f172a" font-family="Satoshi, Segoe UI, sans-serif" font-size="22" font-weight="700">Code d&#8217;invitation</text>
+</svg>
